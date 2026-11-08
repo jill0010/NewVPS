@@ -1,0 +1,64 @@
+name: Extract original RAR archives (no content changes)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out archival branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install RAR extraction and validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unar
+          mkdir -p extracted/newvps1 extracted/newvps2
+
+      - name: List and extract archive contents without rewriting filenames
+        shell: bash
+        run: |
+          set -euo pipefail
+          lsar -l newvps1.rar > /tmp/newvps1-list.txt
+          lsar -l newvps2.rar > /tmp/newvps2-list.txt
+          unar -q -f -o extracted/newvps1 newvps1.rar
+          unar -q -f -o extracted/newvps2 newvps2.rar
+          echo "Extracted file totals:"
+          find extracted/newvps1 -type f | wc -l
+          find extracted/newvps2 -type f | wc -l
+
+      - name: Prevent unsafe repository content from being committed
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          base=Path("extracted").resolve()
+          files=list(base.rglob("*"))
+          for path in files:
+              if path.is_symlink():
+                  raise SystemExit(f"Refusing symlink: {path}")
+              if not path.resolve().is_relative_to(base):
+                  raise SystemExit(f"Unsafe path: {path}")
+          print("Extracted tree validated.")
+          PY
+
+      - name: Record original extraction without changing any file
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- extracted/
+          if git diff --cached --quiet; then
+            echo "No new files to commit."
+          else
+            git commit -m "Extract supplied RAR source files unchanged"
+            git push origin HEAD:restore-original-archives
+          fi
