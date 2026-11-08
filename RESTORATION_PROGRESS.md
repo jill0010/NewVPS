@@ -44,14 +44,14 @@
 - 已增加截图检查统计，后续运行将明确汇总图片加载异常、水平溢出与 HTTP 失败。原始归档提供的是 HTML 与资源快照，而不是同条件参考截图；截图存在不代表完成视觉一致性比对。
 
 ## BLOCKER 子项登记
-### BLOCKER-06-03 — 原始 HTML 与线上页面存在 6 组高度差异
+### BLOCKER-06-03 — 原始 HTML 与线上页面存在不稳定的高度差异
 - GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42502857792 ：66 条路由 × 桌面/手机 = 132 组对照；两侧渲染失败 0、标题差异 0、宽度差异超过 2px 的视口 0。
 - 高度差超过 10px 的 6 组：`/zh/gpu` 桌面 29px、`/gpu` 桌面 29px、`/crypto-gpu-hosting` 手机 276px、`/tos` 手机 159px、`/privacy` 桌面 46px、`/privacy` 手机 23px。
-- 已增加字体、区块几何、图片尺寸的诊断输出。未确定根因前不得改写原始文案或 CSS。
+- 再次运行 https://github.com/jill0010/NewVPS/actions/runs/42503329995 ：超过 10px 的高度差变为 10 组，同一路由的差值也有变化；页面区块和页脚的换行高度存在差异，页面正文前 300 字符一致。这证明差异结果受渲染条件或资源加载时序影响，尚不能认定页面代码不同。已更新对照程序，等待字体与图片解码后才测量；不改写原始文案或 CSS。
 
-### BLOCKER-06-02 — 两处视口检测到图片加载异常（已定位检测误报，待复验）
+### BLOCKER-06-02 — 两处视口检测到图片加载异常（已解决）
 - GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42502055797 ：66 路由、132 视口，HTTP 失败 0、横向溢出 0、图片异常视口 2。
-- 复查 https://github.com/jill0010/NewVPS/actions/runs/42502256035 日志：两处均是 `/account` 的桌面和手机视口；原始 HTML 中 `img` 元素有意未设置 `src`（例如动态支付图标与 2FA QR），此前误判为网络加载失败。修复 `6d1d923` 已排除无 `src` 的占位图，等待新一轮复验。
+- 复查 https://github.com/jill0010/NewVPS/actions/runs/42502256035 日志：两处均是 `/account` 的桌面和手机视口；原始 HTML 中 `img` 元素有意未设置 `src`（例如动态支付图标与 2FA QR），此前误判为网络加载失败。修复 `6d1d923` 已排除无 `src` 的占位图，复验 https://github.com/jill0010/NewVPS/actions/runs/42502555290 已通过：132 视口图片加载异常 0、HTTP 失败 0、横向溢出 0。
 
 ### BLOCKER-06-01 — 尚缺同视口原始页面的基准截图
 - 原始归档有 HTML、CSS、JS 和图片，尚未确认存在可直接使用的桌面/移动基准截图。必须通过原始快照的隔离渲染或已有截图建立可核验基线，不能拿现网站的即时状态冒充历史采集基线。
