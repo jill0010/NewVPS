@@ -25,7 +25,9 @@ const path = require('path');
         result.http_status=response?.status()||null;
         result.title=await page.title();
         result.horizontal_overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth+2);
-        result.broken_images=await page.locator('img').evaluateAll(imgs=>imgs.filter(img=>img.complete && img.naturalWidth===0).map(img=>img.currentSrc||img.src).slice(0,20));
+        // Original /account includes src-less dynamic placeholders (payment icon and 2FA QR).
+        // They are not failed network images and must be audited separately as dynamic content.
+        result.broken_images=await page.locator('img').evaluateAll(imgs=>imgs.filter(img=>img.hasAttribute('src') && img.getAttribute('src')?.trim() && img.complete && img.naturalWidth===0).map(img=>img.currentSrc||img.src).slice(0,20));
         await page.screenshot({path:path.join(output,name),fullPage:true,animations:'disabled',timeout:30000});
         result.ok=response?.ok()||false;
       } catch(e) {result.error=String(e).slice(0,400);}
