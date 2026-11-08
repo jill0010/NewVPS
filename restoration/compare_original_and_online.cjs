@@ -45,7 +45,7 @@ const { pathToFileURL } = require('url');
         await settle(offline);await settle(online);
         const info=async p=>p.evaluate(()=>({
           title:document.title,
-          bodyText:(document.body?.innerText||'').replace(/\s+/g,' ').trim().slice(0,300),
+          bodyText:(document.body?.innerText||'').replace(/\s+/g,' ').trim(),
           scrollWidth:document.documentElement.scrollWidth,
           scrollHeight:document.documentElement.scrollHeight,
           images:[...document.images].filter(x=>x.hasAttribute('src')&&x.getAttribute('src')?.trim()).length,
@@ -75,7 +75,8 @@ const { pathToFileURL } = require('url');
             headerHeight:document.querySelector('header')?.getBoundingClientRect().height??null,
             footerHeight:document.querySelector('footer')?.getBoundingClientRect().height??null,
             images:[...document.images].slice(0,10).map(x=>({alt:x.alt,width:x.naturalWidth,height:x.naturalHeight})),
-            elements:[...document.querySelectorAll('main > *, article > *')].slice(0,15).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,60),height:Math.round(x.getBoundingClientRect().height)}))
+            elements:[...document.querySelectorAll('main > *, article > *')].slice(0,15).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,60),height:Math.round(x.getBoundingClientRect().height)})),
+            sections:[...document.querySelectorAll('main section, main article, footer')].slice(0,35).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,50),height:Math.round(x.getBoundingClientRect().height),width:Math.round(x.getBoundingClientRect().width),font:getComputedStyle(x).fontFamily,head:(x.querySelector('h1,h2,h3')?.textContent||'').trim().slice(0,60)}))
           }));
           result.offlineMetrics=await metrics(offline);
           result.onlineMetrics=await metrics(online);
