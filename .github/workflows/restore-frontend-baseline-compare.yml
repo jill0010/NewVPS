@@ -1,0 +1,35 @@
+name: Restore frontend - compare original captures with deployed pages
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/compare_original_and_online.cjs'
+      - '.github/workflows/restore-frontend-baseline-compare.yml'
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate capture manifest
+        run: python3 restoration/build_visual_audit_manifest.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Compare original HTML rendering with deployed preview
+        run: node restoration/compare_original_and_online.cjs
+      - name: Upload original and deployed screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-vs-deployed-visual-baselines
+          path: visual-baseline-comparison/
+          retention-days: 7
+          if-no-files-found: warn
