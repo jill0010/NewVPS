@@ -38,13 +38,27 @@ const { pathToFileURL } = require('url');
         result.height_difference=Math.abs(result.offline.scrollHeight-result.deployed.scrollHeight);
         result.width_difference=Math.abs(result.offline.scrollWidth-result.deployed.scrollWidth);
         result.title_matches=result.offline.title===result.deployed.title;
+        result.text_matches=result.offline.bodyText===result.deployed.bodyText;
+        if(result.height_difference>10){
+          const metrics=async p=>p.evaluate(()=>({
+            fonts:document.fonts.status,
+            bodyFont:getComputedStyle(document.body).fontFamily,
+            mainHeight:document.querySelector('main')?.getBoundingClientRect().height??null,
+            headerHeight:document.querySelector('header')?.getBoundingClientRect().height??null,
+            footerHeight:document.querySelector('footer')?.getBoundingClientRect().height??null,
+            images:[...document.images].slice(0,10).map(x=>({alt:x.alt,width:x.naturalWidth,height:x.naturalHeight})),
+            elements:[...document.querySelectorAll('main > *, article > *')].slice(0,15).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,60),height:Math.round(x.getBoundingClientRect().height)}))
+          }));
+          result.offlineMetrics=await metrics(offline);
+          result.onlineMetrics=await metrics(online);
+        }
         const prefix=String(i+1).padStart(3,'0')+'-'+v.name;
         await offline.screenshot({path:path.join(out,prefix+'-original.png'),fullPage:true,animations:'disabled',timeout:30000});
         await online.screenshot({path:path.join(out,prefix+'-deployed.png'),fullPage:true,animations:'disabled',timeout:30000});
         result.ok=true;
       }catch(e){result.ok=false;result.error=String(e).slice(0,300);}
       results.push(result);
-      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,error:result.error}));
+      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,error:result.error}));
       await context.close();
     }
   }
