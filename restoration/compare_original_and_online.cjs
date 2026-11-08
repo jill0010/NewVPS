@@ -56,6 +56,11 @@ const { pathToFileURL } = require('url');
         result.width_difference=Math.abs(result.offline.scrollWidth-result.deployed.scrollWidth);
         result.title_matches=result.offline.title===result.deployed.title;
         result.text_matches=result.offline.bodyText===result.deployed.bodyText;
+        if(!result.text_matches){
+          const a=result.offline.bodyText,b=result.deployed.bodyText;
+          let pos=0;while(pos<Math.min(a.length,b.length)&&a[pos]===b[pos])pos++;
+          result.textDiff={firstDifferentIndex:pos,original:a.slice(Math.max(0,pos-65),pos+120),deployed:b.slice(Math.max(0,pos-65),pos+120)};
+        }
         result.resourceMismatch={
           brokenImagesOffline:result.offline.brokenImages,
           brokenImagesOnline:result.deployed.brokenImages
@@ -81,7 +86,7 @@ const { pathToFileURL } = require('url');
         result.ok=true;
       }catch(e){result.ok=false;result.error=String(e).slice(0,300);}
       results.push(result);
-      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,error:result.error}));
+      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,textDiff:result.textDiff,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,error:result.error}));
       await context.close();
     }
   }
