@@ -10,55 +10,54 @@ jobs:
   extract:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out archival branch
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-
-      - name: Install RAR extraction and validation tools
+      - uses: actions/checkout@v4
+      - name: Install independent RAR extractor
         run: |
           sudo apt-get update
-          sudo apt-get install -y unar
+          sudo apt-get install -y 7zip
+          7zz i | head -35
+      - name: Test both original archives independently
+        shell: bash
+        run: |
+          set +e
+          7zz t newvps1.rar > /tmp/test1.log 2>&1
+          a=$?
+          7zz t newvps2.rar > /tmp/test2.log 2>&1
+          b=$?
+          echo "newvps1.rar test exit code: $a"
+          tail -40 /tmp/test1.log
+          echo "newvps2.rar test exit code: $b"
+          tail -40 /tmp/test2.log
+          echo "ARCHIVE1_TEST=$a" >> "$GITHUB_ENV"
+          echo "ARCHIVE2_TEST=$b" >> "$GITHUB_ENV"
+      - name: Extract only when both archives pass validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$ARCHIVE1_TEST" != 0 || "$ARCHIVE2_TEST" != 0 ]]; then
+            echo "::error::Archive validation failed; original files are untouched. Inspect test logs before attempting recovery."
+            exit 1
+          fi
           mkdir -p extracted/newvps1 extracted/newvps2
-
-      - name: List and extract archive contents without rewriting filenames
-        shell: bash
-        run: |
-          set -euo pipefail
-          lsar -l newvps1.rar > /tmp/newvps1-list.txt
-          lsar -l newvps2.rar > /tmp/newvps2-list.txt
-          unar -q -f -o extracted/newvps1 newvps1.rar
-          unar -q -f -o extracted/newvps2 newvps2.rar
-          echo "Extracted file totals:"
-          find extracted/newvps1 -type f | wc -l
-          find extracted/newvps2 -type f | wc -l
-
-      - name: Prevent unsafe repository content from being committed
-        shell: bash
-        run: |
-          set -euo pipefail
+          7zz x -y -oextracted/newvps1 newvps1.rar
+          7zz x -y -oextracted/newvps2 newvps2.rar
           python3 - <<'PY'
           from pathlib import Path
           base=Path("extracted").resolve()
-          files=list(base.rglob("*"))
-          for path in files:
-              if path.is_symlink():
-                  raise SystemExit(f"Refusing symlink: {path}")
-              if not path.resolve().is_relative_to(base):
-                  raise SystemExit(f"Unsafe path: {path}")
-          print("Extracted tree validated.")
+          for path in base.rglob("*"):
+              if path.is_symlink() or not path.resolve().is_relative_to(base):
+                  raise SystemExit(f"Unsafe extracted path: {path}")
+          for name in ("newvps1","newvps2"):
+              print(name, sum(p.is_file() for p in (base/name).rglob("*")), "files")
           PY
-
-      - name: Record original extraction without changing any file
+      - name: Commit only fully validated original extracted files
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- extracted/
-          if git diff --cached --quiet; then
-            echo "No new files to commit."
-          else
-            git commit -m "Extract supplied RAR source files unchanged"
+          if ! git diff --cached --quiet; then
+            git commit -m "Extract validated original archives unchanged"
             git push origin HEAD:restore-original-archives
           fi
