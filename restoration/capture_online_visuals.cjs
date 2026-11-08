@@ -30,6 +30,7 @@ const path = require('path');
         result.ok=response?.ok()||false;
       } catch(e) {result.error=String(e).slice(0,400);}
       results.push(result);
+      if(result.broken_images?.length) console.log('BROKEN_IMAGES '+JSON.stringify({route,viewport:viewport.name,urls:result.broken_images}));
       await page.close();
       console.log((result.ok?'OK':'ISSUE')+' '+route+' '+viewport.name);
     }
