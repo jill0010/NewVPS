@@ -19,6 +19,11 @@ const { pathToFileURL } = require('url');
       const context=await browser.newContext({viewport:{width:v.width,height:v.height},deviceScaleFactor:1});
       const offline=await context.newPage();
       const online=await context.newPage();
+      const resourceFailures={original:[],deployed:[]};
+      for(const [page,key] of [[offline,'original'],[online,'deployed']]){
+        page.on('requestfailed',request=>{if(resourceFailures[key].length<20)resourceFailures[key].push({url:request.url().slice(0,200),failure:request.failure()?.errorText||'unknown'});});
+        page.on('response',response=>{if(response.status()>=400&&resourceFailures[key].length<20)resourceFailures[key].push({url:response.url().slice(0,200),status:response.status()});});
+      }
       const local=pathToFileURL(path.resolve(item.source)).href;
       const url=base+(item.route==='/'?'/':item.route.replace(/\/$/,'')+'/');
       const result={route:item.route,viewport:v.name,source:item.source,online:url};
@@ -73,6 +78,7 @@ const { pathToFileURL } = require('url');
           result.textDiff={firstDifferentIndex:pos,original:a.slice(Math.max(0,pos-65),pos+120),deployed:b.slice(Math.max(0,pos-65),pos+120),originalControls:await inspect(offline),deployedControls:await inspect(online)};
         }
         result.resourceMismatch={
+          resourceFailures,
           brokenImagesOffline:result.offline.brokenImages,
           brokenImagesOnline:result.deployed.brokenImages
         };
@@ -106,7 +112,7 @@ const { pathToFileURL } = require('url');
         result.ok=true;
       }catch(e){result.ok=false;result.error=String(e).slice(0,300);}
       results.push(result);
-      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,textDiff:result.textDiff,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,textBlockDifferences:result.textBlockDifferences,error:result.error}));
+      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,textDiff:result.textDiff,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,textBlockDifferences:result.textBlockDifferences,resourceFailures:result.height_difference>10?result.resourceMismatch?.resourceFailures:undefined,error:result.error}));
       await context.close();
     }
   }
