@@ -98,3 +98,5 @@
 - 2026-11-08：修复 first-wins 对照后，视觉基线工作流 https://github.com/jill0010/NewVPS/actions/runs/42507682648 成功：66 路由 × 2 视口 = 132 项，错误 0，标题差异 0，前 300 字文本摘要差异 0，宽度差异 0，高度差异 >10px 共 6 项（`/zh/gpu` 桌面 29px、`/dedicated` 手机 87px、`/gpu` 桌面 29px、`/tos` 手机 23px、`/privacy` 桌面 46px、`/privacy` 手机 164px）。注意文本核验只比较正文前 300 字，不等同于全页逐字一致；高度差异主要位于正文 section，不能直接改动原始 CSS。下一步定位字体资源、换行和具体差异元素。
 
 - 2026-11-08：完整可见文本（规范化空白）对照 https://github.com/jill0010/NewVPS/actions/runs/42508263019 成功：66 路由、132 视口、全文文本不匹配 0、标题不匹配 0、宽度不匹配 0；高度差异 >10px 共 7 视口，较上一轮 6 项波动。区块定位：`/zh/gpu` 和 `/gpu` 的 AI 模板区约 26–27px，`/tos` 与 `/privacy` 的正文区约 22–45px，`/use-cases/vpn-hosting` 的内容区约 19–26px，`/account` 移动端页脚约 42px。保留 BLOCKER-06-03，需确认字体及资源加载稳定性；不以硬编码高度掩盖差异。
+
+- 2026-11-08：菜单预览修复提交 `3d6c0f3`，部署 https://github.com/jill0010/NewVPS/actions/runs/42508744380 成功。交互测试 https://github.com/jill0010/NewVPS/actions/runs/42509663378 通过：5 项检查、失败 0；桌面语言菜单与手机导航菜单展开、Escape 关闭、点击外部关闭均成功；实际中文 `/NewVPS/zh/` 与手机 VPS `/NewVPS/vps/` 导航成功。手机独立语言按钮按原始响应式隐藏状态跳过。俄语跳转扩展测试 https://github.com/jill0010/NewVPS/actions/runs/42509860332 尚未确认结果。BLOCKER-07-03 仅菜单基本交互子项已恢复，其余原始脚本缺失及业务交互仍阻塞；BLOCKER-08-01 语言切换中文已验证，其他语言和选中态仍待验收。总进度不变，6/10 阶段完成。
