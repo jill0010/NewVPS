@@ -21,6 +21,8 @@ jobs:
       - name: Generate route index
         run: python3 restoration/build_page_index.py
       - name: Build original capture preview
+        env:
+          PREVIEW_BASE_PATH: /NewVPS
         run: python3 restoration/build_static_preview.py
       - name: Verify output
         run: |
