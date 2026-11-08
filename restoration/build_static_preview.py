@@ -49,6 +49,32 @@ def main():
             )
             html = re.sub(r'url\(\s*(["\x27]?)/(?!(?:/))',
                           lambda m: 'url(' + m.group(1) + base + '/', html)
+        if base:
+            # Captured inline scripts may set href="/" after the static HTML rewrite.
+            # Scope this runtime navigation correction to the GitHub Pages preview.
+            # Do not touch source archives or change any visible page content.
+            nav_fix = """
+<script data-restoration-preview-navigation>
+(function () {
+  const base = __BASE__;
+  function fix() {
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      const raw = a.getAttribute('href');
+      if (raw && raw[0] === '/' && raw[1] !== '/' &&
+          !raw.startsWith(base + '/') && raw !== base) {
+        a.setAttribute('href', base + raw);
+      }
+    });
+  }
+  fix();
+  document.addEventListener('DOMContentLoaded', fix);
+  new MutationObserver(fix).observe(document.documentElement, {
+    subtree: true, childList: true, attributes: true, attributeFilter: ['href']
+  });
+})();
+</script>
+""".replace("__BASE__", json.dumps(base))
+            html = html.replace("</body>", nav_fix + "</body>")
         target = OUT / route.lstrip("/") / "index.html" if route != "/" else OUT / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(html, encoding="utf-8")
