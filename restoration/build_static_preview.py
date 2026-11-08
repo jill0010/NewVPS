@@ -75,6 +75,43 @@ def main():
 </script>
 """.replace("__BASE__", json.dumps(base))
             html = html.replace("</body>", nav_fix + "</body>")
+        if base:
+            # The supplied DOM snapshots contain no executable menu handlers.
+            # Restore only the existing captured controls in the preview.
+            menu_fix = """
+<script data-restoration-preview-menus>
+(function () {
+  function bind(buttonId, panelId) {
+    const button = document.getElementById(buttonId);
+    const panel = document.getElementById(panelId);
+    if (!button || !panel) return;
+    function setOpen(open) {
+      button.setAttribute('aria-expanded', String(open));
+      panel.style.setProperty('display', open ? 'block' : 'none', 'important');
+      panel.style.setProperty('visibility', open ? 'visible' : 'hidden', 'important');
+      panel.style.setProperty('opacity', open ? '1' : '0', 'important');
+      panel.style.setProperty('pointer-events', open ? 'auto' : 'none', 'important');
+      if (open) panel.style.setProperty('transform', 'none', 'important');
+    }
+    setOpen(false);
+    button.addEventListener('click', function (event) {
+      event.stopPropagation();
+      setOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+    document.addEventListener('click', function (event) {
+      if (!button.contains(event.target) && !panel.contains(event.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') setOpen(false);
+    });
+  }
+  function init() { bind('langBtn', 'langMenu'); bind('mobBtn', 'mobMenu'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+"""
+            html = html.replace("</body>", menu_fix + "</body>")
         target = OUT / route.lstrip("/") / "index.html" if route != "/" else OUT / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(html, encoding="utf-8")
