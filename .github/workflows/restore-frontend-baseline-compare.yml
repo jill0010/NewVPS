@@ -25,11 +25,11 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Compare original HTML rendering with deployed preview
         run: node restoration/compare_original_and_online.cjs
-      - name: Upload original and deployed screenshots
+      - name: Upload baseline comparison metrics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: original-vs-deployed-visual-baselines
+          name: original-vs-deployed-baseline-metrics
           path: visual-baseline-comparison/
           retention-days: 7
           if-no-files-found: warn
