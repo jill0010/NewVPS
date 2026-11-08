@@ -35,6 +35,8 @@ const path = require('path');
     }
   }
   await browser.close();
-  fs.writeFileSync(path.join(output,'audit.json'),JSON.stringify({pages:unique.length,viewports:results.length,results},null,2));
+  const summary={pages:unique.length,viewports:results.length,failed_http:results.filter(r=>!r.ok).length,views_with_broken_images:results.filter(r=>(r.broken_images||[]).length>0).length,views_with_horizontal_overflow:results.filter(r=>r.horizontal_overflow).length};
+  console.log('VISUAL_AUDIT_SUMMARY '+JSON.stringify(summary));
+  fs.writeFileSync(path.join(output,'audit.json'),JSON.stringify({summary,results},null,2));
   if(results.some(r=>!r.ok))process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1});
