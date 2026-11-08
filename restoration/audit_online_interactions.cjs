@@ -10,7 +10,8 @@ const fs=require('fs');
   const page=await browser.newPage({viewport:{width:1440,height:900}});
   const url='https://jill0010.github.io/NewVPS'+(item.route==='/'?'/':item.route.replace(/\/$/,'')+'/');
   try{
-   await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
+   await page.goto(url,{waitUntil:'load',timeout:30000});
+   await page.waitForTimeout(500);
    const data=await page.evaluate(()=>{
     const links=[...document.querySelectorAll('a[href]')];
     const buttons=[...document.querySelectorAll('button')];
@@ -28,7 +29,7 @@ const fs=require('fs');
    });
    // Exercise an actual click only on a same-site Home link (safe navigation).
    // No forms, account actions, purchases, or outbound links are clicked.
-   if(item.route==='/use-cases/vpn-hosting'){
+   if(item.route==='/use-cases/vpn-hosting' || item.route==='/use-cases/scraping-proxy-hosting'){
      const home=page.locator('a[href="/NewVPS/"]').first();
      data.homeNavigationTest=await home.count() ? await (async()=>{
        await home.click({timeout:8000});
@@ -44,12 +45,12 @@ const fs=require('fs');
  const summary={routes:results.length,failed:results.filter(x=>!x.ok).length,
    pagesWithInvalidLocalLinks:results.filter(x=>x.invalidLocalLinks?.length).length,
    pagesWithUnlabeledButtons:results.filter(x=>x.buttonsWithoutLabel>0).length,
-   homeNavigationTest:results.find(x=>x.route==='/use-cases/vpn-hosting')?.homeNavigationTest,
+   homeNavigationTests:results.filter(x=>x.homeNavigationTest).map(x=>({route:x.route,...x.homeNavigationTest})),
    totalButtons:results.reduce((n,x)=>n+(x.buttons||0),0),
    totalForms:results.reduce((n,x)=>n+(x.forms||0),0)};
  fs.mkdirSync('interaction-audit',{recursive:true});
  fs.writeFileSync('interaction-audit/report.json',JSON.stringify({summary,results},null,2));
  console.log('INTERACTION_AUDIT_SUMMARY '+JSON.stringify(summary));
  for(const r of results.filter(x=>x.invalidLocalLinks?.length))console.log('INVALID_LOCAL_LINKS '+JSON.stringify(r));
- if(summary.failed)process.exitCode=1;
+ if(summary.failed || summary.pagesWithInvalidLocalLinks || summary.homeNavigationTests.some(x=>!x.ok))process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1});
