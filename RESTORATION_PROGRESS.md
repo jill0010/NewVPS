@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | 01 | 原始档案核验 | 两个 RAR 存在、两份解压目录存在、文件树完整 | DONE | — |
 | 02 | 全量页面索引 | 69 个 HTML 逐一映射原 URL、语言、标题、重复关系 | DONE | — |
-| 03 | 资源依赖核对 | HTML 引用的 CSS/JS/图片/字体均定位，缺失单独登记 | DOING | BLOCKER-03-01 |
+| 03 | 资源依赖核对 | HTML 引用的 CSS/JS/图片/字体均定位，缺失单独登记 | DONE | BLOCKER-03-01（缺失已登记） |
 | 04 | 原样静态托管 | 可从工作分支启动静态预览，保留原始内容 | DONE | — |
 | 05 | 页面路由复原 | 每个已收集页面可由对应路径访问，404 逐项记录 | DONE | — |
 | 06 | 视觉逐页核验 | 桌面/移动布局、字体、颜色、间距、图片逐页比对 | TODO | — |
@@ -34,8 +34,10 @@
 - 2026-11-08：GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42500979248 ，66 条唯一 canonical 路由均通过线上 HTTP、标题和语言检查；核验报告保存于该运行的 `online-route-audit` artifact。此验收不代表视觉、交互及动态后端功能已经完成。
 
 ## 阶段 03 资源审计记录
-- 审计报告 `restoration/asset-issues.json` schema v2：1239 条本地静态资源引用已检查，348 条未直接在捕获页面路径定位；其中绝大多数是全站共享根目录引用（favicon、touch icon、manifest、agent.json），不等于 348 个独立缺失文件。
+- 审计报告 `restoration/asset-issues.json` schema v2：1236 条本地静态资源引用已检查，345 条未直接在捕获页面路径定位；其中绝大多数是全站共享根目录引用（favicon、touch icon、manifest、agent.json），不等于 348 个独立缺失文件。
 - 已通过 `de0025b` 在部署产物中从原始哈希命名资源恢复 favicon、32px favicon、touch icon，不改动源文件。2026-11-08 已经由 GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42501389791 验证线上 3 种图标与捕获原始文件逐字节一致（工作流成功）。其他资源仍待核验。
+
+- 资源报告已重新分类：`/AnonPort.webp` 和 `/assets/img/og-image.jpg` 属于链接目标而非页面渲染依赖。剩余未定位项只有 5 类根路径资源：三个图标已从原始哈希文件还原并逐字节验证；`/manifest.json`、`/.well-known/agent.json` 原始文件未收集到，保留为已登记差异，不伪造内容。阶段 03 按“定位或登记缺失”验收，**不代表这两项已修复**。
 
 ## BLOCKER 子项登记
 ### BLOCKER-03-01 — 捕获快照缺少部分根目录静态资源
