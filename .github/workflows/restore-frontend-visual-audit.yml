@@ -1,0 +1,39 @@
+name: Restore frontend - desktop and mobile visual audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/capture_online_visuals.cjs'
+      - 'restoration/build_visual_audit_manifest.py'
+      - '.github/workflows/restore-frontend-visual-audit.yml'
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build manifest from original captures
+        run: python3 restoration/build_visual_audit_manifest.py
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser tooling
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Capture original-content online pages
+        run: node restoration/capture_online_visuals.cjs
+      - name: Upload screenshots and visual audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-content-visual-audit
+          path: |
+            visual-audit-screenshots/
+            restoration/visual-audit-manifest.json
+          if-no-files-found: warn
+          retention-days: 14
