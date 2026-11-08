@@ -1,28 +1,22 @@
 #!/usr/bin/env python3
-"""Build an exact-content static preview from the user's original captured HTML.
-
-Only rewrite relative captured asset URLs to their new immutable asset locations.
-Never edit source captures. No synthetic pages or altered marketing copy.
-"""
+"""Build an original-content preview. Captured source files are read-only."""
 from pathlib import Path
 import json
 import re
 import shutil
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = ROOT / "restoration" / "page-index.json"
+INDEX = ROOT / "restoration/page-index.json"
 OUT = ROOT / "site-preview"
+ROOT_ASSETS = ("favicon.ico", "favicon-32-v2.png", "apple-touch-icon-v2.png", "manifest.json")
 
 def main():
-    if not INDEX.exists():
-        raise SystemExit("Run python3 restoration/build_page_index.py first")
     data = json.loads(INDEX.read_text(encoding="utf-8"))
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir()
-    seen = {}
-    conflicts = []
+    seen, conflicts, root_asset_gaps = {}, [], set()
     for page in data["pages"]:
         source = ROOT / page["source"]
         route = page["route"]
@@ -39,19 +33,33 @@ def main():
         if asset_src.exists():
             shutil.copytree(asset_src, asset_dst)
         html = source.read_text(encoding="utf-8", errors="replace")
-        # Keep all original HTML intact except captured relative asset references.
+        # Rewrite captured relative asset URLs only; do not modify copy or wording.
         html = re.sub(r'(?<=["\x27])assets/', f'/_captures/{capture}/assets/', html)
-        # URL routes are represented by directory index files for static hosts.
         target = OUT / route.lstrip("/") / "index.html" if route != "/" else OUT / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(html, encoding="utf-8")
+
+    # Captures commonly reference /favicon.ico and similar absolute paths.
+    # Restore these only when an unambiguous exact original file exists.
+    for name in ROOT_ASSETS:
+        candidates = list((ROOT / "extracted").glob(f"newvps*/cloned-page-*/{name}"))
+        if candidates:
+            shutil.copy2(candidates[0], OUT / name)
+        else:
+            root_asset_gaps.add(name)
+
     (OUT / ".nojekyll").write_text("")
-    report = {"captures": len(data["pages"]), "published_routes": len(seen), "conflicts": conflicts,
-              "note": "Preview contains only supplied snapshots; backend functionality not reproduced."}
+    report = {
+        "captures": len(data["pages"]),
+        "published_routes": len(seen),
+        "conflicts": conflicts,
+        "root_asset_gaps": sorted(root_asset_gaps),
+        "note": "Captured content only. Dynamic backend behavior is not recreated."
+    }
     (OUT / "restoration-build-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n")
     print(json.dumps(report, ensure_ascii=False, indent=2))
-    if not seen:
-        raise SystemExit("No routes published")
+    if len(seen) != data["unique_route_count"]:
+        raise SystemExit("Route count mismatch")
 
 if __name__ == "__main__":
     main()
