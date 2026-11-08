@@ -1,4 +1,5 @@
 name: Restore frontend - online preview
+# Trigger deployment after github-pages environment branch allowance update.
 on:
   workflow_dispatch:
   push:
