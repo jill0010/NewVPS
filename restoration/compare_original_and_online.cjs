@@ -43,6 +43,15 @@ const { pathToFileURL } = require('url');
           await p.waitForTimeout(100);
         };
         await settle(offline);await settle(online);
+        // Force the same captured font weights to resolve before measuring text wraps.
+        const warmFonts=async p=>p.evaluate(async()=>{
+          const families=['400','500','600','700','800'];
+          await Promise.all(families.map(weight=>document.fonts.load(weight+' 16px "Plus Jakarta Sans"','ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789').catch(()=>[])));
+          await document.fonts.ready.catch(()=>{});
+        });
+        await Promise.race([warmFonts(offline),new Promise(resolve=>setTimeout(resolve,3500))]);
+        await Promise.race([warmFonts(online),new Promise(resolve=>setTimeout(resolve,3500))]);
+        await offline.waitForTimeout(150);await online.waitForTimeout(150);
         const info=async p=>p.evaluate(()=>({
           title:document.title,
           bodyText:(document.body?.innerText||'').replace(/\s+/g,' ').trim(),
