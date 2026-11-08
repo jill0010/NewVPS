@@ -67,8 +67,10 @@ const { pathToFileURL } = require('url');
           result.onlineMetrics=await metrics(online);
         }
         const prefix=String(i+1).padStart(3,'0')+'-'+v.name;
-        await offline.screenshot({path:path.join(out,prefix+'-original.png'),fullPage:true,animations:'disabled',timeout:30000});
-        await online.screenshot({path:path.join(out,prefix+'-deployed.png'),fullPage:true,animations:'disabled',timeout:30000});
+        if(process.env.BASELINE_SCREENSHOTS!=='0'){
+          await offline.screenshot({path:path.join(out,prefix+'-original.png'),fullPage:true,animations:'disabled',timeout:30000});
+          await online.screenshot({path:path.join(out,prefix+'-deployed.png'),fullPage:true,animations:'disabled',timeout:30000});
+        }
         result.ok=true;
       }catch(e){result.ok=false;result.error=String(e).slice(0,300);}
       results.push(result);
