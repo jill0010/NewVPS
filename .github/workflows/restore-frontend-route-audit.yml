@@ -1,0 +1,26 @@
+name: Restore frontend - audit all online routes
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/audit_online_routes.py'
+      - '.github/workflows/restore-frontend-route-audit.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check syntax
+        run: python3 -m py_compile restoration/audit_online_routes.py
+      - name: Verify all published routes
+        run: python3 restoration/audit_online_routes.py
+      - name: Upload complete audit, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: online-route-audit
+          path: restoration/online-route-audit.json
+          if-no-files-found: warn
