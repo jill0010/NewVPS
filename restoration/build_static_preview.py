@@ -53,14 +53,24 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(html, encoding="utf-8")
 
-    # Captures commonly reference /favicon.ico and similar absolute paths.
-    # Restore these only when an unambiguous exact original file exists.
-    for name in ROOT_ASSETS:
-        candidates = list((ROOT / "extracted").glob(f"newvps*/cloned-page-*/{name}"))
+    # Restore original icon bytes from captured, content-hashed asset files.
+    # Never substitute invented images. Missing non-captured metadata is reported.
+    icon_patterns = {
+        "favicon.ico": "favicon-*.ico",
+        "favicon-32-v2.png": "favicon-32-v2-*.png",
+        "apple-touch-icon-v2.png": "apple-touch-icon-v2-*.png",
+    }
+    for name, pattern in icon_patterns.items():
+        candidates = sorted((ROOT / "extracted").glob(
+            f"newvps*/cloned-page-*/assets/anonport_com/{pattern}"
+        ))
         if candidates:
             shutil.copy2(candidates[0], OUT / name)
         else:
             root_asset_gaps.add(name)
+    # Preserve the report for files that are absent from the user-provided captures.
+    if not (OUT / "manifest.json").exists():
+        root_asset_gaps.add("manifest.json")
 
     (OUT / ".nojekyll").write_text("")
     report = {
