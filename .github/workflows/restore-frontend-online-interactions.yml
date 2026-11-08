@@ -1,0 +1,32 @@
+name: Restore frontend - online interaction audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/audit_online_interactions.cjs'
+      - '.github/workflows/restore-frontend-online-interactions.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 restoration/build_visual_audit_manifest.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Audit navigation and controls safely
+        run: node restoration/audit_online_interactions.cjs
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: online-interaction-audit
+          path: interaction-audit/report.json
+          retention-days: 14
