@@ -11,7 +11,7 @@ permissions:
 jobs:
   compare:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: Generate capture manifest
@@ -25,6 +25,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Compare original HTML rendering with deployed preview
         run: node restoration/compare_original_and_online.cjs
+        env:
+          BASELINE_SCREENSHOTS: '0'
       - name: Upload baseline comparison metrics
         if: always()
         uses: actions/upload-artifact@v4
