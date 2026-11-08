@@ -1,0 +1,23 @@
+name: Restore frontend - original interaction inventory
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/inventory_interactions.py'
+      - '.github/workflows/restore-frontend-interactions-audit.yml'
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inventory original HTML controls
+        run: python3 restoration/inventory_interactions.py
+      - name: Upload original control inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-interaction-inventory
+          path: restoration/interaction-inventory.json
+          retention-days: 14
