@@ -35,7 +35,7 @@
 
 ## 阶段 03 资源审计记录
 - 审计报告 `restoration/asset-issues.json` schema v2：1239 条本地静态资源引用已检查，348 条未直接在捕获页面路径定位；其中绝大多数是全站共享根目录引用（favicon、touch icon、manifest、agent.json），不等于 348 个独立缺失文件。
-- 已通过 `de0025b` 在部署产物中从原始哈希命名资源恢复 favicon、32px favicon、touch icon，不改动源文件。尚待新部署及资源逐项验收。
+- 已通过 `de0025b` 在部署产物中从原始哈希命名资源恢复 favicon、32px favicon、touch icon，不改动源文件。2026-11-08 已经由 GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42501389791 验证线上 3 种图标与捕获原始文件逐字节一致（工作流成功）。其他资源仍待核验。
 
 ## BLOCKER 子项登记
 ### BLOCKER-03-01 — 捕获快照缺少部分根目录静态资源
@@ -44,7 +44,8 @@
 ### BLOCKER-09-01 — GitHub Pages deployment job fails before steps start（已解决）
 - 证据：Run https://github.com/jill0010/NewVPS/actions/runs/42499917068 ，commit `4c2a732`，build 全部步骤成功，`github-pages` 工件上传成功（约 31 MB），但 deploy job 在 2026-11-08T16:27:00Z 至 16:27:01Z 之间失败，且 GitHub API 返回 `steps: []`、无 runner 名称。
 - 结论：静态构建成功，故障位于部署作业启动/权限/环境配置阶段；由于日志存储返回 BlobNotFound，具体 GitHub 拒绝原因尚未证实，不能认定权限或设置是唯一原因。
-- 根因：`github-pages` 环境的 Deployment branches and tags 仅允许 `main`，阻止 `restore-frontend` 的部署作业启动。用户已允许 `restore-frontend` 分支。\n- 验证：Run https://github.com/jill0010/NewVPS/actions/runs/42500744010 ，commit `a2b33f7`，build 和 deploy 均成功；实际访问 `https://jill0010.github.io/NewVPS/`、`/zh/`、`/vps/` 均返回相应原始页面内容。其余页面的视觉和交互仍需逐项核验。
+- 根因：`github-pages` 环境的 Deployment branches and tags 仅允许 `main`，阻止 `restore-frontend` 的部署作业启动。用户已允许 `restore-frontend` 分支。
+- 验证：Run https://github.com/jill0010/NewVPS/actions/runs/42500744010 ，commit `a2b33f7`，build 和 deploy 均成功；实际访问 `https://jill0010.github.io/NewVPS/`、`/zh/`、`/vps/` 均返回相应原始页面内容。其余页面的视觉和交互仍需逐项核验。
 
 ### BLOCKER-09-01 / 历史构建故障（已解决）
 - Run https://github.com/jill0010/NewVPS/actions/runs/42499745109 构建因 Python 正则表达式转义错误失败。
