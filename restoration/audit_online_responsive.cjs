@@ -3,7 +3,8 @@ const {chromium}=require('playwright');
 const fs=require('fs');
 (async()=>{
  const manifest=JSON.parse(fs.readFileSync('restoration/visual-audit-manifest.json','utf8'));
- const items=[...new Map(manifest.items.map(x=>[x.route,x])).values()];
+ const seen=new Set();
+  const items=manifest.items.filter(x=>{if(seen.has(x.route))return false;seen.add(x.route);return true;});
  const browser=await chromium.launch({headless:true});
  const results=[];
  for(const item of items){
