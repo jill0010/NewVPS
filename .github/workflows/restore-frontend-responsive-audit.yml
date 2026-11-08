@@ -1,0 +1,32 @@
+name: Restore frontend - language and responsive audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/audit_online_responsive.cjs'
+      - '.github/workflows/restore-frontend-responsive-audit.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 restoration/build_visual_audit_manifest.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Audit deployed languages and responsive widths
+        run: node restoration/audit_online_responsive.cjs
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-language-audit
+          path: responsive-audit/
+          retention-days: 14
