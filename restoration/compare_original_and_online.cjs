@@ -27,12 +27,19 @@ const { pathToFileURL } = require('url');
         // Wait for layout-affecting resources on both pages; DOMContentLoaded
         // alone is insufficient for screenshots and creates nondeterministic differences.
         const settle=async p=>{
-          await p.evaluate(async()=>{
-            try{await document.fonts.ready}catch{}
-            await Promise.all([...document.images].filter(img=>img.getAttribute('src')?.trim()).map(img=>
-              img.decode().catch(()=>{})));
-          });
-          await p.waitForTimeout(200);
+          // Captures may reference third-party fonts/images that never finish.
+          // Bound each resource wait; do not allow one page to stall all 132 views.
+          await Promise.race([
+            p.evaluate(async()=>{
+              await Promise.all([
+                document.fonts.ready.catch(()=>{}),
+                ...[...document.images].filter(img=>img.getAttribute('src')?.trim())
+                  .map(img=>img.decode().catch(()=>{}))
+              ]);
+            }).catch(()=>{}),
+            new Promise(resolve=>setTimeout(resolve,2500))
+          ]);
+          await p.waitForTimeout(100);
         };
         await settle(offline);await settle(online);
         const info=async p=>p.evaluate(()=>({
