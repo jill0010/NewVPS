@@ -80,10 +80,14 @@ const { pathToFileURL } = require('url');
             footerHeight:document.querySelector('footer')?.getBoundingClientRect().height??null,
             images:[...document.images].slice(0,10).map(x=>({alt:x.alt,width:x.naturalWidth,height:x.naturalHeight})),
             elements:[...document.querySelectorAll('main > *, article > *')].slice(0,15).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,60),height:Math.round(x.getBoundingClientRect().height)})),
+            textBlocks:[...document.querySelectorAll('main p, main li, main h1, main h2, main h3, footer p, footer a')].slice(0,180).map(x=>({tag:x.tagName,text:(x.innerText||'').trim().slice(0,65),height:Math.round(x.getBoundingClientRect().height),width:Math.round(x.getBoundingClientRect().width),font:getComputedStyle(x).fontFamily,fontSize:getComputedStyle(x).fontSize,lineHeight:getComputedStyle(x).lineHeight})),
             sections:[...document.querySelectorAll('main section, main article, footer')].slice(0,35).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,50),height:Math.round(x.getBoundingClientRect().height),width:Math.round(x.getBoundingClientRect().width),font:getComputedStyle(x).fontFamily,fontSize:getComputedStyle(x).fontSize,lineHeight:getComputedStyle(x).lineHeight,head:(x.querySelector('h1,h2,h3')?.textContent||'').trim().slice(0,60)}))
           }));
           result.offlineMetrics=await metrics(offline);
           result.onlineMetrics=await metrics(online);
+          const a=result.offlineMetrics.textBlocks,b=result.onlineMetrics.textBlocks;
+          result.textBlockDifferences=a.map((x,i)=>({index:i,original:x,deployed:b[i]})).filter(x=>x.deployed&&Math.abs(x.original.height-x.deployed.height)>2).slice(0,18);
+          delete result.offlineMetrics.textBlocks;delete result.onlineMetrics.textBlocks;
         }
         const prefix=String(i+1).padStart(3,'0')+'-'+v.name;
         if(process.env.BASELINE_SCREENSHOTS!=='0'){
@@ -93,7 +97,7 @@ const { pathToFileURL } = require('url');
         result.ok=true;
       }catch(e){result.ok=false;result.error=String(e).slice(0,300);}
       results.push(result);
-      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,textDiff:result.textDiff,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,error:result.error}));
+      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,textDiff:result.textDiff,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,textBlockDifferences:result.textBlockDifferences,error:result.error}));
       await context.close();
     }
   }
