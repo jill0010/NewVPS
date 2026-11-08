@@ -2,6 +2,7 @@
 """Build an original-content preview. Captured source files are read-only."""
 from pathlib import Path
 import json
+import os
 import re
 import shutil
 from urllib.parse import unquote, urlsplit
@@ -17,6 +18,9 @@ def main():
         shutil.rmtree(OUT)
     OUT.mkdir()
     seen, conflicts, root_asset_gaps = {}, [], set()
+    base = os.environ.get('PREVIEW_BASE_PATH', '').rstrip('/')
+    if base and (not base.startswith('/') or '..' in base):
+        raise SystemExit('Invalid PREVIEW_BASE_PATH')
     for page in data["pages"]:
         source = ROOT / page["source"]
         route = page["route"]
@@ -35,6 +39,16 @@ def main():
         html = source.read_text(encoding="utf-8", errors="replace")
         # Rewrite captured relative asset URLs only; do not modify copy or wording.
         html = re.sub(r'(?<=["\x27])assets/', f'/_captures/{capture}/assets/', html)
+        if base:
+            # GitHub project Pages are served below /NewVPS, not at domain root.
+            # Rewrite local navigation and asset URL attributes only.
+            html = re.sub(
+                r'(?P<before>\\b(?:href|src|action|poster)\\s*=\\s*["\\x27])/(?P<path>[^"\\x27]*)',
+                lambda m: m.group('before') + base + '/' + m.group('path'),
+                html, flags=re.IGNORECASE
+            )
+            html = re.sub(r'url\\(\\s*(["\\x27]?)/(?!(?:/))',
+                          lambda m: 'url(' + m.group(1) + base + '/', html)
         target = OUT / route.lstrip("/") / "index.html" if route != "/" else OUT / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(html, encoding="utf-8")
