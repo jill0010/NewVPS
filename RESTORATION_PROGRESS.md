@@ -40,6 +40,7 @@
 - 资源报告已重新分类：`/AnonPort.webp` 和 `/assets/img/og-image.jpg` 属于链接目标而非页面渲染依赖。剩余未定位项只有 5 类根路径资源：三个图标已从原始哈希文件还原并逐字节验证；`/manifest.json`、`/.well-known/agent.json` 原始文件未收集到，保留为已登记差异，不伪造内容。阶段 03 按“定位或登记缺失”验收，**不代表这两项已修复**。
 
 ## 阶段 06 视觉核验记录
+- 2026-11-08：发现原始 HTML 69 份包含 66 条唯一路由，构建器采用 first-wins，视觉对照脚本此前误用 Map 的 last-wins，造成 `/zh/` 和 `/jurisdiction-selector` 账户入口标签差异。已修复对照脚本及响应式脚本使用 first-wins；新的视觉核验 https://github.com/jill0010/NewVPS/actions/runs/42507682648 正在执行，未提前认定文字差异归零。
 - 2026-11-08：GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42501742057 成功，已生成 66 条唯一线上路由在 1440×900 与 390×844 视口下的 132 张截图，并上传 64 MB 证据工件 `original-content-visual-audit`。
 - 已增加截图检查统计，后续运行将明确汇总图片加载异常、水平溢出与 HTTP 失败。原始归档提供的是 HTML 与资源快照，而不是同条件参考截图；截图存在不代表完成视觉一致性比对。
 
@@ -48,6 +49,7 @@
 - 已新增只读线上交互审计：检查导航路径是否仍指向部署站点根目录、无标签按钮、控件数量等；不提交表单、不下单、不触发账户操作。
 
 ## 阶段 08 基础检查证据
+- 2026-11-08：修正重复路由选择后，GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42507687141 再次成功：132 项检查、HTTP 失败 0、语言标识不一致 0、水平溢出 0、缺少 viewport 元信息 0。审计已与构建的 first-wins 快照策略一致。
 - 2026-11-08：GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42505394268 成功：66 条唯一路由分别以 1440×900 和 390×844 检查，共 132 项；HTTP 失败 0、语言标识不一致 0、水平溢出 0、缺少 viewport 元信息 0。检测到语言标识 en、ru、zh。此为静态布局与语言标识验证，不包含实际语言切换交互。
 
 ## BLOCKER 子项登记
