@@ -102,3 +102,5 @@
 - 2026-11-08：菜单预览修复提交 `3d6c0f3`，部署 https://github.com/jill0010/NewVPS/actions/runs/42508744380 成功。交互测试 https://github.com/jill0010/NewVPS/actions/runs/42509663378 通过：5 项检查、失败 0；桌面语言菜单与手机导航菜单展开、Escape 关闭、点击外部关闭均成功；实际中文 `/NewVPS/zh/` 与手机 VPS `/NewVPS/vps/` 导航成功。手机独立语言按钮按原始响应式隐藏状态跳过。俄语跳转扩展测试 https://github.com/jill0010/NewVPS/actions/runs/42509860332 已成功：6 项检查通过、失败 0，俄语 `/NewVPS/ru/` 跳转正确。BLOCKER-07-03 仅菜单基本交互子项已恢复，其余原始脚本缺失及业务交互仍阻塞；BLOCKER-08-01 语言切换中文已验证，其他语言和选中态仍待验收。总进度不变，6/10 阶段完成。
 
 - 2026-11-08：手机导航扩展审计 https://github.com/jill0010/NewVPS/actions/runs/42510335966 成功：19 项检查通过、0 失败（含 1 项响应式隐藏跳过）。实际点击 13 个新增手机导航入口均正确到达 `/NewVPS/` 对应页面，覆盖 Dedicated、RDP、GPU、Domains、Pricing、Locations、Use cases、Guides、Alternatives、About、FAQ、Contact、Status。保留 BLOCKER-07-01 动态业务功能缺口；阶段 07 仍为 DOING。
+
+- 2026-11-08：字体字形宽度对照 https://github.com/jill0010/NewVPS/actions/runs/42512651224 成功：132 组、标题/全文/宽度差异均 0，高度差异 >10px 为 8 组。`/gpu` 与 `/zh/gpu` 异常段落两侧 glyphWidth 相同但高度不同；`/crypto-gpu-hosting` 与 `/account` 手机端异常段落 glyphWidth 不同。已在提交 `8281c7e` 中增加 computedFont、wordSpacing、textTransform、overflowWrap、hyphens 的元素级诊断。尚未证实根因，保留 BLOCKER-06-03，不改原始文件。
