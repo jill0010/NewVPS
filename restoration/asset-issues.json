@@ -4,7 +4,20 @@
   "external_references": 424,
   "skipped_navigation_references": 8045,
   "count": 345,
-  "navigational_asset_links": [],
+  "navigational_asset_links": [
+    {
+      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
+      "reference": "/AnonPort.webp"
+    },
+    {
+      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
+      "reference": "/favicon.ico"
+    },
+    {
+      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
+      "reference": "/assets/img/og-image.jpg"
+    }
+  ],
   "issues": [
     {
       "source": "extracted/newvps1/cloned-page-1794077501436/index.html",
