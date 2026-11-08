@@ -18,27 +18,7 @@ jobs:
       - name: Generate original page index
         run: python3 restoration/build_page_index.py
       - name: Check missing local asset references
-        run: |
-          python3 - <<'PY'
-          import json, re
-          from pathlib import Path
-          from urllib.parse import urlsplit, unquote
-          root=Path('.')
-          data=json.loads(Path('restoration/page-index.json').read_text())
-          issues=[]
-          for page in data['pages']:
-              src=Path(page['source'])
-              html=src.read_text(encoding='utf-8',errors='replace')
-              for raw in re.findall(r'(?:src|href)\s*=\s*[\x22\x27]([^\x22\x27]+)',html,re.I):
-                  if raw.startswith(('http:','https:','//','data:','mailto:','tel:','#','javascript:')): continue
-                  path=unquote(urlsplit(raw).path)
-                  if not path or path=='/': continue
-                  target=src.parent/path.lstrip('/') if path.startswith('/') else src.parent/path
-                  if not target.exists() and not (src.parent/path.lstrip('/')).exists():
-                      issues.append({'source':str(src),'reference':raw})
-          Path('restoration/asset-issues.json').write_text(json.dumps({'count':len(issues),'issues':issues},indent=2,ensure_ascii=False)+'\n')
-          print('Missing local asset references:',len(issues))
-          PY
+        run: python3 restoration/audit_assets.py
       - name: Commit generated inventory and asset report
         run: |
           git config user.name "github-actions[bot]"
