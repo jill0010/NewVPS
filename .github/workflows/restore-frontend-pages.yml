@@ -18,6 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Validate Python syntax and URL rewrite expressions
+        run: |
+          python3 -m py_compile restoration/build_page_index.py restoration/build_static_preview.py restoration/audit_assets.py
+          python3 - <<'PY'
+          import re
+          assert re.sub(r'url\(\s*([\x22\x27]?)/(?!(?:/))', lambda m: 'url(' + m.group(1) + '/NewVPS/', 'url(/assets/example.webp)') == 'url(/NewVPS/assets/example.webp)'
+          PY
       - name: Generate route index
         run: python3 restoration/build_page_index.py
       - name: Build original capture preview
