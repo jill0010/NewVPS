@@ -1,9 +1,23 @@
 {
   "schema_version": 2,
-  "checked_local_asset_references": 1239,
+  "checked_local_asset_references": 1236,
   "external_references": 424,
   "skipped_navigation_references": 8045,
-  "count": 348,
+  "count": 345,
+  "navigational_asset_links": [
+    {
+      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
+      "reference": "/AnonPort.webp"
+    },
+    {
+      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
+      "reference": "/favicon.ico"
+    },
+    {
+      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
+      "reference": "/assets/img/og-image.jpg"
+    }
+  ],
   "issues": [
     {
       "source": "extracted/newvps1/cloned-page-1794077501436/index.html",
@@ -1203,24 +1217,6 @@
       "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
       "reference": "/.well-known/agent.json",
       "tag": "link",
-      "attribute": "href"
-    },
-    {
-      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
-      "reference": "/AnonPort.webp",
-      "tag": "a",
-      "attribute": "href"
-    },
-    {
-      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
-      "reference": "/favicon.ico",
-      "tag": "a",
-      "attribute": "href"
-    },
-    {
-      "source": "extracted/newvps2/cloned-page-1794127753454/index.html",
-      "reference": "/assets/img/og-image.jpg",
-      "tag": "a",
       "attribute": "href"
     },
     {
