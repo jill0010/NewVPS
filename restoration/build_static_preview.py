@@ -43,11 +43,11 @@ def main():
             # GitHub project Pages are served below /NewVPS, not at domain root.
             # Rewrite local navigation and asset URL attributes only.
             html = re.sub(
-                r'(?P<before>\\b(?:href|src|action|poster)\\s*=\\s*["\\x27])/(?P<path>[^"\\x27]*)',
+                r'(?P<before>\b(?:href|src|action|poster)\s*=\s*["\x27])/(?P<path>[^"\x27]*)',
                 lambda m: m.group('before') + base + '/' + m.group('path'),
                 html, flags=re.IGNORECASE
             )
-            html = re.sub(r'url\\(\\s*(["\\x27]?)/(?!(?:/))',
+            html = re.sub(r'url\(\s*(["\x27]?)/(?!(?:/))',
                           lambda m: 'url(' + m.group(1) + base + '/', html)
         target = OUT / route.lstrip("/") / "index.html" if route != "/" else OUT / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
