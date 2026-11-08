@@ -20,7 +20,16 @@ const fs=require('fs');
     after=await button.getAttribute('aria-expanded');
     visible=await page.locator(c.panel).isVisible();
    }catch(e){error=String(e).slice(0,250)}
-   cases.push({viewport:v.name,control:c.name,before,after,visible,ok:!error&&before==='false'&&after==='true'&&visible===true,error});
+   let closedOnEscape=null, reopened=null, closedOutside=null;
+   if(!error&&after==='true'){
+     await page.keyboard.press('Escape');
+     closedOnEscape=(await button.getAttribute('aria-expanded'))==='false';
+     await button.click({timeout:8000});
+     reopened=(await button.getAttribute('aria-expanded'))==='true';
+     await page.locator('body').click({position:{x:1,y:1}});
+     closedOutside=(await button.getAttribute('aria-expanded'))==='false';
+   }
+   cases.push({viewport:v.name,control:c.name,before,after,visible,closedOnEscape,reopened,closedOutside,ok:!error&&before==='false'&&after==='true'&&visible===true&&closedOnEscape&&reopened&&closedOutside,error});
   }
   await page.close();
  }
