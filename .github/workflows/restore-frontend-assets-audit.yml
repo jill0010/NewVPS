@@ -1,0 +1,26 @@
+name: Restore frontend - verify original root assets
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/audit_online_root_assets.py'
+      - '.github/workflows/restore-frontend-assets-audit.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check syntax
+        run: python3 -m py_compile restoration/audit_online_root_assets.py
+      - name: Verify online assets against captured original bytes
+        run: python3 restoration/audit_online_root_assets.py
+      - name: Upload full root resource report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: online-root-assets-audit
+          path: restoration/online-root-assets-audit.json
+          if-no-files-found: warn
