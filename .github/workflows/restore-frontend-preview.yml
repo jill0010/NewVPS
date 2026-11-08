@@ -1,0 +1,35 @@
+name: Restore frontend - static preview build
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/**'
+      - '.github/workflows/restore-frontend-preview.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate canonical route index
+        run: python3 restoration/build_page_index.py
+      - name: Build original-content preview
+        run: python3 restoration/build_static_preview.py
+      - name: Validate output
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('site-preview/restoration-build-report.json').read_text())
+          assert report['captures']==69, report
+          assert report['published_routes']>0, report
+          print('Published routes:',report['published_routes'])
+          print('Conflicts:',len(report['conflicts']))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anonport-static-preview
+          path: site-preview/
+          include-hidden-files: true
