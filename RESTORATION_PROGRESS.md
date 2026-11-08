@@ -94,3 +94,5 @@
 ### BLOCKER-09-01 / 历史构建故障（已解决）
 - Run https://github.com/jill0010/NewVPS/actions/runs/42499745109 构建因 Python 正则表达式转义错误失败。
 - 修复：`8b4de62`，在 run `42499917068` 已验证构建成功。
+
+- 2026-11-08：修复 first-wins 对照后，视觉基线工作流 https://github.com/jill0010/NewVPS/actions/runs/42507682648 成功：66 路由 × 2 视口 = 132 项，错误 0，标题差异 0，前 300 字文本摘要差异 0，宽度差异 0，高度差异 >10px 共 6 项（`/zh/gpu` 桌面 29px、`/dedicated` 手机 87px、`/gpu` 桌面 29px、`/tos` 手机 23px、`/privacy` 桌面 46px、`/privacy` 手机 164px）。注意文本核验只比较正文前 300 字，不等同于全页逐字一致；高度差异主要位于正文 section，不能直接改动原始 CSS。下一步定位字体资源、换行和具体差异元素。
