@@ -59,7 +59,8 @@ const { pathToFileURL } = require('url');
         if(!result.text_matches){
           const a=result.offline.bodyText,b=result.deployed.bodyText;
           let pos=0;while(pos<Math.min(a.length,b.length)&&a[pos]===b[pos])pos++;
-          result.textDiff={firstDifferentIndex:pos,original:a.slice(Math.max(0,pos-65),pos+120),deployed:b.slice(Math.max(0,pos-65),pos+120)};
+          const inspect=async p=>p.evaluate(()=>[...document.querySelectorAll('.hd-auth, a, button')].filter(e=>/^(Dashboard|Login|控制面板|登录)$/i.test((e.textContent||'').trim())).slice(0,20).map(e=>({text:e.textContent.trim(),tag:e.tagName,cls:e.className,href:e.getAttribute('href'),display:getComputedStyle(e).display,visibility:getComputedStyle(e).visibility,rect:{width:Math.round(e.getBoundingClientRect().width),height:Math.round(e.getBoundingClientRect().height)}})));
+          result.textDiff={firstDifferentIndex:pos,original:a.slice(Math.max(0,pos-65),pos+120),deployed:b.slice(Math.max(0,pos-65),pos+120),originalControls:await inspect(offline),deployedControls:await inspect(online)};
         }
         result.resourceMismatch={
           brokenImagesOffline:result.offline.brokenImages,
