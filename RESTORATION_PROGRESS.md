@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | 01 | 原始档案核验 | 两个 RAR 存在、两份解压目录存在、文件树完整 | DONE | — |
 | 02 | 全量页面索引 | 69 个 HTML 逐一映射原 URL、语言、标题、重复关系 | DONE | — |
-| 03 | 资源依赖核对 | HTML 引用的 CSS/JS/图片/字体均定位，缺失单独登记 | TODO | — |
+| 03 | 资源依赖核对 | HTML 引用的 CSS/JS/图片/字体均定位，缺失单独登记 | DOING | BLOCKER-03-01 |
 | 04 | 原样静态托管 | 可从工作分支启动静态预览，保留原始内容 | DONE | — |
 | 05 | 页面路由复原 | 每个已收集页面可由对应路径访问，404 逐项记录 | DONE | — |
 | 06 | 视觉逐页核验 | 桌面/移动布局、字体、颜色、间距、图片逐页比对 | TODO | — |
@@ -33,7 +33,14 @@
 ## 阶段 05 验收证据
 - 2026-11-08：GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42500979248 ，66 条唯一 canonical 路由均通过线上 HTTP、标题和语言检查；核验报告保存于该运行的 `online-route-audit` artifact。此验收不代表视觉、交互及动态后端功能已经完成。
 
+## 阶段 03 资源审计记录
+- 审计报告 `restoration/asset-issues.json` schema v2：1239 条本地静态资源引用已检查，348 条未直接在捕获页面路径定位；其中绝大多数是全站共享根目录引用（favicon、touch icon、manifest、agent.json），不等于 348 个独立缺失文件。
+- 已通过 `de0025b` 在部署产物中从原始哈希命名资源恢复 favicon、32px favicon、touch icon，不改动源文件。尚待新部署及资源逐项验收。
+
 ## BLOCKER 子项登记
+### BLOCKER-03-01 — 捕获快照缺少部分根目录静态资源
+- 已识别 `/manifest.json`、`/.well-known/agent.json`、`/AnonPort.webp`、`/assets/img/og-image.jpg` 等引用。缺失项不得凭空生成；按原始归档搜索或保留差异记录。
+
 ### BLOCKER-09-01 — GitHub Pages deployment job fails before steps start（已解决）
 - 证据：Run https://github.com/jill0010/NewVPS/actions/runs/42499917068 ，commit `4c2a732`，build 全部步骤成功，`github-pages` 工件上传成功（约 31 MB），但 deploy job 在 2026-11-08T16:27:00Z 至 16:27:01Z 之间失败，且 GitHub API 返回 `steps: []`、无 runner 名称。
 - 结论：静态构建成功，故障位于部署作业启动/权限/环境配置阶段；由于日志存储返回 BlobNotFound，具体 GitHub 拒绝原因尚未证实，不能认定权限或设置是唯一原因。
