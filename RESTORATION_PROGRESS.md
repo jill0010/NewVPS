@@ -56,6 +56,7 @@
  
 ### BLOCKER-07-03 — 原始网页快照缺少可执行交互脚本
 - GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42504830517 ：三个菜单测试 0/3 通过；桌面语言按钮 aria-expanded 不变，手机语言按钮不可点击，手机菜单按钮点击后仍未展开。
+- 全量审计 https://github.com/jill0010/NewVPS/actions/runs/42505114347 已通过：69 份 HTML 快照、66 个唯一路由中，包含 `<script>` 标签的快照 0 份，脚本标签总数 0，包含行内事件处理器的快照 0 份。此为原始材料的明确缺口，不是单页偶发异常。
 - 已直接核对原始首页 `extracted/newvps1/cloned-page-1794124882520/index.html`：`<script>` 标签 0 个、`onclick` 等行内事件处理器 0 个。原始文件为浏览器抓取后的静态 DOM 快照，保留了菜单按钮的外观与属性，但不包含原网站对应交互逻辑。修复必须依据可核验的原站行为或其他原始文件证据；不得臆造登录、支付或其他业务交互。
 
 ### BLOCKER-07-01 — 动态交互与后端服务尚未验收
