@@ -33,6 +33,22 @@ const fs=require('fs');
   }
   await page.close();
  }
+ // Verify real navigation targets from both captured menus without submitting forms.
+ for(const nav of [{name:'language-zh',viewport:{width:1440,height:900},open:'#langBtn',link:'#langMenu a[href$="/zh/"]',expected:'/NewVPS/zh/'},{name:'mobile-vps',viewport:{width:390,height:844},open:'#mobBtn',link:'#mobMenu a[href$="/vps"]',expected:'/NewVPS/vps/'}]){
+  const page=await browser.newPage({viewport:nav.viewport});
+  let target=null,error=null;
+  try{
+   await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
+   await page.locator(nav.open).click({timeout:8000});
+   const link=page.locator(nav.link).first();
+   if(!await link.count())throw Error('captured menu link missing: '+nav.link);
+   await link.click({timeout:8000});
+   await page.waitForLoadState('domcontentloaded',{timeout:15000});
+   target=new URL(page.url()).pathname;
+  }catch(e){error=String(e).slice(0,300)}
+  cases.push({control:nav.name,target,expected:nav.expected,ok:!error&&target===nav.expected,error});
+  await page.close();
+ }
  await browser.close();
  const summary={tests:cases.length,passed:cases.filter(x=>x.ok).length,failed:cases.filter(x=>!x.ok).length};
  fs.mkdirSync('interaction-audit',{recursive:true});
