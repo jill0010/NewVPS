@@ -10,7 +10,7 @@
 | 02 | 全量页面索引 | 69 个 HTML 逐一映射原 URL、语言、标题、重复关系 | DONE | — |
 | 03 | 资源依赖核对 | HTML 引用的 CSS/JS/图片/字体均定位，缺失单独登记 | TODO | — |
 | 04 | 原样静态托管 | 可从工作分支启动静态预览，保留原始内容 | DONE | — |
-| 05 | 页面路由复原 | 每个已收集页面可由对应路径访问，404 逐项记录 | TODO | — |
+| 05 | 页面路由复原 | 每个已收集页面可由对应路径访问，404 逐项记录 | DONE | — |
 | 06 | 视觉逐页核验 | 桌面/移动布局、字体、颜色、间距、图片逐页比对 | TODO | — |
 | 07 | 交互逐项核验 | 菜单、按钮、筛选、弹窗等逐项验证，后端依赖单列 | TODO | — |
 | 08 | 多语言与响应式 | 已收集语言版本和不同视口逐一验证 | TODO | — |
@@ -29,6 +29,9 @@
 - `main`：两个原始 RAR。
 - `restore-original-archives`：两个 RAR 与 `extracted/newvps1`、`extracted/newvps2`，共 69 个 `index.html`、4145 个解压文件（GitHub 文件树检查）。
 - 本框架首次创建日期：2026-11-09（UTC+08:00）。
+
+## 阶段 05 验收证据
+- 2026-11-08：GitHub Actions https://github.com/jill0010/NewVPS/actions/runs/42500979248 ，66 条唯一 canonical 路由均通过线上 HTTP、标题和语言检查；核验报告保存于该运行的 `online-route-audit` artifact。此验收不代表视觉、交互及动态后端功能已经完成。
 
 ## BLOCKER 子项登记
 ### BLOCKER-09-01 — GitHub Pages deployment job fails before steps start（已解决）
