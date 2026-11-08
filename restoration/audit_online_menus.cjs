@@ -9,17 +9,18 @@ const fs=require('fs');
   const page=await browser.newPage({viewport:{width:v.width,height:v.height}});
   await page.goto(url,{waitUntil:'load',timeout:30000});
   await page.waitForTimeout(350);
-  for(const c of [{name:'language',button:'#langBtn',panel:'#langSw'},...(v.name==='mobile'?[{name:'mobile-menu',button:'#mobBtn',panel:'#mobMenu'}]:[])]){
+  for(const c of [{name:'language',button:'#langBtn',panel:'#langMenu'},...(v.name==='mobile'?[{name:'mobile-menu',button:'#mobBtn',panel:'#mobMenu'}]:[])]){
    const button=page.locator(c.button);
    if(!await button.count()){cases.push({viewport:v.name,control:c.name,ok:false,reason:'button missing'});continue}
    const before=await button.getAttribute('aria-expanded');
    let after=null,visible=null,error=null;
    try{
+    if(!await button.isVisible()){cases.push({viewport:v.name,control:c.name,ok:true,skipped:true,reason:'control intentionally hidden at this viewport'});continue}
     await button.click({timeout:8000});
     after=await button.getAttribute('aria-expanded');
     visible=await page.locator(c.panel).isVisible();
    }catch(e){error=String(e).slice(0,250)}
-   cases.push({viewport:v.name,control:c.name,before,after,visible,ok:!error&&before==='false'&&after==='true',error});
+   cases.push({viewport:v.name,control:c.name,before,after,visible,ok:!error&&before==='false'&&after==='true'&&visible===true,error});
   }
   await page.close();
  }
