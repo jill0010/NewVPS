@@ -21,10 +21,21 @@ const fs=require('fs');
         return u.hostname==='jill0010.github.io' && !u.pathname.startsWith('/NewVPS/');
       }catch{return false;}
     }).map(a=>({href:a.getAttribute('href'),text:(a.textContent||'').trim().slice(0,70)})).slice(0,30);
-    return {links:links.length,buttons:buttons.length,forms:forms.length,
+    const rootNavigationLinks=links.filter(a=>a.getAttribute('href')==='/' || a.getAttribute('href')==='/NewVPS/').map(a=>({href:a.getAttribute('href'),text:(a.textContent||'').trim().slice(0,60)}));
+    return {links:links.length,buttons:buttons.length,forms:forms.length,rootNavigationLinks,
       buttonsWithoutLabel:buttons.filter(b=>!((b.innerText||'').trim()||b.getAttribute('aria-label')||b.getAttribute('title'))).length,
       invalidLocalLinks};
    });
+   // Exercise an actual click only on a same-site Home link (safe navigation).
+   // No forms, account actions, purchases, or outbound links are clicked.
+   if(item.route==='/use-cases/vpn-hosting'){
+     const home=page.locator('a[href="/NewVPS/"]').first();
+     data.homeNavigationTest=await home.count() ? await (async()=>{
+       await home.click({timeout:8000});
+       await page.waitForLoadState('domcontentloaded');
+       return {url:page.url(),ok:new URL(page.url()).pathname==='/NewVPS/'};
+     })().catch(e=>({ok:false,error:String(e).slice(0,200)})) : {ok:false,error:'No corrected home link'};
+   }
    results.push({route:item.route,ok:true,...data});
   }catch(e){results.push({route:item.route,ok:false,error:String(e).slice(0,250)})}
   await page.close();
@@ -33,6 +44,7 @@ const fs=require('fs');
  const summary={routes:results.length,failed:results.filter(x=>!x.ok).length,
    pagesWithInvalidLocalLinks:results.filter(x=>x.invalidLocalLinks?.length).length,
    pagesWithUnlabeledButtons:results.filter(x=>x.buttonsWithoutLabel>0).length,
+   homeNavigationTest:results.find(x=>x.route==='/use-cases/vpn-hosting')?.homeNavigationTest,
    totalButtons:results.reduce((n,x)=>n+(x.buttons||0),0),
    totalForms:results.reduce((n,x)=>n+(x.forms||0),0)};
  fs.mkdirSync('interaction-audit',{recursive:true});
