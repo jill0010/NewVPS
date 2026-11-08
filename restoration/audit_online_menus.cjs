@@ -34,7 +34,7 @@ const fs=require('fs');
   await page.close();
  }
  // Verify real navigation targets from both captured menus without submitting forms.
- for(const nav of [{name:'language-zh',viewport:{width:1440,height:900},open:'#langBtn',link:'#langMenu a[href$="/zh"]',expected:'/NewVPS/zh/'},{name:'mobile-vps',viewport:{width:390,height:844},open:'#mobBtn',link:'#mobMenu a[href$="/vps"]',expected:'/NewVPS/vps/'}]){
+ for(const nav of [{name:'language-zh',viewport:{width:1440,height:900},open:'#langBtn',link:'#langMenu a[href$="/zh"]',expected:'/NewVPS/zh/'},{name:'language-ru',viewport:{width:1440,height:900},open:'#langBtn',link:'#langMenu a[href$="/ru"]',expected:'/NewVPS/ru/'},{name:'mobile-vps',viewport:{width:390,height:844},open:'#mobBtn',link:'#mobMenu a[href$="/vps"]',expected:'/NewVPS/vps/'}]){
   const page=await browser.newPage({viewport:nav.viewport});
   let target=null,error=null;
   try{
