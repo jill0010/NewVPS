@@ -1,0 +1,51 @@
+name: Restore frontend - online preview
+on:
+  workflow_dispatch:
+  push:
+    branches: [restore-frontend]
+    paths:
+      - 'restoration/**'
+      - '.github/workflows/restore-frontend-pages.yml'
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: anonport-restore-preview
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate route index
+        run: python3 restoration/build_page_index.py
+      - name: Build original capture preview
+        run: python3 restoration/build_static_preview.py
+      - name: Verify output
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('site-preview')
+          report=json.loads((p/'restoration-build-report.json').read_text())
+          assert report['captures']==69
+          assert report['published_routes']==66
+          assert (p/'index.html').is_file()
+          assert (p/'zh/index.html').is_file()
+          print('Verified original capture preview:', report['published_routes'], 'routes')
+          print('Unresolved root assets:', report['root_asset_gaps'])
+          PY
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site-preview
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
