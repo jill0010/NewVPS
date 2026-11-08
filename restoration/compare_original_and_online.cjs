@@ -24,7 +24,17 @@ const { pathToFileURL } = require('url');
       try{
         await offline.goto(local,{waitUntil:'domcontentloaded',timeout:25000});
         await online.goto(url,{waitUntil:'domcontentloaded',timeout:25000});
-        await offline.waitForTimeout(400);await online.waitForTimeout(400);
+        // Wait for layout-affecting resources on both pages; DOMContentLoaded
+        // alone is insufficient for screenshots and creates nondeterministic differences.
+        const settle=async p=>{
+          await p.evaluate(async()=>{
+            try{await document.fonts.ready}catch{}
+            await Promise.all([...document.images].filter(img=>img.getAttribute('src')?.trim()).map(img=>
+              img.decode().catch(()=>{})));
+          });
+          await p.waitForTimeout(200);
+        };
+        await settle(offline);await settle(online);
         const info=async p=>p.evaluate(()=>({
           title:document.title,
           bodyText:(document.body?.innerText||'').replace(/\s+/g,' ').trim().slice(0,300),
@@ -39,6 +49,10 @@ const { pathToFileURL } = require('url');
         result.width_difference=Math.abs(result.offline.scrollWidth-result.deployed.scrollWidth);
         result.title_matches=result.offline.title===result.deployed.title;
         result.text_matches=result.offline.bodyText===result.deployed.bodyText;
+        result.resourceMismatch={
+          brokenImagesOffline:result.offline.brokenImages,
+          brokenImagesOnline:result.deployed.brokenImages
+        };
         if(result.height_difference>10){
           const metrics=async p=>p.evaluate(()=>({
             fonts:document.fonts.status,
@@ -63,7 +77,7 @@ const { pathToFileURL } = require('url');
     }
   }
   await browser.close();
-  const summary={routes:items.length,views:results.length,errors:results.filter(x=>!x.ok).length,title_mismatches:results.filter(x=>x.ok&&!x.title_matches).length,height_mismatches_over_10px:results.filter(x=>x.ok&&x.height_difference>10).length,width_mismatches_over_2px:results.filter(x=>x.ok&&x.width_difference>2).length};
+  const summary={routes:items.length,views:results.length,errors:results.filter(x=>!x.ok).length,title_mismatches:results.filter(x=>x.ok&&!x.title_matches).length,text_mismatches:results.filter(x=>x.ok&&!x.text_matches).length,height_mismatches_over_10px:results.filter(x=>x.ok&&x.height_difference>10).length,width_mismatches_over_2px:results.filter(x=>x.ok&&x.width_difference>2).length};
   fs.writeFileSync(path.join(out,'comparison.json'),JSON.stringify({summary,results},null,2));
   console.log('BASELINE_SUMMARY '+JSON.stringify(summary));
   if(summary.errors)process.exitCode=1;
