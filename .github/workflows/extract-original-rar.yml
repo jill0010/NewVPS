@@ -15,14 +15,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y 7zip
-          7zz i | head -35
+          7z i | head -35
       - name: Test both original archives independently
         shell: bash
         run: |
           set +e
-          7zz t newvps1.rar > /tmp/test1.log 2>&1
+          7z t newvps1.rar > /tmp/test1.log 2>&1
           a=$?
-          7zz t newvps2.rar > /tmp/test2.log 2>&1
+          7z t newvps2.rar > /tmp/test2.log 2>&1
           b=$?
           echo "newvps1.rar test exit code: $a"
           tail -40 /tmp/test1.log
@@ -39,8 +39,8 @@ jobs:
             exit 1
           fi
           mkdir -p extracted/newvps1 extracted/newvps2
-          7zz x -y -oextracted/newvps1 newvps1.rar
-          7zz x -y -oextracted/newvps2 newvps2.rar
+          7z x -y -oextracted/newvps1 newvps1.rar
+          7z x -y -oextracted/newvps2 newvps2.rar
           python3 - <<'PY'
           from pathlib import Path
           base=Path("extracted").resolve()
