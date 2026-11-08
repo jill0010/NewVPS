@@ -14,7 +14,7 @@
 | 06 | 视觉逐页核验 | 桌面/移动布局、字体、颜色、间距、图片逐页比对 | TODO | — |
 | 07 | 交互逐项核验 | 菜单、按钮、筛选、弹窗等逐项验证，后端依赖单列 | TODO | — |
 | 08 | 多语言与响应式 | 已收集语言版本和不同视口逐一验证 | TODO | — |
-| 09 | 线上预览部署 | 取得实际可访问的预览 URL，验证部署版本与提交 | BLOCKED | BLOCKER-09-01 |
+| 09 | 线上预览部署 | 取得实际可访问的预览 URL，验证部署版本与提交 | DONE | BLOCKER-09-01（已解决） |
 | 10 | 最终差异审计 | 差异清单、未实现原因、逐页验收记录与最终交付 | TODO | — |
 
 ## 不可变执行规则
@@ -31,10 +31,10 @@
 - 本框架首次创建日期：2026-11-09（UTC+08:00）。
 
 ## BLOCKER 子项登记
-### BLOCKER-09-01 — GitHub Pages deployment job fails before steps start
+### BLOCKER-09-01 — GitHub Pages deployment job fails before steps start（已解决）
 - 证据：Run https://github.com/jill0010/NewVPS/actions/runs/42499917068 ，commit `4c2a732`，build 全部步骤成功，`github-pages` 工件上传成功（约 31 MB），但 deploy job 在 2026-11-08T16:27:00Z 至 16:27:01Z 之间失败，且 GitHub API 返回 `steps: []`、无 runner 名称。
 - 结论：静态构建成功，故障位于部署作业启动/权限/环境配置阶段；由于日志存储返回 BlobNotFound，具体 GitHub 拒绝原因尚未证实，不能认定权限或设置是唯一原因。
-- 后续：核对仓库 Settings → Pages 是否已选 GitHub Actions，GitHub Actions 是否允许部署到 `github-pages` 环境，以及该环境的分支部署限制；必要时改用可用的托管方式。保持原始页面与部署产物分离。
+- 根因：`github-pages` 环境的 Deployment branches and tags 仅允许 `main`，阻止 `restore-frontend` 的部署作业启动。用户已允许 `restore-frontend` 分支。\n- 验证：Run https://github.com/jill0010/NewVPS/actions/runs/42500744010 ，commit `a2b33f7`，build 和 deploy 均成功；实际访问 `https://jill0010.github.io/NewVPS/`、`/zh/`、`/vps/` 均返回相应原始页面内容。其余页面的视觉和交互仍需逐项核验。
 
 ### BLOCKER-09-01 / 历史构建故障（已解决）
 - Run https://github.com/jill0010/NewVPS/actions/runs/42499745109 构建因 Python 正则表达式转义错误失败。
