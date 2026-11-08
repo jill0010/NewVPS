@@ -5,6 +5,7 @@ on:
     branches: [restore-frontend]
     paths:
       - 'restoration/audit_online_interactions.cjs'
+      - 'restoration/audit_online_menus.cjs'
       - '.github/workflows/restore-frontend-online-interactions.yml'
 permissions:
   contents: read
@@ -23,10 +24,12 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Audit navigation and controls safely
         run: node restoration/audit_online_interactions.cjs
+      - name: Verify language selector and mobile menu
+        run: node restoration/audit_online_menus.cjs
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: online-interaction-audit
-          path: interaction-audit/report.json
+          path: interaction-audit/
           retention-days: 14
