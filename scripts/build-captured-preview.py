@@ -207,6 +207,53 @@ def main():
     buttons.forEach(b=>b.addEventListener('click',function(){if(custom)custom.value='';render(b.dataset.amt)}));
     if(custom)custom.addEventListener('input',function(){render(custom.value)});
     render(100);
+    // Restore the original archived cryptocurrency picker, whose site script
+    // was not included in the static capture.
+    var picker=document.getElementById('cs-topup');
+    if(picker){
+      var trigger=picker.querySelector('.cs-trigger');
+      var panel=picker.querySelector('.cs-panel');
+      var search=picker.querySelector('.cs-search');
+      var label=picker.querySelector('.cs-label');
+      var icon=picker.querySelector('.cs-icon');
+      var hiddenValue=document.getElementById('cs-topup-val');
+      var options=Array.from(picker.querySelectorAll('.cs-option'));
+      function closePicker(){
+        panel.hidden=true;panel.style.display='none';
+        picker.classList.remove('cs-open');
+        trigger.setAttribute('aria-expanded','false');
+      }
+      function openPicker(){
+        panel.hidden=false;panel.style.display='flex';
+        picker.classList.add('cs-open');
+        trigger.setAttribute('aria-expanded','true');
+        if(search){search.value='';search.dispatchEvent(new Event('input'));search.focus()}
+      }
+      trigger.addEventListener('click',function(){if(panel.hidden)openPicker();else closePicker()});
+      options.forEach(function(option){
+        option.addEventListener('click',function(){
+          if(hiddenValue)hiddenValue.value=option.dataset.value||'';
+          label.textContent=option.dataset.name||option.textContent.trim();
+          label.classList.remove('cs-placeholder');
+          if(icon){
+            var source=option.querySelector('.cs-option-icon');
+            if(source&&source.getAttribute('src')){icon.src=source.src;icon.hidden=false}
+          }
+          options.forEach(function(o){o.classList.toggle('cs-selected',o===option)});
+          closePicker();
+        });
+      });
+      if(search)search.addEventListener('input',function(){
+        var query=search.value.trim().toLowerCase();
+        options.forEach(function(o){
+          o.hidden=!(o.dataset.haystack||o.textContent).toLowerCase().includes(query);
+          o.style.display=o.hidden?'none':'';
+        });
+      });
+      document.addEventListener('click',function(e){if(!picker.contains(e.target))closePicker()});
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')closePicker()});
+      closePicker();
+    }
     form.addEventListener('submit',function(e){e.preventDefault();if(msg)msg.textContent='Payment processing is not connected yet. No charge has been made.'});
     function tab(){var key=new URLSearchParams(location.search).get('tab')||'overview';
       document.querySelectorAll('[data-pane]').forEach(el=>{var active=el.dataset.pane===key;el.style.display=active?'':'none';el.classList.toggle('on',active)});
