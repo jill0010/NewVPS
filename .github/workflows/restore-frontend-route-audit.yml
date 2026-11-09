@@ -6,6 +6,8 @@ on:
     paths:
       - 'restoration/audit_online_routes.py'
       - 'restoration/build_static_preview.py'
+      - 'restoration/build_page_index.py'
+      - '.github/workflows/restore-frontend-pages.yml'
       - '.github/workflows/restore-frontend-route-audit.yml'
 permissions:
   contents: read
@@ -14,6 +16,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch newly extracted source captures
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: new-archive-source
+          sparse-checkout: |
+            extracted/new-captures
+      - name: Merge new captures into audit workspace
+        run: |
+          mkdir -p extracted/new-captures
+          cp -a new-archive-source/extracted/new-captures/. extracted/new-captures/
+      - name: Generate current full route inventory
+        run: python3 restoration/build_page_index.py
       - name: Check syntax
         run: python3 -m py_compile restoration/audit_online_routes.py
       - name: Verify all published routes
