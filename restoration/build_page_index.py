@@ -39,7 +39,7 @@ def main():
     if not SOURCE.is_dir():
         sys.exit("ERROR: extracted/ is missing")
     pages = []
-    for path in sorted(SOURCE.glob("newvps*/cloned-page-*/index.html")):
+    for path in sorted(list(SOURCE.glob("newvps*/cloned-page-*/index.html")) + list(SOURCE.glob("new-captures/**/cloned-page-*/index.html"))):
         parser = Metadata()
         parser.feed(path.read_text(encoding="utf-8", errors="replace"))
         url = parser.canonical
@@ -52,7 +52,7 @@ def main():
         pages.append({
             "source": path.relative_to(ROOT).as_posix(),
             "archive": path.relative_to(SOURCE).parts[0],
-            "capture": path.parent.name,
+            "capture": path.parent.name + ("-" + path.relative_to(SOURCE).parts[1] if path.relative_to(SOURCE).parts[0] == "new-captures" else ""),
             "canonical": url,
             "route": parsed.path or "/" if url else None,
             "language": parser.lang,
@@ -78,8 +78,8 @@ def main():
     for page in pages:
         if page["issues"]:
             print(f"BLOCKER 02: {page['source']} {page['issues']}")
-    if len(pages) != 69:
-        sys.exit(f"BLOCKER 02: expected 69 HTML captures, found {len(pages)}")
+    if len(pages) < 69:
+        sys.exit(f"BLOCKER 02: original 69 captures missing; found {len(pages)}")
 
 if __name__ == "__main__":
     main()
