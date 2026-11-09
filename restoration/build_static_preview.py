@@ -54,6 +54,10 @@ def main():
             html, flags=re.IGNORECASE
         )
         if base:
+            # HTML entity quotes in style attributes prevent the generic url(/...) rule
+            # from seeing the slash. Prefix these URLs for GitHub project Pages.
+            html = html.replace('url(&quot;/_captures/', 'url(&quot;' + base + '/_captures/')
+        if base:
             # GitHub project Pages are served below /NewVPS, not at domain root.
             # Rewrite local navigation and asset URL attributes only.
             html = re.sub(
