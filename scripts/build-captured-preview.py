@@ -82,6 +82,29 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
+    # The captured Iceland order screen advertises /vps as canonical even though
+    # its document title and body identify an order flow. Restore it at the
+    # independently linked /order route, preserving /vps as the actual catalog.
+    order_capture = next(
+        (entry for entry in entries
+         if entry["route"] == "/vps"
+         and "order-pages" in entry["capture"].lower()
+         and (entry.get("title") or "").startswith("Order ")), None)
+    if order_capture and "/order" not in written:
+        source = (ROOT / order_capture["capture"]).resolve()
+        if source.is_file() and source.is_relative_to((ROOT / "extracted").resolve()):
+            capture_id = source.parent.name
+            html = source.read_text(encoding="utf-8", errors="replace")
+            html = re.sub(r'(?<![\\w/])assets/', "/_captures/" + capture_id + "/assets/", html)
+            html = re.sub(r'\\sdata-immersive-translate-[\\w-]+="[^"]*"', '', html)
+            destination = OUT / "order" / "index.html"
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(html, encoding="utf-8")
+            assets = source.parent / "assets"
+            if assets.is_dir():
+                shutil.copytree(assets, OUT / "_captures" / capture_id / "assets", dirs_exist_ok=True)
+            written["/order"] = order_capture["capture"]
+            print("Restored original Iceland order screen at /order/ (static preview only)")
     # Expose a route-specific archive directory for order captures without
     # replacing the normal /vps and /zh/vps catalog pages.
     order_route_links = {}
