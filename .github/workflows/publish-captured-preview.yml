@@ -2,16 +2,6 @@ name: Publish captured preview to GitHub Pages
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'extracted/**'
-      - 'preview-pages/**'
-      - 'scripts/build-captured-preview.py'
-      - 'scripts/audit-preview-resources.py'
-      - 'scripts/inventory-captured-routes.py'
-      - 'reports/captured-route-inventory.csv'
-      - '.github/workflows/publish-captured-preview.yml'
 
 permissions:
   contents: write
