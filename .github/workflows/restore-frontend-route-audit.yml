@@ -5,6 +5,7 @@ on:
     branches: [restore-frontend]
     paths:
       - 'restoration/audit_online_routes.py'
+      - 'restoration/build_static_preview.py'
       - '.github/workflows/restore-frontend-route-audit.yml'
 permissions:
   contents: read
