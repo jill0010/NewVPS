@@ -192,7 +192,8 @@ def main():
     render(100);
     form.addEventListener('submit',function(e){e.preventDefault();if(msg)msg.textContent='Payment processing is not connected yet. No charge has been made.'});
     function tab(){var key=new URLSearchParams(location.search).get('tab')||'overview';
-      document.querySelectorAll('[data-pane]').forEach(el=>{var active=el.dataset.pane===key;el.style.display=active?'':'none';el.classList.toggle('on',active)});\n      document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('on',el.dataset.tab===key));
+      document.querySelectorAll('[data-pane]').forEach(el=>{var active=el.dataset.pane===key;el.style.display=active?'':'none';el.classList.toggle('on',active)});
+      document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('on',el.dataset.tab===key));
     }
     document.querySelectorAll('[data-tab]').forEach(a=>a.addEventListener('click',function(e){var key=a.dataset.tab;if(!key)return;e.preventDefault();history.pushState({},'',location.pathname+'?tab='+encodeURIComponent(key));tab()}));
     addEventListener('popstate',tab);tab();
@@ -200,7 +201,7 @@ def main():
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>'''
-        html = html.replace("</body>", bridge + "\\n</body>", 1)
+        html = html.replace("</body>", bridge + "\n</body>", 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Enabled archived account top-up amount selection and preview; payment remains disabled")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
