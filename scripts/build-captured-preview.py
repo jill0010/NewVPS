@@ -127,6 +127,36 @@ def main():
             shutil.copytree(asset_source, OUT / "_captures" / capture_id / "assets", dirs_exist_ok=True)
         order_count += 1
     print(f"Preserved {order_count} original order snapshots under /archived-order/")
+    # Restore /order from an actual archived order capture, not from a
+    # catalog page whose canonical URL happens to be /vps.
+    # Query-specific checkout states remain static snapshots only.
+    order_entries = [e for e in entries if "order-pages" in e["capture"].lower()]
+    for language, route in (("en", "/order"), ("zh", "/zh/order")):
+        candidates = []
+        for entry in order_entries:
+            report = ROOT / entry["capture"].replace("index.html", "capture-report.json")
+            if not report.is_file():
+                continue
+            import json
+            try:
+                source_url = json.loads(report.read_text(encoding="utf-8")).get("sourceUrl", "")
+            except (ValueError, OSError):
+                continue
+            source_path = urlsplit(source_url).path.rstrip("/") or "/"
+            if source_path == route:
+                candidates.append(entry)
+        if not candidates:
+            continue
+        entry = candidates[0]
+        source = ROOT / entry["capture"]
+        capture_id = source.parent.name
+        html = source.read_text(encoding="utf-8", errors="replace")
+        html = re.sub(r'(?<![\\w/])assets/', "/_captures/" + capture_id + "/assets/", html)
+        destination = OUT.joinpath(*safe_route(route), "index.html")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(html, encoding="utf-8")
+        written[route] = entry["capture"]
+        print(f"Restored archived checkout snapshot at {route} from {entry['capture']}")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
