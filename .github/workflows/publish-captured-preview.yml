@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'extracted/**'
       - 'scripts/build-captured-preview.py'
       - 'scripts/audit-preview-resources.py'
       - 'scripts/inventory-captured-routes.py'
@@ -118,15 +119,15 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           root = Path('dist-captured')
-          required = ['vps/index.html', 'missing-routes.csv']
+          required = ['index.html', 'vps/index.html', 'dedicated/index.html', 'gpu/index.html', 'guides/index.html', 'locations/index.html', 'missing-routes.csv']
           for rel in required:
               path = root / rel
               if not path.is_file() or not path.stat().st_size:
                   raise SystemExit(f'Missing preview output: {rel}')
               print(f'OK: {rel} ({path.stat().st_size} bytes)')
           pages = list(root.rglob('index.html'))
-          if len(pages) < 120:
-              raise SystemExit(f'Expected at least 120 preview HTML pages, got {len(pages)}')
+          if len(pages) < 174:
+              raise SystemExit(f'Expected at least 174 preview HTML pages, got {len(pages)}')
           print(f'OK: {len(pages)} preview entry pages')
           PY
       - uses: actions/configure-pages@v5
