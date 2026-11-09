@@ -49,7 +49,7 @@ def main():
         # Captured style attributes HTML-escape quotes inside CSS url(&quot;assets/...&quot;).
         # Keep original files immutable; only rewrite preview copies.
         html = re.sub(
-            r'url\\(\\s*&quot;assets/',
+            r'url\(\s*&quot;assets/',
             lambda m: f'url(&quot;/_captures/{capture}/assets/',
             html, flags=re.IGNORECASE
         )
