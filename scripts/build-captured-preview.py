@@ -218,7 +218,10 @@ def main():
         message = {"en": ("Archived page not yet available", "This URL was found in the original site's navigation, but its original page was not included in the supplied captures."),
                    "zh": ("原始页面尚未收录", "原网站导航包含此链接，但提供的归档文件中尚无对应页面。"),
                    "ru": ("Архивная страница пока недоступна", "Эта ссылка есть в навигации исходного сайта, но соответствующая страница отсутствует в предоставленном архиве.")}[lang]
-        fallback = "/vps/" if "/vps" in known else "/"
+        localized_vps = "/" + lang + "/vps" if lang != "en" else "/vps"
+        fallback = (localized_vps if localized_vps in known else
+                    "/vps" if "/vps" in known else "/")
+        fallback = fallback.rstrip("/") + "/"
         destination.write_text(
             '<!doctype html><html lang="' + lang + '"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
