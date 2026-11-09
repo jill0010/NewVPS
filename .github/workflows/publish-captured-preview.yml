@@ -132,6 +132,13 @@ jobs:
           print(f'OK: {len(pages)} preview entry pages')
           PY
       - uses: actions/configure-pages@v5
+      - name: Remove duplicate Pages artifacts before upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --paginate "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts?per_page=100" --jq '.artifacts[] | select(.name == "github-pages") | .id' | while read -r artifact_id; do
+            gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/${artifact_id}"
+          done
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist-captured
