@@ -31,6 +31,12 @@ jobs:
         run: |
           python3 scripts/inventory-captured-routes.py
           python3 scripts/build-captured-preview.py
+      - name: Upload missing-route audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: newvps-missing-routes
+          path: reports/captured-preview-missing-links.csv
+          retention-days: 14
       - name: Rewrite absolute paths for GitHub Pages project subdirectory
         run: |
           python3 - <<'PY'
