@@ -13,6 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch immutable newly extracted archives from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: new-archive-source
+          sparse-checkout: |
+            extracted/new-captures
+      - name: Include new original captures in build workspace
+        run: |
+          mkdir -p extracted/new-captures
+          cp -a new-archive-source/extracted/new-captures/. extracted/new-captures/
       - name: Generate canonical route index
         run: python3 restoration/build_page_index.py
       - name: Build original-content preview
@@ -23,7 +34,7 @@ jobs:
           import json
           from pathlib import Path
           report=json.loads(Path('site-preview/restoration-build-report.json').read_text())
-          assert report['captures']==69, report
+          assert report['captures']>=193, report
           assert report['published_routes']>0, report
           print('Published routes:',report['published_routes'])
           print('Conflicts:',len(report['conflicts']))
