@@ -74,7 +74,7 @@ def main():
     # Provide an explicit preview entry instead of returning a root 404.
     # Do not pretend this fallback is a restored original homepage.
     if "/" not in written:
-        fallback = "/vps/" if "/vps" in written else (sorted(written)[0] + "/" if written else "")
+        fallback = "vps/" if "/vps" in written else (sorted(written)[0].lstrip("/") + "/" if written else "")
         if fallback:
             (OUT / "index.html").write_text(
                 '<!doctype html><html lang="en"><head><meta charset="utf-8">'
