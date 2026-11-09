@@ -132,6 +132,58 @@ def main():
             '</head><body><main><h1>Order snapshots for ' + escape(route) + '</h1>'
             '<p>Original static captures; no checkout or payment is enabled.</p>'
             '<ul>' + links + '</ul></main></body></html>', encoding="utf-8")
+    # Build usable navigation hubs from actual captured detail pages, not
+    # invented copies of missing originals. Every destination is archived.
+    hub_names = {
+        "/dedicated": "Dedicated servers",
+        "/gpu": "GPU hosting",
+        "/guides": "Technical guides",
+        "/locations": "Hosting locations",
+    }
+    for hub, heading in hub_names.items():
+        if hub in written:
+            continue
+        candidates = []
+        for entry in entries:
+            route = entry["route"]
+            if route not in written or route.startswith(("/zh/", "/ru/")):
+                continue
+            if hub == "/locations":
+                match = re.match(r"^/(?:vps|dedicated|gpu)/([^/]+)$", route)
+                if not match:
+                    continue
+                label = match.group(1).replace("-", " ").title() + " — " + route.split("/")[1].upper()
+            elif route.startswith(hub + "/"):
+                label = entry.get("title") or route.rsplit("/", 1)[-1]
+            else:
+                continue
+            candidates.append((route, label))
+        candidates = sorted(set(candidates))
+        if not candidates:
+            continue
+        links = "".join('<li><a href="' + escape(route, quote=True) + '/">'
+                        + escape(label) + '</a></li>' for route, label in candidates)
+        destination = OUT.joinpath(*safe_route(hub), "index.html")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>' + escape(heading) + ' | NewVPS</title>'
+            '<style>body{margin:0;background:#0b1220;color:#e9eff8;font:16px system-ui}'
+            'main{max-width:1100px;margin:36px auto;padding:24px}'
+            'a{color:#9bd2ff;text-decoration:none}a:hover{text-decoration:underline}'
+            'ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}'
+            'li{background:#192638;border:1px solid #30445a;border-radius:12px;padding:18px}'
+            'p{color:#b3c2d1}</style></head><body><main>'
+            '<nav><a href="/">Home</a> · <a href="/vps/">VPS</a> · '
+            '<a href="/dedicated/">Dedicated</a> · <a href="/gpu/">GPU</a> · '
+            '<a href="/guides/">Guides</a> · <a href="/locations/">Locations</a></nav>'
+            '<h1>' + escape(heading) + '</h1>'
+            '<p>Reconstructed navigation index using the original archived detail pages. '
+            'The original category landing page was not included in the supplied captures.</p>'
+            '<ul>' + links + '</ul></main></body></html>', encoding="utf-8")
+        written[hub] = "generated index of original captured pages"
+        print(f"Restored navigable {hub}/ index with {len(candidates)} captured destinations")
     # The archived dataset does not contain the site's root homepage.
     # Provide an explicit preview entry instead of returning a root 404.
     # Do not pretend this fallback is a restored original homepage.
