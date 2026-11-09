@@ -41,8 +41,12 @@ jobs:
           for file in root.rglob('index.html'):
               html = file.read_text(encoding='utf-8')
               # Prefix root-relative URLs in HTML attributes and CSS url() references.
-              html = re.sub(r'((?:href|src|action|poster)=["\\x27])/(?!/)', lambda m: m.group(1) + base + '/', html)
-              html = re.sub(r'(url\\(\\s*["\\x27]?)/(?!/)', lambda m: m.group(1) + base + '/', html)
+              # Rewrite root-relative HTML links without a fragile regex.
+              for attr in ('href', 'src', 'action', 'poster'):
+                  for quote in ('"', "'"):
+                      html = html.replace(f'{attr}={quote}/', f'{attr}={quote}{base}/')
+              for token in ('url(/', 'url("/', "url('/"):
+                  html = html.replace(token, token[:-1] + base + '/')
               # Captured assets are sometimes embedded as escaped strings.
               html = html.replace('/_captures/', base + '/_captures/')
               html = html.replace(base + base + '/_captures/', base + '/_captures/')
