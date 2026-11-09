@@ -162,6 +162,38 @@ def main():
             )
             missing_localized.append({"requested": localized, "fallback": route})
 
+    # Audit captured navigation targets against actual preview files, including
+    # links generated for language menus. Record unresolved paths explicitly.
+    from html.parser import HTMLParser
+    class LinkCollector(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.links = []
+        def handle_starttag(self, tag, attrs):
+            if tag == "a":
+                self.links.extend(value for key, value in attrs if key == "href" and value)
+
+    unresolved_links = []
+    for route in sorted(known_routes):
+        page_file = OUT / route.lstrip("/") / "index.html" if route != "/" else OUT / "index.html"
+        parser = LinkCollector()
+        parser.feed(page_file.read_text(encoding="utf-8"))
+        for href in parser.links:
+            parsed = urlsplit(href)
+            if parsed.scheme or parsed.netloc or not parsed.path.startswith("/"):
+                continue
+            path = unquote(parsed.path)
+            if base and path.startswith(base + "/"):
+                path = path[len(base):]
+            elif base and path != base:
+                continue
+            if path in ("", "/"):
+                continue
+            expected = OUT / path.lstrip("/")
+            if not expected.is_file() and not (expected / "index.html").is_file():
+                unresolved_links.append({"source": route, "href": href})
+    unresolved_links = sorted(unresolved_links, key=lambda x: (x["source"], x["href"]))
+
     # Some snapshots retain original /assets/img/*.webp references while the
     # identical image was captured in another page under its hashed name.
     # Restore only these verified originals; never synthesize replacement art.
@@ -203,6 +235,7 @@ def main():
     report = {
         "captures": len(data["pages"]),
         "localized_fallback_redirects": missing_localized,
+        "unresolved_navigation_links": unresolved_links,
         "published_routes": len(seen),
         "conflicts": conflicts,
         "root_asset_gaps": sorted(root_asset_gaps),
