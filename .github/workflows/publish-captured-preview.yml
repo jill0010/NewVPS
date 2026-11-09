@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'extracted/**'
+      - 'preview-pages/**'
       - 'scripts/build-captured-preview.py'
       - 'scripts/audit-preview-resources.py'
       - 'scripts/inventory-captured-routes.py'
