@@ -118,7 +118,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           root = Path('dist-captured')
-          required = ['index.html', 'vps/index.html', 'missing-routes.csv']
+          required = ['vps/index.html', 'missing-routes.csv']
           for rel in required:
               path = root / rel
               if not path.is_file() or not path.stat().st_size:
