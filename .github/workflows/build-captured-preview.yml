@@ -47,10 +47,13 @@ jobs:
               raise SystemExit(1)
           for page in pages:
               text = page.read_text(encoding='utf-8')
-              for match in re.findall(r'/_captures/[^\s"\x27)<>]+', text):
-                  local = root / match.lstrip('/')
+              for match in re.findall(r'/_captures/[^\\s"\\x27)<>]+', text):
+                  # HTML entity-escaped quotes (&quot;) and ampersands are not filename characters.
+                  asset = html.unescape(match).split('?', 1)[0].split('#', 1)[0]
+                  asset = asset.rstrip('";,')
+                  local = root / asset.lstrip('/')
                   if not local.is_file():
-                      raise SystemExit(f'Missing local asset {match} referenced by {page}')
+                      raise SystemExit(f'Missing local asset {asset} referenced by {page}')
           print('Captured relative asset references validated')
           PY
       - name: Upload static preview build
