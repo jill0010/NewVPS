@@ -78,10 +78,21 @@ def main():
   function fix() {
     document.querySelectorAll('a[href]').forEach(function (a) {
       const raw = a.getAttribute('href');
-      if (raw && raw[0] === '/' && raw[1] !== '/' &&
+      if (!raw) return;
+      if (raw[0] === '/' && raw[1] !== '/' &&
           !raw.startsWith(base + '/') && raw !== base) {
         a.setAttribute('href', base + raw);
+        return;
       }
+      // Some captured menu scripts recreate absolute original-site links.
+      // Keep them inside the restored preview without altering external links.
+      try {
+        const url = new URL(raw, document.baseURI);
+        if ((url.hostname === 'anonport.com' || url.hostname === 'www.anonport.com') &&
+            (url.protocol === 'https:' || url.protocol === 'http:')) {
+          a.setAttribute('href', base + url.pathname + url.search + url.hash);
+        }
+      } catch (_) { /* Preserve malformed original href unchanged. */ }
     });
   }
   fix();
