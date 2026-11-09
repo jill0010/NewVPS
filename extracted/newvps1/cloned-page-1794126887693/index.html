@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-immersive-translate-page-theme="light" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); overflow: clip visible"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Buy a VPS with an AI Agent — MCP &amp; API, No KYC | AnonPort</title>
+<meta name="description" content="Any AI agent (Claude, ChatGPT, Cursor, Cline) can buy offshore VPS, RDP or GPU servers via MCP, REST API or x402. Crypto only, no KYC, no signup.">
+<!-- Favicon -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon-32-v2.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v2.png" sizes="180x180">
+<link rel="manifest" href="/manifest.json">
+
+<!-- SEO Meta -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://anonport.com/agents">
+
+<!-- Hreflang -->
+<link rel="alternate" hreflang="en" href="https://anonport.com/agents">
+<link rel="alternate" hreflang="ru" href="https://anonport.com/ru/agents">
+<link rel="alternate" hreflang="zh" href="https://anonport.com/zh/agents">
+<link rel="alternate" hreflang="x-default" href="https://anonport.com/agents">
+
+<!-- Markdown twin for LLMs -->
+<link rel="alternate" type="text/markdown" href="https://anonport.com/agents.md">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AnonPort">
+<meta property="og:title" content="Buy a VPS with an AI Agent — MCP &amp; API, No KYC | AnonPort">
+<meta property="og:description" content="Any AI agent (Claude, ChatGPT, Cursor, Cline) can buy offshore VPS, RDP or GPU servers via MCP, REST API or x402. Crypto only, no KYC, no signup.">
+<meta property="og:url" content="https://anonport.com/agents">
+<meta property="og:image" content="https://anonport.com/assets/img/hero-bg.webp">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:locale:alternate" content="zh_CN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Buy a VPS with an AI Agent — MCP &amp; API, No KYC | AnonPort">
+<meta name="twitter:description" content="Any AI agent (Claude, ChatGPT, Cursor, Cline) can buy offshore VPS, RDP or GPU servers via MCP, REST API or x402. Crypto only, no KYC, no signup.">
+<meta name="twitter:image" content="https://anonport.com/assets/img/hero-bg.webp">
+
+<!-- Theme (theme-color : une seule balise, posee par header.php selon le bandeau promo) -->
+<meta name="msapplication-TileColor" content="#1a56db">
+
+
+
+
+
+
+
+
+
+
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2" crossorigin>
+<link rel="stylesheet" href="assets/anonport_com/fonts-b7334b1298d07d070db7d4f7e032a715c9c4b2e9529344aa8571ad2fb1b42486.css">
+<link rel="stylesheet" href="assets/anonport_com/flags-5cbb272bae146718d4bd828a4ff17f41b624ae132ba5591b9dcbaf28120d55bf.css">
+<link rel="stylesheet" href="assets/anonport_com/style-43152d4ee1dca81ed6392465060c6b76fcd47bb1dbc09aa8db3d442285983c64.css"><link rel="agent" href="/.well-known/agent.json">
+<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt">
+<meta name="x402" content="supported; network=base; asset=USDC">
+<style>@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}</style></head>
+<body class="pg-agents has-bnav" style="overflow: clip visible">
+<header class="hd is-scrolled" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); z-index: 100; box-shadow: rgb(236, 236, 236) 0px 1px 0px 0px, rgba(10, 22, 40, 0.06) 0px 4px 16px 0px"><div class="w hd-in">
+  <a href="/" class="logo">
+    <img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="105" height="28">
+  </a>
+  <nav class="hd-nav" id="nav">
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" title="Limited offer on .com" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+  </nav>
+  <div class="hd-r">
+    <a href="/status" class="hd-status" title="Server Status" style="color: rgb(10, 122, 65); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.392) 0px 0px 0px 0.0856295px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span>
+      <span class="hd-status-txt">Operational</span>
+    </a>
+    <div class="lang-sw" id="langSw"><button type="button" class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span>EN</span><svg width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true" style="opacity: 0.5; overflow: hidden; transition: transform 0.18s; transition-property: transform; transition-duration: 0.18s"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></button><div class="lang-menu few" id="langMenu" role="listbox" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); opacity: 0; z-index: 200; box-shadow: rgba(0, 0, 0, 0.12) 0px 12px 32px 0px, rgba(0, 0, 0, 0.04) 0px 2px 6px 0px; transition: opacity 0.15s, transform 0.15s; transition-property: opacity, transform; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s"><div class="lang-grid" id="langGrid"><a href="/agents?utm_source=chatgpt.com" class="lang-opt on" role="option" aria-selected="true" data-search="en english gb" data-pseudo-states="░color:var(--tx)" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">English</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/ru/agents?utm_source=chatgpt.com" class="lang-opt" role="option" aria-selected="false" data-search="ru Русский ru" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">Русский</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/zh/agents?utm_source=chatgpt.com" class="lang-opt" role="option" aria-selected="false" data-search="zh 简体中文 cn" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">简体中文</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div><div class="lang-empty" id="langEmpty" hidden style="color: rgb(93, 102, 111)">No match</div></div></div>          <a href="#" class="bt bt-o bt-sm hd-auth" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      </div>
+  <button class="mob-btn" id="mobBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobMenu" style="background-color: rgba(0, 0, 0, 0); transition: 0.2s; transition-duration: 0.2s">
+    <span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span>
+  </button>
+</div>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu" style="background-color: rgb(255, 255, 255); z-index: 99; overflow: auto">
+  <div class="mob-nav">
+    <div class="mob-sec">Services</div>
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+    <div class="mob-sec">Solutions</div>
+    <a href="/pricing" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Pricing</a>
+    <a href="/locations" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+    <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+    <a href="/guides" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+    <a href="/alternatives" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+    <div class="mob-sec">Company</div>
+    <a href="/about" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">About</a>
+    <a href="/faq" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+    <a href="/contact" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+    <a href="/status" class="mob-status" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.4) 0px 0px 0px 0px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span> Server Status    </a>
+  </div>
+  <div class="mob-bottom" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+    <div class="mob-lang">
+            <a href="/agents?utm_source=chatgpt.com" class="mob-lang-opt on" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); border-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">English</span>
+      </a>
+            <a href="/ru/agents?utm_source=chatgpt.com" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">Русский</span>
+      </a>
+            <a href="/zh/agents?utm_source=chatgpt.com" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">简体中文</span>
+      </a>
+          </div>
+          <a href="#" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;justify-content:center">Login</a>
+      </div>
+</div>
+</header>
+
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="modalOverlay" style="background-color: rgba(10, 22, 40, 0.6); z-index: 9999; backdrop-filter: blur(6px)">
+  <div class="modal" style="background-color: rgb(255, 255, 255); opacity: 0; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.25) 0px 24px 80px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; animation: 0.25s cubic-bezier(0.16, 1, 0.3, 1) modalIn; animation-name: modalIn; animation-duration: 0.25s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1)">
+    <button class="modal-close" data-pseudo-states="░color:var(--tx)" style="color: rgb(104, 112, 122); background-color: rgb(247, 248, 250); z-index: 2; transition: 0.12s; transition-duration: 0.12s">×</button>
+
+    <!-- Header -->
+    <div class="modal-head">
+      <div class="modal-icon" style="background-color: rgb(237, 241, 252)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
+      </div>
+      <div id="modal-title" class="modal-h2" style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px">Welcome back</div>
+      <p class="modal-desc" id="modal-desc" style="color: rgb(93, 102, 111)">Access your server dashboard</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="modal-tabs" style="border-color: rgb(236, 236, 236); overflow: hidden">
+      <a id="mtab-login" class="on" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); border-color: rgb(255, 255, 255) rgb(236, 236, 236) rgb(255, 255, 255) rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      <a id="mtab-register" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Register</a>
+    </div>
+
+    <!-- Login -->
+    <div class="modal-body" id="tab-login">
+      <form id="loginForm">
+        <input type="hidden" name="_token" data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgba(0, 0, 0, 0)">
+
+        <div id="loginStepToken">
+          <label style="color: rgb(85, 85, 85)">Access Token</label>
+          <input type="text" id="loginToken" name="token" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" required value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+        </div>
+
+        <div id="loginStepTotp" style="display:none">
+          <label style="color: rgb(85, 85, 85)">2FA code</label>
+          <input type="text" id="loginTotp" name="totp" placeholder="123456" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" spellcheck="false" value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+          <p class="modal-totp-hint" style="color: rgb(93, 102, 111)">Enter the 6-digit code from your authenticator app.</p>
+        </div>
+
+        <div id="loginError" style="display:none;font-size:12px;color:#dc2626;margin-bottom:10px"></div>
+        <button type="submit" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="loginBtn">Login</button>
+      </form>
+    </div>
+
+    <!-- Register -->
+    <div class="modal-body" id="tab-register" style="display:none">
+      <!-- Step A: explainer + create button -->
+      <div id="register-intro">
+        <div class="modal-notice" style="border-color: rgb(212, 222, 245); background-image: linear-gradient(135deg, rgb(240, 244, 255), rgb(248, 249, 255))">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+          <div>
+            <strong>Account creation is free and instant.</strong>
+            <p style="color: rgb(85, 85, 85)">One token replaces your name, email and password. We hash it on creation and never see the full value again. You'll need to add credit before deploying.</p>
+          </div>
+        </div>
+        <div class="modal-steps">
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">1</span> Click below to generate your token</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">2</span> Save it (we cannot recover it)</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">3</span> Top up &amp; deploy any service</div>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="signupBtn">Create my token</button>
+        <div id="signupError" style="display:none;font-size:12px;color:#dc2626;margin-top:8px"></div>
+      </div>
+
+      <!-- Step B: token reveal + saved gate -->
+      <div id="register-token" style="display:none">
+        <div class="modal-token-banner" style="background-color: rgb(237, 241, 252); border-color: rgb(196, 214, 247)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: rgb(26, 86, 219); overflow: hidden"><path d="M12 3l8 3v6c0 4.5-3.4 8.5-8 9.5C7.4 20.5 4 16.5 4 12V6l8-3z"></path><path d="M9 12l2 2 4-4"></path></svg>
+          <div class="modal-token-banner-tx">
+            <strong style="color: rgb(18, 68, 176)">Your access token — shown once</strong>
+            <p style="color: rgb(85, 85, 85)">Copy it now — we can't recover it, reset it, or show it again.</p>
+          </div>
+        </div>
+        <div class="modal-token-box" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224)">
+          <code id="newTokenValue" style="overflow: hidden">XXXX-XXXX-XXXX-XXXX</code>
+          <button type="button" id="copyTokenBtn" class="modal-token-copy" data-copy data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="overflow: hidden"><rect x="5" y="5" width="9" height="9" rx="1.4"></rect><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"></path></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;margin-top:12px" id="continueBtn">Continue to my account</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer" id="modal-footer-login" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111)">
+      No account? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">See how to register</a>
+    </div>
+    <div class="modal-footer" id="modal-footer-register" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111); display:none">
+      Already have a token? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">Login</a>
+    </div>
+  </div>
+</div>
+
+
+
+<main>
+
+<style>
+/* ── Page-local styles, all aligned to the global design tokens (--ac, --bd, --bg2…) ── */
+.ag-paths { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:32px; }
+.ag-paths .ag-path { background:var(--bg2); border:1px solid var(--bd2); border-radius:8px; padding:18px; transition:.15s; }
+.ag-paths .ag-path:hover { border-color:var(--bd); transform:translateY(-2px); box-shadow:0 8px 24px -12px rgba(0,0,0,.15); }
+.ag-paths .ag-path .ag-tag { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; background:var(--ac-bg); color:var(--ac); letter-spacing:.04em; text-transform:uppercase; margin-bottom:8px; }
+.ag-paths .ag-path h3 { margin:0 0 6px; font-size:15px; }
+.ag-paths .ag-path p { margin:0; font-size:13px; color:var(--tx2); line-height:1.55; }
+
+.ag-step-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:24px; }
+.ag-stepc { background:var(--bg2); border:1px solid var(--bd2); border-radius:8px; padding:18px; }
+.ag-stepc .ag-num { display:inline-flex; width:24px; height:24px; align-items:center; justify-content:center; border-radius:50%; background:var(--ac); color:#fff; font-size:12px; font-weight:700; margin-right:8px; vertical-align:middle; }
+.ag-stepc h3 { margin:0 0 6px; font-size:14.5px; display:flex; align-items:center; }
+.ag-stepc p { margin:0; font-size:13px; color:var(--tx2); line-height:1.55; }
+
+.ag-code { background:linear-gradient(180deg,#0b1425 0%,#080f1f 100%); border:1px solid rgba(255,255,255,.08); border-radius:10px; overflow:hidden; box-shadow:0 24px 64px -24px rgba(0,0,0,.5); margin:18px 0; }
+.ag-code-bar { background:rgba(255,255,255,.04); padding:8px 14px; display:flex; align-items:center; gap:10px; border-bottom:1px solid rgba(255,255,255,.06); }
+.ag-code-dots { display:flex; gap:5px; }
+.ag-code-dots i { display:block; width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.18); }
+.ag-code-title { font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:11.5px; color:rgba(255,255,255,.45); margin-left:4px; }
+.ag-code pre { margin:0; padding:18px 20px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:12.5px; line-height:1.65; color:#cdd6e0; overflow-x:auto; }
+.ag-code .k { color:#c678dd; } .ag-code .s { color:#98c379; } .ag-code .n { color:#d19a66; } .ag-code .c { color:#5c6370; font-style:italic; } .ag-code .p { color:#60a5fa; }
+
+/* Icon to the LEFT of the text — compact horizontal layout, no wasted vertical space. */
+.ag-feat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-top:24px; }
+.ag-feat { display:flex; gap:12px; align-items:flex-start; padding:16px 18px; background:var(--bg2); border:1px solid var(--bd2); border-radius:8px; }
+.ag-feat .ag-feat-ic { flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; background:var(--ac-bg); color:var(--ac); }
+.ag-feat .ag-feat-ic svg { width:18px; height:18px; }
+.ag-feat .ag-feat-body { flex:1; min-width:0; }
+.ag-feat h4, .ag-feat h3 { margin:0 0 4px; font-size:14px; font-weight:700; line-height:1.3; }
+.ag-feat p { margin:0; font-size:12.5px; color:var(--tx2); line-height:1.55; }
+
+.ag-uc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:24px; }
+.ag-uc { padding:18px; background:var(--bg); border:1px solid var(--bd2); border-radius:8px; transition:.15s; }
+.ag-uc:hover { border-color:var(--ac); }
+.ag-uc h4, .ag-uc h3 { margin:0 0 6px; font-size:14.5px; font-weight:700; color:var(--tx); }
+.ag-uc p { margin:0; font-size:13px; color:var(--tx2); line-height:1.55; }
+
+/* Same dark slate palette as the .loc-hero / .hero-term at the top of the page,
+   with a subtle radial highlight + grid texture so it doesn't feel like a flat
+   color block. Matches the dark hero up top — coherent visual rhythm. */
+.ag-cta {
+  position:relative; overflow:hidden;
+  background:
+    /* soft accent glow top-left */
+    radial-gradient(ellipse 60% 80% at 20% 0%, rgba(96,165,250,.18) 0%, transparent 60%),
+    /* faint grid lines */
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px) 0 0/24px 24px,
+    /* base dark navy gradient */
+    linear-gradient(160deg, #0b1425 0%, #080f1f 60%, #0a1628 100%);
+  color:#fff;
+  padding:36px 28px;
+  border-radius:12px;
+  margin:32px 0 8px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 24px 64px -28px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.ag-cta::after {
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 50% 60% at 100% 100%, rgba(167,201,255,.08) 0%, transparent 65%);
+}
+.ag-cta > * { position:relative; z-index:1; }
+.ag-cta h2 { color:#fff; font-size:22px; margin:0 0 10px; letter-spacing:-.01em; }
+.ag-cta p { margin:0 0 16px; font-size:14px; color:rgba(255,255,255,.72); max-width:560px; margin-left:auto; margin-right:auto; line-height:1.6; }
+.ag-cta .ag-cta-actions { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.ag-cta .bt-w { background:#fff; color:var(--tx); box-shadow:0 4px 14px rgba(255,255,255,.14); }
+.ag-cta .bt-w:hover { background:rgba(255,255,255,.94); transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,255,255,.18); }
+.ag-cta .bt-g { color:rgba(255,255,255,.92); border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.03); backdrop-filter:blur(4px); }
+.ag-cta .bt-g:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.32); color:#fff; }
+
+.ag-faq details { padding:14px 18px; background:var(--bg2); border:1px solid var(--bd2); border-radius:8px; margin-bottom:8px; }
+.ag-faq details summary { font-weight:600; font-size:14.5px; cursor:pointer; padding:2px 0; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+.ag-faq details summary::after { content:'+'; font-size:20px; font-weight:300; color:var(--tx3); transition:.15s; }
+.ag-faq details[open] summary::after { transform:rotate(45deg); color:var(--ac); }
+.ag-faq details p { margin:14px 0 0; color:var(--tx2); line-height:1.6; font-size:13.5px; }
+
+.ag-tools { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:18px; }
+.ag-tool { padding:10px 14px; background:var(--bg); border:1px solid var(--bd2); border-radius:6px; font-size:12.5px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; color:var(--tx); display:flex; gap:8px; align-items:center; }
+.ag-tool code { background:transparent; padding:0; color:var(--ac); font-weight:700; }
+
+.ag-clients { display:flex; gap:6px; flex-wrap:wrap; margin-top:14px; }
+.ag-client { display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border:1px solid rgba(255,255,255,.18); border-radius:100px; font-size:11.5px; font-weight:600; color:rgba(255,255,255,.85); background:rgba(255,255,255,.04); }
+</style>
+
+<div style="border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(236, 236, 236); padding:8px 0;border-bottom:1px solid var(--bd2);font-size:12px;color:var(--tx3)"><div class="w">
+  <a href="/" style="color:var(--tx3)">Home</a> <span style="margin:0 4px">/</span>
+  <span style="color:var(--tx)">Agent API</span>
+</div></div>
+
+<!-- ─── HERO ─── -->
+<section class="loc-hero" style="color: rgb(255, 255, 255); background-color: rgb(10, 22, 40); overflow: hidden; background-position: 50% 50%; background-size: cover; background-repeat: no-repeat; background-image:url(&quot;assets/anonport_com/hero-bg-0f9fd3940d1bdfc9ff4e0a492bf48717d66616df5e53c2d71e067429118eacc2.webp&quot;)">
+  <div class="w">
+    <div class="loc-hero-row" style="z-index: 1; grid-template-columns:1fr 380px">
+      <div class="loc-hero-left">
+        <div>
+          <div class="loc-hero-tag" style="color: rgb(96, 165, 250)">AI agent VPS hosting · MCP · REST · x402</div>
+          <h1>Buy a VPS or dedicated server with your AI agent — paid in crypto, no KYC.</h1>
+          <p style="color: rgba(255, 255, 255, 0.6)">AnonPort is built so AI agents can purchase, deploy and manage servers end-to-end without a human in the loop. Three integration paths, one domain, zero KYC, 8 cryptocurrencies including Monero. Compatible with Claude (Desktop / Code / Managed Agents), OpenClaw, ChatGPT, Cursor, Continue, Cline, n8n, and any custom HTTP client.</p>
+          <div class="hero-acts" style="margin-top:18px">
+            <a href="https://anonport.com/openapi.json" class="bt bt-p" rel="noopener" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.9)" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">Read the OpenAPI spec <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+            <a href="#mcp" class="bt bt-s" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.18)" style="background-color: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); transition: 0.12s; transition-duration: 0.12s">Setup MCP in 60s</a>
+          </div>
+          <div class="ag-clients">
+            <span class="ag-client" style="color: rgba(255, 255, 255, 0.85); background-color: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.18)">Claude Desktop</span>
+            <span class="ag-client" style="color: rgba(255, 255, 255, 0.85); background-color: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.18)">Claude Code</span>
+            <span class="ag-client" style="color: rgba(255, 255, 255, 0.85); background-color: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.18)">ChatGPT</span>
+            <span class="ag-client" style="color: rgba(255, 255, 255, 0.85); background-color: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.18)">Cursor</span>
+            <span class="ag-client" style="color: rgba(255, 255, 255, 0.85); background-color: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.18)">Continue</span>
+            <span class="ag-client" style="color: rgba(255, 255, 255, 0.85); background-color: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.18)">OpenClaw</span>
+            <span class="ag-client" style="color: rgba(255, 255, 255, 0.85); background-color: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.18)">curl</span>
+          </div>
+        </div>
+      </div>
+      <div class="loc-hero-right" style="min-width:0">
+        <div class="hero-term" aria-hidden="true" style="border-color: rgba(255, 255, 255, 0.08); overflow: hidden; background-image: linear-gradient(rgb(11, 20, 37) 0%, rgb(8, 15, 31) 100%); box-shadow: rgba(0, 0, 0, 0.7) 0px 24px 64px -24px, rgba(96, 165, 250, 0.05) 0px 0px 0px 1px">
+          <div class="ht-bar" style="background-color: rgba(255, 255, 255, 0.03); border-color: rgb(255, 255, 255) rgb(255, 255, 255) rgba(255, 255, 255, 0.06)">
+            <div class="ht-dots"><i style="background-color: rgb(255, 95, 87)"></i><i style="background-color: rgb(254, 188, 46)"></i><i style="background-color: rgb(40, 200, 64)"></i></div>
+            <div class="ht-title" style="color: rgba(255, 255, 255, 0.42)">claude — agent buying H100 GPU</div>
+          </div>
+          <div class="ht-body" style="color: rgba(255, 255, 255, 0.86)">
+            <div class="ht-l" style="overflow: hidden"><span class="ht-p" style="color: rgb(96, 165, 250)">&gt;</span> <span class="ht-dim" style="color: rgba(255, 255, 255, 0.42)">user:</span> spin up an H100 in Iceland for a Llama finetune, pay USDC</div>
+            <div class="ht-l ht-dim" style="color: rgba(255, 255, 255, 0.42); overflow: hidden">claude calls anonport/create_order type=gpu...</div>
+            <div class="ht-sep" style="background-color: rgba(255, 255, 255, 0.08)"></div>
+            <div class="ht-l" style="overflow: hidden"><span class="ht-key" style="color: rgba(255, 255, 255, 0.42)">type</span><span class="ht-v" style="color: rgb(147, 197, 253)">gpu / IS-L</span></div>
+            <div class="ht-l" style="overflow: hidden"><span class="ht-key" style="color: rgba(255, 255, 255, 0.42)">gpu</span><span class="ht-v" style="color: rgb(147, 197, 253)">1× H100 SXM5 80GB</span></div>
+            <div class="ht-l" style="overflow: hidden"><span class="ht-key" style="color: rgba(255, 255, 255, 0.42)">amount</span><span class="ht-v" style="color: rgb(147, 197, 253)">1,294.30 USDC</span></div>
+            <div class="ht-l" style="overflow: hidden"><span class="ht-key" style="color: rgba(255, 255, 255, 0.42)">os</span><span class="ht-v" style="color: rgb(147, 197, 253)">ubuntu-22-cuda</span></div>
+            <div class="ht-l" style="overflow: hidden"><span class="ht-key" style="color: rgba(255, 255, 255, 0.42)">status</span><span class="ht-v" style="color:#34d399">active ✓</span></div>
+            <div class="ht-l" style="overflow: hidden"><span class="ht-key" style="color: rgba(255, 255, 255, 0.42)">ssh</span><span class="ht-v" style="color: rgb(147, 197, 253)">root@213.x.x.x</span></div>
+            <div class="ht-l" style="overflow: hidden"><span class="ht-key" style="color: rgba(255, 255, 255, 0.42)">jupyter</span><span class="ht-v" style="color: rgb(147, 197, 253)">https://213…:8888</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STRIP — key features ─── -->
+<section class="strip" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="w"><div class="strip-in">
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(10, 122, 65); overflow: hidden"><polyline points="20 6 9 17 4 12"></polyline></svg> No KYC</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(10, 122, 65); overflow: hidden"><polyline points="20 6 9 17 4 12"></polyline></svg> MCP server</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(10, 122, 65); overflow: hidden"><polyline points="20 6 9 17 4 12"></polyline></svg> REST + OpenAPI</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(10, 122, 65); overflow: hidden"><polyline points="20 6 9 17 4 12"></polyline></svg> x402-light</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(10, 122, 65); overflow: hidden"><polyline points="20 6 9 17 4 12"></polyline></svg> 8 cryptos</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(10, 122, 65); overflow: hidden"><polyline points="20 6 9 17 4 12"></polyline></svg> Test mode</div>
+</div></div></section>
+
+<!-- ─── THREE PATHS ─── -->
+<section class="sc"><div class="w">
+  <div class="sc-hd">
+    <h2>Three integration paths, one domain</h2>
+    <p style="color: rgb(85, 85, 85)">Pick the one that fits your stack. They all hit the same backend, the same accounts, the same /api/v1/* logic.</p>
+  </div>
+
+  <div class="ag-paths">
+    <div class="ag-path" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s">
+      <span class="ag-tag" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)">MCP</span>
+      <h3>MCP — for Claude, Cursor, Continue, Cline</h3>
+      <p style="color: rgb(85, 85, 85)">Add https://anonport.com/mcp to your MCP config. Eight tools instantly available: list_plans, list_locations, quote, create_order, payment_status, server_credentials, server_action, agent_help.</p>
+    </div>
+    <div class="ag-path" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s">
+      <span class="ag-tag" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)">REST</span>
+      <h3>REST — for any HTTP client</h3>
+      <p style="color: rgb(85, 85, 85)">Plain JSON endpoints under /api/v1/. Bearer auth (auto-issued on first order, no signup). OpenAPI 3.1 spec at /openapi.json. Works from curl, Python, Go, anything that speaks HTTP.</p>
+    </div>
+    <div class="ag-path" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s">
+      <span class="ag-tag" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)">x402-light</span>
+      <h3>x402-light — instant USDC</h3>
+      <p style="color: rgb(85, 85, 85)">For agents with their own wallet. Send X-Payment-Mode: x402 to POST /api/v1/topup → 402 with the x402 accepts block (scheme "exact", USDC on Base). Settle by retrying with the signed X-Payment header.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ─── PRODUCTS AVAILABLE VIA API ─── -->
+<section class="sc"><div class="w">
+  <div class="sc-hd">
+    <h2>Four product lines, one /api/v1/orders endpoint</h2>
+    <p style="color: rgb(85, 85, 85)">Pass `type=vps` / `dedicated` / `rdp` / `gpu` to switch product lines. Same Bearer auth, same crypto checkout, same status endpoints. Locations are restricted by product — the API rejects `type=gpu` in `russia` (NVIDIA export controls) and `type=rdp` in `iceland` / `panama` / `switzerland`.</p>
+  </div>
+  <div class="tw tw-cards" style="overflow: auto"><table class="tb tb-cardify" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden">
+    <thead style="background-color: rgb(247, 248, 250)"><tr><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">Product line</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)"><code>type</code></th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">Available locations</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">From</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">Typical agent use case</th></tr></thead>
+    <tbody>
+      <tr>
+        <td data-th="Product line" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><strong>Linux VPS</strong></td>
+        <td data-th="type" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><code>vps</code></td>
+        <td data-th="Available locations" class="tb-wrapv" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">7 (IS · PA · MD · RO · CH · NL · RU)</td>
+        <td class="pr" data-th="From" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$7.50/mo</td>
+        <td data-th="Typical agent use case" class="tb-wrapv" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Linux services (Tor, VPN, mail, scraping bots, web apps).</td>
+      </tr>
+      <tr>
+        <td data-th="Product line" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><strong>Dedicated Server</strong></td>
+        <td data-th="type" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><code>dedicated</code></td>
+        <td data-th="Available locations" class="tb-wrapv" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">7 (IS · PA · MD · RO · CH · NL · RU)</td>
+        <td class="pr" data-th="From" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$48.50/mo</td>
+        <td data-th="Typical agent use case" class="tb-wrapv" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Bare-metal isolation (large DBs, dual-socket workloads, hypervisors).</td>
+      </tr>
+      <tr>
+        <td data-th="Product line" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><strong>Windows RDP</strong></td>
+        <td data-th="type" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><code>rdp</code></td>
+        <td data-th="Available locations" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">4 (NL · RO · MD · RU)</td>
+        <td class="pr" data-th="From" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$11.00/mo</td>
+        <td data-th="Typical agent use case" class="tb-wrapv" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Browser automation, multi-account SMM, Forex / MetaTrader, Windows-only apps.</td>
+      </tr>
+      <tr class="hl" style="background-color: rgb(237, 241, 252)">
+        <td data-th="Product line" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); box-shadow: rgb(26, 86, 219) 3px 0px 0px 0px inset"><strong>GPU AI Hosting</strong> <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)">New</span></td>
+        <td data-th="type" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><code>gpu</code></td>
+        <td data-th="Available locations" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">4 (IS · NL · RO · MD)</td>
+        <td class="pr" data-th="From" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$122.00/mo</td>
+        <td data-th="Typical agent use case" class="tb-wrapv" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">LLM finetuning, image / video generation, model inference behind your own API.</td>
+      </tr>
+      <tr class="hl" style="background-color: rgb(237, 241, 252)">
+        <td data-th="Product line" style="box-shadow: rgb(26, 86, 219) 3px 0px 0px 0px inset"><strong>Anonymous Domain Names</strong> <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)">New</span></td>
+        <td data-th="type"><code>domain</code></td>
+        <td data-th="Available locations" class="tb-wrapv">26 TLDs (.com .net .org .io .me .ai .app .dev .fr .de …)</td>
+        <td class="pr" data-th="From" style="color: rgb(26, 86, 219)">$4.99/yr</td>
+        <td data-th="Typical agent use case" class="tb-wrapv">One-call live availability + Namecheap-beating prices. Buy via balance; deep-link to /domain-order on the site.</td>
+      </tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:12.5px;color:var(--tx3);margin-top:10px">GET /api/v1/catalog returns the live SKU matrix (prices per location, OS options, GPU model, VRAM). The catalogue is open and cacheable for 5 minutes — no auth required.</p>
+</div></section>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section class="sc sc-a" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd">
+    <h2>How it works — 4 calls from discovery to credentials</h2>
+    <p style="color: rgb(85, 85, 85)">No SDK to install. No OAuth dance. No email. The first call returns your account token; the next three move the order from pending to active.</p>
+  </div>
+
+  <div class="ag-step-grid">
+    <div class="ag-stepc" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><h3><span class="ag-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">1</span>Discover what is available</h3><p style="color: rgb(85, 85, 85)">Read the catalog and the list of jurisdictions. Both endpoints are open (no auth) and cacheable for 5 minutes.</p></div>
+    <div class="ag-stepc" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><h3><span class="ag-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">2</span>Create the order</h3><p style="color: rgb(85, 85, 85)">POST your choice. The response contains a fresh per-order payment address, the exact crypto amount, an expiry, and — if you didn't send a Bearer — a fresh account_token. STORE THE TOKEN: it is the only way to manage the server later. We do not have a recovery path.</p></div>
+    <div class="ag-stepc" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><h3><span class="ag-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">3</span>Pay and poll</h3><p style="color: rgb(85, 85, 85)">Send the crypto to the address. Then poll the order until status reaches "active" (typically 1–5 minutes for VPS once the deposit is detected).</p></div>
+    <div class="ag-stepc" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><h3><span class="ag-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">4</span>Receive the credentials</h3><p style="color: rgb(85, 85, 85)">Once the order is active, fetch the server. The IP address, root password, SSH port and a console URL are returned. SSH in, you're done.</p></div>
+  </div>
+
+  <div class="ag-code" style="border-color: rgba(255, 255, 255, 0.08); overflow: hidden; background-image: linear-gradient(rgb(11, 20, 37) 0%, rgb(8, 15, 31) 100%); box-shadow: rgba(0, 0, 0, 0.5) 0px 24px 64px -24px; margin-top:32px">
+    <div class="ag-code-bar" style="background-color: rgba(255, 255, 255, 0.04); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgba(255, 255, 255, 0.06)"><div class="ag-code-dots"><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i></div><span class="ag-code-title" style="color: rgba(255, 255, 255, 0.45)">curl — balance-only two-step: topup, then deploy</span></div>
+<pre style="color: rgb(205, 214, 224); overflow: auto"><span class="c" style="color: rgb(92, 99, 112)"># Step 1: fund USD balance with crypto (min $30, max $2000; bonus credit applied on confirmation)</span>
+curl -X POST https://anonport.com/api/v1/topup \
+  -H <span class="s" style="color: rgb(152, 195, 121)">'Content-Type: application/json'</span> \
+  -d <span class="s" style="color: rgb(152, 195, 121)">'{ "amount": 200, "crypto": "XMR" }'</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># → 201 Created</span>
+{
+  <span class="k" style="color: rgb(198, 120, 221)">"ok"</span>: <span class="n" style="color: rgb(209, 154, 102)">true</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"payment_id"</span>: <span class="n" style="color: rgb(209, 154, 102)">12345</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"amount_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">200</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"crypto"</span>: <span class="s" style="color: rgb(152, 195, 121)">"XMR"</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"amount_crypto"</span>: <span class="s" style="color: rgb(152, 195, 121)">"1.2034"</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"address"</span>: <span class="s" style="color: rgb(152, 195, 121)">"47abc..."</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"bonus_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">50</span>,            <span class="c" style="color: rgb(92, 99, 112)">// free credit on confirmation</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"credited_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">250</span>,         <span class="c" style="color: rgb(92, 99, 112)">// 200 + 50 bonus</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"expires_in"</span>: <span class="n" style="color: rgb(209, 154, 102)">3600</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"poll_url"</span>: <span class="s" style="color: rgb(152, 195, 121)">"https://anonport.com/api/v1/topup/12345"</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"account_token"</span>: <span class="s" style="color: rgb(152, 195, 121)">"AAAA-BBBB-CCCC-DDDD"</span>    <span class="c" style="color: rgb(92, 99, 112)">// STORE THIS</span>
+}
+
+<span class="c" style="color: rgb(92, 99, 112)"># (send the crypto, poll poll_url until status="confirmed")</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># Step 2: deploy the server from the funded balance</span>
+curl -X POST https://anonport.com/api/v1/orders \
+  -H <span class="s" style="color: rgb(152, 195, 121)">'Authorization: Bearer AAAA-BBBB-CCCC-DDDD'</span> \
+  -H <span class="s" style="color: rgb(152, 195, 121)">'Content-Type: application/json'</span> \
+  -d <span class="s" style="color: rgb(152, 195, 121)">'{ "type": "vps", "plan": "IS-S", "location": "iceland", "os": "ubuntu-24", "billing": 3 }'</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># → 201 Created</span>
+{
+  <span class="k" style="color: rgb(198, 120, 221)">"ok"</span>: <span class="n" style="color: rgb(209, 154, 102)">true</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"server_id"</span>: <span class="n" style="color: rgb(209, 154, 102)">9876</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"status"</span>: <span class="s" style="color: rgb(152, 195, 121)">"active"</span>,            <span class="c" style="color: rgb(92, 99, 112)">// active immediately</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"charged_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">16.88</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"new_balance"</span>: <span class="n" style="color: rgb(209, 154, 102)">233.12</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"billing_months"</span>: <span class="n" style="color: rgb(209, 154, 102)">3</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"service_months"</span>: <span class="n" style="color: rgb(209, 154, 102)">3</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"credentials_url"</span>: <span class="s" style="color: rgb(152, 195, 121)">"https://anonport.com/api/v1/servers/9876"</span>
+}</pre>
+  </div>
+
+  <p style="font-size:13.5px;color:var(--tx2);margin:24px 0 8px"><strong>One endpoint, four product lines — copy-paste examples</strong></p>
+  <div class="ag-code" style="border-color: rgba(255, 255, 255, 0.08); overflow: hidden; background-image: linear-gradient(rgb(11, 20, 37) 0%, rgb(8, 15, 31) 100%); box-shadow: rgba(0, 0, 0, 0.5) 0px 24px 64px -24px">
+    <div class="ag-code-bar" style="background-color: rgba(255, 255, 255, 0.04); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgba(255, 255, 255, 0.06)"><div class="ag-code-dots"><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i></div><span class="ag-code-title" style="color: rgba(255, 255, 255, 0.45)">curl — POST /api/v1/orders for each product</span></div>
+<pre style="color: rgb(205, 214, 224); overflow: auto"><span class="c" style="color: rgb(92, 99, 112)"># All examples assume the agent already topped up via POST /api/v1/topup and the Bearer token is set.</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># Linux VPS — Iceland, Ubuntu 24, 3-month billing</span>
+<span class="p" style="color: rgb(96, 165, 250)">POST</span> /api/v1/orders <span class="p" style="color: rgb(96, 165, 250)">{</span><span class="k" style="color: rgb(198, 120, 221)">"type"</span>:<span class="s" style="color: rgb(152, 195, 121)">"vps"</span>, <span class="k" style="color: rgb(198, 120, 221)">"plan"</span>:<span class="s" style="color: rgb(152, 195, 121)">"IS-S"</span>, <span class="k" style="color: rgb(198, 120, 221)">"location"</span>:<span class="s" style="color: rgb(152, 195, 121)">"iceland"</span>, <span class="k" style="color: rgb(198, 120, 221)">"os"</span>:<span class="s" style="color: rgb(152, 195, 121)">"ubuntu-24"</span>, <span class="k" style="color: rgb(198, 120, 221)">"billing"</span>:<span class="n" style="color: rgb(209, 154, 102)">3</span><span class="p" style="color: rgb(96, 165, 250)">}</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># Dedicated bare-metal — Switzerland, AlmaLinux, annual</span>
+<span class="p" style="color: rgb(96, 165, 250)">POST</span> /api/v1/orders <span class="p" style="color: rgb(96, 165, 250)">{</span><span class="k" style="color: rgb(198, 120, 221)">"type"</span>:<span class="s" style="color: rgb(152, 195, 121)">"dedicated"</span>, <span class="k" style="color: rgb(198, 120, 221)">"plan"</span>:<span class="s" style="color: rgb(152, 195, 121)">"CH-3"</span>, <span class="k" style="color: rgb(198, 120, 221)">"location"</span>:<span class="s" style="color: rgb(152, 195, 121)">"switzerland"</span>, <span class="k" style="color: rgb(198, 120, 221)">"os"</span>:<span class="s" style="color: rgb(152, 195, 121)">"alma-9"</span>, <span class="k" style="color: rgb(198, 120, 221)">"billing"</span>:<span class="n" style="color: rgb(209, 154, 102)">12</span><span class="p" style="color: rgb(96, 165, 250)">}</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># Windows RDP — Netherlands, Win Server 2022, monthly</span>
+<span class="p" style="color: rgb(96, 165, 250)">POST</span> /api/v1/orders <span class="p" style="color: rgb(96, 165, 250)">{</span><span class="k" style="color: rgb(198, 120, 221)">"type"</span>:<span class="s" style="color: rgb(152, 195, 121)">"rdp"</span>, <span class="k" style="color: rgb(198, 120, 221)">"plan"</span>:<span class="s" style="color: rgb(152, 195, 121)">"NL-M"</span>, <span class="k" style="color: rgb(198, 120, 221)">"location"</span>:<span class="s" style="color: rgb(152, 195, 121)">"netherlands"</span>, <span class="k" style="color: rgb(198, 120, 221)">"os"</span>:<span class="s" style="color: rgb(152, 195, 121)">"win-2022"</span>, <span class="k" style="color: rgb(198, 120, 221)">"billing"</span>:<span class="n" style="color: rgb(209, 154, 102)">1</span><span class="p" style="color: rgb(96, 165, 250)">}</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># GPU AI — H100 SXM5 with vLLM + Llama 3.3 70B pre-downloaded + HF token + SSH key + auto-shutdown after 24h</span>
+<span class="p" style="color: rgb(96, 165, 250)">POST</span> /api/v1/orders <span class="p" style="color: rgb(96, 165, 250)">{</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"type"</span>:<span class="s" style="color: rgb(152, 195, 121)">"gpu"</span>, <span class="k" style="color: rgb(198, 120, 221)">"plan"</span>:<span class="s" style="color: rgb(152, 195, 121)">"IS-L"</span>, <span class="k" style="color: rgb(198, 120, 221)">"location"</span>:<span class="s" style="color: rgb(152, 195, 121)">"iceland"</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"os"</span>:<span class="s" style="color: rgb(152, 195, 121)">"ubuntu-22-cuda"</span>, <span class="k" style="color: rgb(198, 120, 221)">"billing"</span>:<span class="n" style="color: rgb(209, 154, 102)">1</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"ai_stacks"</span>: [<span class="s" style="color: rgb(152, 195, 121)">"vllm"</span>, <span class="s" style="color: rgb(152, 195, 121)">"jupyterlab"</span>],
+  <span class="k" style="color: rgb(198, 120, 221)">"pretrained_models"</span>: [<span class="s" style="color: rgb(152, 195, 121)">"llama-3.3-70b"</span>, <span class="s" style="color: rgb(152, 195, 121)">"flux-dev"</span>],
+  <span class="k" style="color: rgb(198, 120, 221)">"hf_token"</span>: <span class="s" style="color: rgb(152, 195, 121)">"hf_..."</span>,                     <span class="c" style="color: rgb(92, 99, 112)">// optional — needed for Llama / Mistral (gated)</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"ssh_public_key"</span>: <span class="s" style="color: rgb(152, 195, 121)">"ssh-ed25519 AAAA..."</span>,    <span class="c" style="color: rgb(92, 99, 112)">// optional — password-less login</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"public_endpoint"</span>: <span class="n" style="color: rgb(209, 154, 102)">true</span>,                  <span class="c" style="color: rgb(92, 99, 112)">// auto Let's Encrypt + nginx reverse proxy on 443</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"auto_shutdown_hours"</span>: <span class="n" style="color: rgb(209, 154, 102)">24</span>                   <span class="c" style="color: rgb(92, 99, 112)">// destroy after 24h to bound cost</span>
+<span class="p" style="color: rgb(96, 165, 250)">}</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># GPU AI image-gen — Netherlands, RTX 5090 (32 GB GDDR7), ComfyUI + FLUX.1-dev preinstalled, 3-month billing</span>
+<span class="p" style="color: rgb(96, 165, 250)">POST</span> /api/v1/orders <span class="p" style="color: rgb(96, 165, 250)">{</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"type"</span>:<span class="s" style="color: rgb(152, 195, 121)">"gpu"</span>, <span class="k" style="color: rgb(198, 120, 221)">"plan"</span>:<span class="s" style="color: rgb(152, 195, 121)">"NL-M"</span>, <span class="k" style="color: rgb(198, 120, 221)">"location"</span>:<span class="s" style="color: rgb(152, 195, 121)">"netherlands"</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"os"</span>:<span class="s" style="color: rgb(152, 195, 121)">"ubuntu-22-cuda"</span>, <span class="k" style="color: rgb(198, 120, 221)">"billing"</span>:<span class="n" style="color: rgb(209, 154, 102)">3</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"ai_stacks"</span>: [<span class="s" style="color: rgb(152, 195, 121)">"comfyui"</span>, <span class="s" style="color: rgb(152, 195, 121)">"kohya-ss"</span>],
+  <span class="k" style="color: rgb(198, 120, 221)">"pretrained_models"</span>: [<span class="s" style="color: rgb(152, 195, 121)">"flux-dev"</span>, <span class="s" style="color: rgb(152, 195, 121)">"sdxl-base"</span>]
+<span class="p" style="color: rgb(96, 165, 250)">}</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># If the balance is short, /orders returns 402 with a topup_required block:</span>
+<span class="p" style="color: rgb(96, 165, 250)">{</span>
+  <span class="k" style="color: rgb(198, 120, 221)">"ok"</span>: <span class="n" style="color: rgb(209, 154, 102)">false</span>, <span class="k" style="color: rgb(198, 120, 221)">"error"</span>: <span class="s" style="color: rgb(152, 195, 121)">"insufficient_balance"</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"have_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">0</span>, <span class="k" style="color: rgb(198, 120, 221)">"need_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">53.5</span>, <span class="k" style="color: rgb(198, 120, 221)">"deficit_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">53.5</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"topup_required"</span>: <span class="n" style="color: rgb(209, 154, 102)">true</span>,
+  <span class="k" style="color: rgb(198, 120, 221)">"topup"</span>: <span class="p" style="color: rgb(96, 165, 250)">{</span>
+    <span class="k" style="color: rgb(198, 120, 221)">"endpoint"</span>: <span class="s" style="color: rgb(152, 195, 121)">"https://anonport.com/api/v1/topup"</span>,
+    <span class="k" style="color: rgb(198, 120, 221)">"suggested_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">54</span>, <span class="k" style="color: rgb(198, 120, 221)">"suggested_bonus"</span>: <span class="n" style="color: rgb(209, 154, 102)">0</span>,
+    <span class="k" style="color: rgb(198, 120, 221)">"minimum_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">30</span>, <span class="k" style="color: rgb(198, 120, 221)">"maximum_usd"</span>: <span class="n" style="color: rgb(209, 154, 102)">2000</span>,
+    <span class="k" style="color: rgb(198, 120, 221)">"bonus_doc"</span>: <span class="s" style="color: rgb(152, 195, 121)">"https://anonport.com/api/v1/topup/bonus"</span>
+  <span class="p" style="color: rgb(96, 165, 250)">}</span>
+<span class="p" style="color: rgb(96, 165, 250)">}</span>
+<span class="c" style="color: rgb(92, 99, 112)"># → POST /api/v1/topup {"amount": 54, "crypto": "XMR"} → wait for confirm → retry POST /api/v1/orders</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># Anonymous domain check — 26 TLDs in one unauthenticated GET, no token required, JSON out, 1h Redis cache</span>
+<span class="p" style="color: rgb(96, 165, 250)">GET</span> /api/v1/domains/check?q=<span class="s" style="color: rgb(152, 195, 121)">mybrand</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># Tip: typing a TLD surfaces it FIRST. "mybrand.fr" returns .fr at index 0, then the rest.</span>
+<span class="p" style="color: rgb(96, 165, 250)">GET</span> /api/v1/domains/check?q=<span class="s" style="color: rgb(152, 195, 121)">mybrand.fr</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># Response (truncated): live availability + Namecheap-beating prices + featured/badge labels</span>
+<span class="c" style="color: rgb(92, 99, 112)"># {"ok":true, "results":[</span>
+<span class="c" style="color: rgb(92, 99, 112)">#   {"domain":"mybrand.com", "available":true, "price_usd":4.99,  "market_usd":15.98, "discount_pct":69, "badge":"BEST DEAL", "featured":true},</span>
+<span class="c" style="color: rgb(92, 99, 112)">#   {"domain":"mybrand.io",  "available":true, "price_usd":24.99, "market_usd":46.98, "discount_pct":47, "badge":"HOT"},</span>
+<span class="c" style="color: rgb(92, 99, 112)">#   {"domain":"mybrand.ai",  "available":true, "price_usd":84.99, "market_usd":109.98,"discount_pct":23, "badge":"HOT"} ...]}</span></pre>
+  </div>
+</div></section>
+
+<!-- ─── MCP SETUP ─── -->
+<section class="sc" id="mcp"><div class="w">
+  <div class="sc-hd">
+    <h2>MCP setup (60 seconds)</h2>
+    <p style="color: rgb(85, 85, 85)">Add this snippet to your MCP-aware client (Claude Desktop, Claude Code, Cursor, Continue, Cline). After restart, ask: "Buy me an Iceland VPS-S in Ubuntu 24.04, paid in XMR".</p>
+  </div>
+
+  <div class="ag-code" style="border-color: rgba(255, 255, 255, 0.08); overflow: hidden; background-image: linear-gradient(rgb(11, 20, 37) 0%, rgb(8, 15, 31) 100%); box-shadow: rgba(0, 0, 0, 0.5) 0px 24px 64px -24px">
+    <div class="ag-code-bar" style="background-color: rgba(255, 255, 255, 0.04); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgba(255, 255, 255, 0.06)"><div class="ag-code-dots"><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i></div><span class="ag-code-title" style="color: rgba(255, 255, 255, 0.45)">~/.claude/mcp_settings.json — Cursor / Continue / Cline equivalent</span></div>
+<pre style="color: rgb(205, 214, 224); overflow: auto">{
+  <span class="k" style="color: rgb(198, 120, 221)">"mcpServers"</span>: {
+    <span class="k" style="color: rgb(198, 120, 221)">"anonport"</span>: {
+      <span class="k" style="color: rgb(198, 120, 221)">"url"</span>: <span class="s" style="color: rgb(152, 195, 121)">"https://anonport.com/mcp"</span>
+    }
+  }
+}</pre>
+  </div>
+
+  <p style="font-size:13.5px;color:var(--tx2);margin:18px 0 6px"><strong>Tools exposed by the MCP server:</strong></p>
+  <div class="ag-tools">
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">list_plans</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">list_locations</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">quote</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">topup_bonus</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">topup_create</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">payment_status</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">account_balance</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">create_order</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">server_credentials</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">server_action</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">agent_help</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">domain_check</code></div>
+    <div class="ag-tool" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)"><code style="color: rgb(26, 86, 219)">domain_quote</code></div>
+  </div>
+  <p style="font-size:13px;color:var(--tx3);margin-top:14px">Then call agent_help() inside Claude — it returns the canonical 4-call recipe with examples, baked into the tool itself.</p>
+</div></section>
+
+<!-- ─── x402-light ─── -->
+<section class="sc sc-a" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd">
+    <h2>x402-light — single round trip with USDC</h2>
+    <p style="color: rgb(85, 85, 85)">Send the X-Payment-Mode: x402 header to POST /api/v1/topup. The server replies HTTP 402 with an x402 accepts block (scheme "exact", USDC on Base, EIP-3009 transferWithAuthorization). Sign the authorization for the quoted amount, retry the same request with the X-Payment header — the deposit settles and credits your balance. Then order any server via /api/v1/orders.</p>
+  </div>
+
+  <div class="ag-code" style="border-color: rgba(255, 255, 255, 0.08); overflow: hidden; background-image: linear-gradient(rgb(11, 20, 37) 0%, rgb(8, 15, 31) 100%); box-shadow: rgba(0, 0, 0, 0.5) 0px 24px 64px -24px">
+    <div class="ag-code-bar" style="background-color: rgba(255, 255, 255, 0.04); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgba(255, 255, 255, 0.06)"><div class="ag-code-dots"><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i></div><span class="ag-code-title" style="color: rgba(255, 255, 255, 0.45)">x402-light — single round trip with USDT</span></div>
+<pre style="color: rgb(205, 214, 224); overflow: auto"><span class="c" style="color: rgb(92, 99, 112)"># With balance-only orders, /api/v1/orders returns 402 insufficient_balance</span>
+<span class="c" style="color: rgb(92, 99, 112)"># when balance is short — the response includes a topup_required block.</span>
+<span class="c" style="color: rgb(92, 99, 112)"># Fund USDT directly via:</span>
+curl -X POST https://anonport.com/api/v1/topup \
+  -H <span class="s" style="color: rgb(152, 195, 121)">'Content-Type: application/json'</span> \
+  -d <span class="s" style="color: rgb(152, 195, 121)">'{"amount":100,"crypto":"USDT"}'</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># → 201 returns {payment_id, address, amount_crypto, bonus_usd: 25,</span>
+<span class="c" style="color: rgb(92, 99, 112)">#               credited_usd: 125, poll_url, account_token}.</span>
+<span class="c" style="color: rgb(92, 99, 112)"># Send USDT (ERC-20) to address, poll poll_url until status="confirmed",</span>
+<span class="c" style="color: rgb(92, 99, 112)"># then POST /api/v1/orders with Bearer to deploy from the funded balance.</span></pre>
+  </div>
+</div></section>
+
+<!-- ─── DRY-RUN ─── -->
+<section class="sc"><div class="w">
+  <div class="sc-hd">
+    <h2>Test mode (dry-run) — never spend real crypto while integrating</h2>
+    <p style="color: rgb(85, 85, 85)">Add ?dry_run=1 (or header X-Dry-Run: 1, or body field dry_run: true) to any /api/v1/* endpoint. The synthetic order auto-confirms after ~60 seconds, returns RFC 5737 IPs, and never touches a real database row or upstream payment processor. Perfect for validating an agent integration before touching mainnet.</p>
+  </div>
+
+  <div class="ag-code" style="border-color: rgba(255, 255, 255, 0.08); overflow: hidden; background-image: linear-gradient(rgb(11, 20, 37) 0%, rgb(8, 15, 31) 100%); box-shadow: rgba(0, 0, 0, 0.5) 0px 24px 64px -24px">
+    <div class="ag-code-bar" style="background-color: rgba(255, 255, 255, 0.04); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgba(255, 255, 255, 0.06)"><div class="ag-code-dots"><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i><i style="background-color: rgba(255, 255, 255, 0.18)"></i></div><span class="ag-code-title" style="color: rgba(255, 255, 255, 0.45)">dry-run — never spend real crypto</span></div>
+<pre style="color: rgb(205, 214, 224); overflow: auto"><span class="c" style="color: rgb(92, 99, 112)"># no real crypto spent, no real server provisioned</span>
+curl -X POST <span class="s" style="color: rgb(152, 195, 121)">'https://anonport.com/api/v1/orders?dry_run=1'</span> \
+  -H <span class="s" style="color: rgb(152, 195, 121)">'Content-Type: application/json'</span> \
+  -d <span class="s" style="color: rgb(152, 195, 121)">'{"type":"vps","plan":"IS-S","location":"iceland","billing":1}'</span>
+
+<span class="c" style="color: rgb(92, 99, 112)"># For a topup preview:</span>
+curl -X POST <span class="s" style="color: rgb(152, 195, 121)">'https://anonport.com/api/v1/topup?dry_run=1'</span> \
+  -H <span class="s" style="color: rgb(152, 195, 121)">'Content-Type: application/json'</span> \
+  -d <span class="s" style="color: rgb(152, 195, 121)">'{"amount":200,"crypto":"XMR"}'</span></pre>
+  </div>
+</div></section>
+
+<!-- ─── USE CASES ─── -->
+<section class="sc sc-a" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd">
+    <h2>Use cases — what agents do with AnonPort</h2>
+    <p style="color: rgb(85, 85, 85)">These are the patterns we see (and design for) in agentic infrastructure today.</p>
+  </div>
+
+  <div class="ag-uc-grid">
+    <div class="ag-uc" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s"><h3>Spin up a scraper VPS in 30 seconds</h3><p style="color: rgb(85, 85, 85)">A research agent needs a clean IP in a specific jurisdiction. It calls create_order, gets credentials, runs the job, then terminates.</p></div>
+    <div class="ag-uc" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s"><h3>Agent-owned compute supply chain</h3><p style="color: rgb(85, 85, 85)">A long-running autonomous agent (Claude Managed Agent, custom orchestrator) provisions its own infrastructure as it scales horizontally — no human gatekeeper.</p></div>
+    <div class="ag-uc" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s"><h3>BYO compute for sensitive workloads</h3><p style="color: rgb(85, 85, 85)">A user with privacy concerns asks Claude to host an LLM, a Tor relay, a Monero node or a self-hosted VPN — payment, deployment, SSH key handover all happen agent-side.</p></div>
+    <div class="ag-uc" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s"><h3>Disposable infrastructure for security research</h3><p style="color: rgb(85, 85, 85)">Penetration testing tools, malware sandboxes, exit nodes — anything that benefits from being short-lived and unattributable. Agents create, use, and destroy.</p></div>
+    <div class="ag-uc" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s"><h3>On-demand GPU for LLM finetuning + inference</h3><p style="color: rgb(85, 85, 85)">Agents spin up an H100 SXM5 (80 GB HBM3) with PyTorch / CUDA preinstalled in 60 seconds, run a finetune job, deploy the model behind their own vLLM endpoint, then destroy the box. Predictable monthly billing, unlimited bandwidth, no per-token fees.</p></div>
+    <div class="ag-uc" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.15s; transition-duration: 0.15s"><h3>Multi-region + multi-product deployment from one prompt</h3><p style="color: rgb(85, 85, 85)">One agent loop deploys a Linux VPS in Iceland (control plane), a Windows RDP in the Netherlands (browser-automation worker), and an H100 GPU in Iceland (inference). Same token, same API, same checkout.</p></div>
+  </div>
+</div></section>
+
+<!-- ─── WHY AnonPort works for agents ─── -->
+<section class="sc"><div class="w">
+  <div class="sc-hd">
+    <h2>Why AnonPort works for agents</h2>
+    <p style="color: rgb(85, 85, 85)">Six properties that make AnonPort uniquely well-suited to autonomous and assisted purchasing.</p>
+  </div>
+
+  <div class="ag-feat-grid">
+    <div class="ag-feat" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+      <div class="ag-feat-ic" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="overflow: hidden"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><div class="ag-feat-body"><h3>Zero KYC</h3><p style="color: rgb(85, 85, 85)">No name, email, phone, ID, captcha. The agent pays and gets the server — that's it.</p></div>
+    </div>
+    <div class="ag-feat" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+      <div class="ag-feat-ic" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="overflow: hidden"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path></svg></div><div class="ag-feat-body"><h3>Instant deployment</h3><p style="color: rgb(85, 85, 85)">VPS live in under 5 minutes. Dedicated typically 15–60 minutes. No queue, no human approval.</p></div>
+    </div>
+    <div class="ag-feat" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+      <div class="ag-feat-ic" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"></path></svg></div><div class="ag-feat-body"><h3>8 cryptocurrencies</h3><p style="color: rgb(85, 85, 85)">BTC, XMR, ETH, USDT, USDTTRC, SOL, LTC, TRX. Same API for all.</p></div>
+    </div>
+    <div class="ag-feat" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+      <div class="ag-feat-ic" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><div class="ag-feat-body"><h3>7 jurisdictions</h3><p style="color: rgb(85, 85, 85)">Iceland, Panama, Moldova, Romania, Switzerland, Netherlands, Russia. Filter by location.</p></div>
+    </div>
+    <div class="ag-feat" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+      <div class="ag-feat-ic" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="overflow: hidden"><path d="M9 11H5l4-7 4 7h-4v6l-4 4h12l-4-4v-6"></path></svg></div><div class="ag-feat-body"><h3>Test mode</h3><p style="color: rgb(85, 85, 85)">Validate your integration end-to-end without spending. dry_run=1 on every endpoint.</p></div>
+    </div>
+    <div class="ag-feat" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+      <div class="ag-feat-ic" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="overflow: hidden"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="ag-feat-body"><h3>Two flows, one API</h3><p style="color: rgb(85, 85, 85)">Same endpoint serves Claude-with-human-paying and fully autonomous agent-with-own-wallet.</p></div>
+    </div>
+  </div>
+
+  <div class="ag-cta" style="color: rgb(255, 255, 255); border-color: rgba(255, 255, 255, 0.08); overflow: hidden; background-image: radial-gradient(60% 80% at 20% 0%, rgba(96, 165, 250, 0.18) 0%, rgba(0, 0, 0, 0) 60%), linear-gradient(rgba(255, 255, 255, 0.024) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(160deg, rgb(11, 20, 37) 0%, rgb(8, 15, 31) 60%, rgb(10, 22, 40) 100%); background-position: 0% 0%, 0px 0px, 0px 0px, 0% 0%; background-size: auto, 24px 24px, 24px 24px, auto; background-repeat: repeat, repeat, repeat, repeat; background-attachment: scroll, scroll, scroll, scroll; background-origin: padding-box, padding-box, padding-box, padding-box; background-clip: border-box, border-box, border-box, border-box; box-shadow: rgba(0, 0, 0, 0.55) 0px 24px 64px -28px, rgba(255, 255, 255, 0.04) 0px 1px 0px 0px inset">
+    <h2 style="z-index: 1">Discover the API in one curl</h2>
+    <p style="color: rgba(255, 255, 255, 0.72); z-index: 1">Or open https://anonport.com/openapi.json for the full OpenAPI 3.1 spec.</p>
+    <div class="ag-cta-actions" style="z-index: 1">
+      <a href="https://anonport.com/openapi.json" class="bt bt-w" rel="noopener" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.94);transform:translateY(-1px);box-shadow:rgba(255, 255, 255, 0.18) 0px 6px 20px" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); box-shadow: rgba(255, 255, 255, 0.14) 0px 4px 14px 0px; transition: 0.12s; transition-duration: 0.12s">Read the OpenAPI spec</a>
+      <a href="https://anonport.com/.well-known/agent.json" class="bt bt-g" rel="noopener" data-pseudo-states="░color:rgb(255, 255, 255);background-color:rgba(255, 255, 255, 0.08);border-top-color:rgba(255, 255, 255, 0.32);border-right-color:rgba(255, 255, 255, 0.32);border-bottom-color:rgba(255, 255, 255, 0.32);border-left-color:rgba(255, 255, 255, 0.32)" style="color: rgba(255, 255, 255, 0.92); background-color: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.18); backdrop-filter: blur(4px); transition: 0.12s; transition-duration: 0.12s">Discovery file</a>
+    </div>
+  </div>
+</div></section>
+
+<!-- ─── FAQ ─── -->
+<section class="sc sc-a" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd">
+    <h2>FAQ</h2>
+    <p style="color: rgb(85, 85, 85)">Common questions about integrating AnonPort with AI agents.</p>
+  </div>
+
+  <div class="ag-faq">
+    <details style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><summary>Which AI assistants can use this?</summary><p style="color: rgb(85, 85, 85)">Any MCP-aware client: Claude Desktop, Claude Code, Cursor, Continue, Cline, and any client implementing the Model Context Protocol. For agents without MCP support (OpenClaw, ChatGPT plugins, custom Python scripts, n8n workflows, Anthropic Managed Agents), the same functionality is available via plain HTTPS calls to /api/v1/* — exactly the same backend, same auth, same flow.</p></details>
+    <details style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><summary>Do I need an account before placing the first order?</summary><p style="color: rgb(85, 85, 85)">No. POST /api/v1/orders without any Authorization header and the response will include a fresh account_token (16-character string in AAAA-BBBB-CCCC-DDDD format). Store it. That token is the only way to manage your server afterwards — we have no email, no recovery path, nothing else.</p></details>
+    <details style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><summary>Is x402-light compatible with the official Coinbase x402 client?</summary><p style="color: rgb(85, 85, 85)">Partially. We label our 402 responses with x402_light: true and facilitator: null. A spec-compliant x402 client should detect facilitator: null and either fall back to a regular USDC transfer (which we accept normally) or fail gracefully. We accept any USDC ERC-20 transfer to the recipient address returned in the 402 — there is no EIP-3009 signing requirement. We will add a true Coinbase x402 facilitator the first time a real client demands it.</p></details>
+    <details style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><summary>How do I test without spending real crypto?</summary><p style="color: rgb(85, 85, 85)">Add ?dry_run=1 to any /api/v1/* URL (or header X-Dry-Run: 1, or body field dry_run: true). You will get a synthetic order_id starting with "DRY-", a fake payment address, fake credentials (RFC 5737 IPs), and the order auto-progresses pending → confirmed → active over ~60 seconds. No upstream payment-processor call, no real DB row in payments, no real server provisioned. The MCP tools accept the same dry_run argument.</p></details>
+  </div>
+</div></section>
+
+</main>
+<footer class="ft" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)"><div class="w">
+  <div class="ft-g">
+    <div class="ft-brand">
+      <div class="logo"><img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="120" height="32"></div>
+      <p class="ft-desc" style="color: rgb(93, 102, 111)">Offshore VPS &amp; dedicated servers in 7 offshore jurisdictions. No KYC, no logs, crypto only. Privacy by architecture.</p>
+      <div class="cry" style="margin-top:14px" title="8 crypto coins accepted: BTC, XMR, ETH, USDT, SOL, LTC, TRX"><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">BTC</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">XMR</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">ETH</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">USDT</span><span class="cry-more" style="color: rgb(93, 102, 111); border-color: rgb(236, 236, 236)">+5</span></div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Services</p>
+      <div class="ft-lk">
+        <a href="/vps" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+        <a href="/dedicated" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+        <a href="/rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Windows RDP</a>
+        <a href="/gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU AI Hosting <span style="display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:#76b900;color:#132a00;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/node-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Node Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/censorship-resistant-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anti-Censorship Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/domains" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domain Names <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+                <a href="/com-domain" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">.com $4.99</a>
+        <a href="/locations" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+        <a href="/jurisdiction-selector" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Find Best Jurisdiction</a>
+        <a href="/alternatives" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+        <a href="/guides" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+        <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+        <a href="/faq" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Solutions</p>
+      <div class="ft-lk">
+        <a href="/no-kyc-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No KYC Hosting</a>
+        <a href="/dmca-ignored-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">DMCA Ignored</a>
+        <a href="/bitcoin-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Bitcoin Hosting</a>
+        <a href="/anonymous-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anonymous Hosting</a>
+        <a href="/offshore-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Offshore Hosting</a>
+        <a href="/monero-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Monero Hosting</a>
+        <a href="/no-kyc-rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC RDP</a>
+        <a href="/no-kyc-gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC GPU</a>
+        <a href="/uncensored-ai-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Uncensored AI Hosting</a>
+        <a href="/crypto-gpu-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Crypto GPU Hosting</a>
+        <a href="/ai-agent-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">AI Agent Hosting</a>
+        <a href="/agents" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Agent API <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Company</p>
+      <div class="ft-lk">
+        <a href="/about" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">About</a>
+        <a href="/contact" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+        <a href="/status" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Status</a>
+        <a href="/canary" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Warrant Canary</a>
+        <a href="/press" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Press Kit</a>
+        <a href="/tos" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Terms of Service</a>
+        <a href="/privacy" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ft-bt" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <p class="ft-updated" style="font-size:12px;color:var(--tx4);margin:0 0 6px">Last updated: <time datetime="2026-10-18" style="color:var(--tx2,#444);font-weight:500">October 18, 2026</time></p>
+    <p style="color: rgb(104, 112, 122)">© 2026 AnonPort — No registered entity. No personal data stored. No logs. No KYC.</p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Jurisdictions:</span>
+      <a href="/servers/iceland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Iceland</a> ·
+      <a href="/servers/panama" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Panama</a> ·
+      <a href="/servers/moldova" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Moldova</a> ·
+      <a href="/servers/romania" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Romania</a> ·
+      <a href="/servers/switzerland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Switzerland</a> ·
+      <a href="/servers/netherlands" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Netherlands</a> ·
+      <a href="/servers/russia" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Russia</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Use cases:</span>
+      <a href="/use-cases/tor-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Tor</a> ·
+      <a href="/use-cases/vpn-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">VPN</a> ·
+      <a href="/use-cases/mail-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Mail</a> ·
+      <a href="/use-cases/game-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Game</a> ·
+      <a href="/use-cases/crypto-node-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Crypto nodes</a> ·
+      <a href="/use-cases/seedbox-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Seedbox</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Compare:</span>
+      <a href="/guides/best-offshore-hosting-providers" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Best offshore hosts 2026</a> ·
+      <a href="/alternative-to-njalla" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Njalla</a> ·
+      <a href="/alternative-to-flokinet" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">FlokiNET</a> ·
+      <a href="/alternative-to-1984-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">1984</a> ·
+      <a href="/alternative-to-orangewebsite" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OrangeWebsite</a> ·
+      <a href="/alternative-to-buyvm" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">BuyVM</a> ·
+      <a href="/alternative-to-hetzner" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Hetzner</a> ·
+      <a href="/alternative-to-ovh" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OVH</a> ·
+      <a href="/alternative-to-aws" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">AWS</a>
+    </p>
+  </div>
+</div></footer>
+<nav class="bnav" aria-label="Services">
+  <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg>
+    <span>Home</span>
+  </a>
+  <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="3" y="4" width="18" height="7" rx="1.5"></rect><rect x="3" y="13" width="18" height="7" rx="1.5"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>
+    <span>VPS</span>
+  </a>
+  <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="5" y="5" width="14" height="14" rx="2"></rect><rect x="9.5" y="9.5" width="5" height="5" rx="1"></rect><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path></svg>
+    <span>GPU</span>
+  </a>
+  <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a13.5 13.5 0 0 1 0 18M12 3a13.5 13.5 0 0 0 0 18"></path></svg>
+    <span>Domains</span>
+  </a>
+    <a href="#" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+    <span>Account</span>
+  </a>
+</nav>
+
+
+
+
+
+
+</body><div id="immersive-translate-browser-popup" style="--bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; all: initial"><div id="mount" style="position: absolute; top: 8801.56px; right: 765px; bottom: -7584.56px; left: 0px; inset: 8801.56px 765px -7584.56px 0px; width: 250px; min-width: 250px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; transform-origin: 125px 0px; perspective-origin: 125px 0px; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; display: block;"><div hidden id="immersive-translate-popup-overlay" class="immersive-translate-popup-overlay" style="position: fixed; top: 0px; left: 0px; inset: 0px auto auto 0px; width: 100%; height: 100%; box-sizing: border-box; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgba(0, 0, 0, 0.5) none repeat scroll 0% 0% / auto padding-box border-box; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; z-index: 2147483647; background-color: rgba(0, 0, 0, 0.5);"><div class="immersive-translate-popup-wrapper" style="inset: 50% auto auto 50%; width: auto; height: auto; border-radius: 20px; box-sizing: border-box; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; background-color: rgb(255, 255, 255); box-shadow: rgba(14, 18, 22, 0.08) 2px 10px 24px 0px; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; position: fixed; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);"></div></div></div></div></html>
