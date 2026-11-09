@@ -70,6 +70,24 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
+    # The archived dataset does not contain the site's root homepage.
+    # Provide an explicit preview entry instead of returning a root 404.
+    # Do not pretend this fallback is a restored original homepage.
+    if "/" not in written:
+        fallback = "/vps/" if "/vps" in written else (sorted(written)[0] + "/" if written else "")
+        if fallback:
+            (OUT / "index.html").write_text(
+                '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+                '<meta name="viewport" content="width=device-width,initial-scale=1">'
+                '<title>NewVPS archived preview</title>'
+                '<meta http-equiv="refresh" content="0;url=' + fallback + '">'
+                '</head><body><main><h1>NewVPS archived preview</h1>'
+                '<p>The original homepage has not yet been captured. '
+                'Opening an available archived page.</p>'
+                '<p><a href="' + fallback + '">Open archived VPS page</a></p>'
+                '</main></body></html>', encoding="utf-8"
+            )
+            print(f"Root preview entry generated, pointing to archived {fallback}")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
