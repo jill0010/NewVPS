@@ -181,7 +181,24 @@ def main():
       var n=Number(value);if(!Number.isFinite(n)||n<30||n>2000){if(msg)msg.textContent='Enter an amount between $30 and $2,000.';return}
       if(msg)msg.textContent='';if(amount)amount.value=n;
       var chosen=buttons.find(b=>Number(b.dataset.amt)===n);
-      buttons.forEach(b=>b.classList.toggle('on',b===chosen));
+      buttons.forEach(function(b){
+        var selected=b===chosen;
+        b.classList.toggle('on',selected);
+        b.style.backgroundColor=selected?'#edf1fc':'#fff';
+        b.style.borderColor=selected?'#1a56db':'#e0e0e0';
+        b.style.boxShadow=selected?'inset 0 0 0 1px #1a56db':'none';
+        b.querySelectorAll('.tu-amt-val,.tu-amt-total').forEach(function(el){el.style.color=selected?'#1a56db':'#111'});
+        var check=b.querySelector('.tu-amt-check');if(check)check.style.opacity=selected?'1':'0';
+      });
+      var customCard=custom&&custom.closest('.tu-amt-custom');
+      if(customCard){
+        var isCustom=!chosen;
+        customCard.classList.toggle('on',isCustom);
+        customCard.style.backgroundColor=isCustom?'#edf1fc':'#fff';
+        customCard.style.borderColor=isCustom?'#1a56db':'#e0e0e0';
+        customCard.style.boxShadow=isCustom?'inset 0 0 0 1px #1a56db':'none';
+        var customCheck=customCard.querySelector('.tu-amt-check');if(customCheck)customCheck.style.opacity=isCustom?'1':'0';
+      }
       var bonus=chosen?Number(chosen.dataset.bonus||0):0;
       var values={'topup-submit-amt':money(n),'tu-prev-add':money(n),'tu-prev-bonus':money(bonus),'tu-prev-after':money(n+bonus)};
       Object.entries(values).forEach(([id,value])=>{var el=document.getElementById(id);if(el)el.textContent=value});
