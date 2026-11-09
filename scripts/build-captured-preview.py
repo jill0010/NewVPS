@@ -7,6 +7,7 @@ Output: dist-captured/ (deploy this directory as a separate preview, not product
 from pathlib import Path
 from urllib.parse import urlparse
 from html.parser import HTMLParser
+from html import escape
 from urllib.parse import urlsplit, unquote
 import csv
 import re
@@ -146,7 +147,6 @@ def main():
         order_count += 1
     print(f"Preserved {order_count} original order snapshots under /archived-order/")
     # Provide an index so order captures are discoverable without guessing IDs.
-    from html import escape
     order_entries = [entry for entry in entries if "order-pages" in entry["capture"].lower()]
     if order_entries:
         links = []
