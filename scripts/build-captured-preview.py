@@ -118,6 +118,31 @@ def main():
             shutil.copytree(asset_source, OUT / "_captures" / capture_id / "assets", dirs_exist_ok=True)
         order_count += 1
     print(f"Preserved {order_count} original order snapshots under /archived-order/")
+    # Provide an index so order captures are discoverable without guessing IDs.
+    from html import escape
+    order_entries = [entry for entry in entries if "order-pages" in entry["capture"].lower()]
+    if order_entries:
+        links = []
+        for entry in order_entries:
+            capture_id = Path(entry["capture"]).parent.name
+            title = entry.get("title") or capture_id
+            language = entry.get("language") or "unknown"
+            links.append('<li><a href="' + escape(capture_id, quote=True) + '/">'
+                         + escape(title) + '</a> <small>(' + escape(language) + ')</small></li>')
+        index = OUT / "archived-order" / "index.html"
+        index.parent.mkdir(parents=True, exist_ok=True)
+        index.write_text(
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>NewVPS original order captures</title>'
+            '<style>body{background:#0b1220;color:#e9eff8;font:16px system-ui;margin:0}'
+            'main{max-width:900px;margin:60px auto;padding:24px}a{color:#85c3ff}'
+            'li{padding:8px 0}small{color:#a6b4c6}</style></head><body><main>'
+            '<h1>Original archived order pages</h1>'
+            '<p>These are preserved static snapshots from the supplied archive; checkout and payment are not functional.</p>'
+            '<ul>' + ''.join(links) + '</ul></main></body></html>',
+            encoding="utf-8")
+
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
