@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/build-captured-preview.py'
+      - 'scripts/audit-preview-resources.py'
       - 'scripts/inventory-captured-routes.py'
       - 'reports/captured-route-inventory.csv'
       - '.github/workflows/publish-captured-preview.yml'
@@ -103,6 +104,15 @@ jobs:
           print(f'Prepared {route_count} archived pages for GitHub Pages navigation')
           (root / '.nojekyll').touch()
           PY
+      - name: Audit every archived page and CSS asset
+        run: python3 scripts/audit-preview-resources.py
+      - name: Upload resource audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newvps-resource-audit
+          path: reports/newvps-resource-audit.csv
+          if-no-files-found: ignore
       - name: Verify preview entry and representative routes
         run: |
           python3 - <<'PY'
