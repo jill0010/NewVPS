@@ -202,7 +202,6 @@ def main():
             writer.writerow((target, len(sources), " | ".join(sorted(sources)[:12])))
     # Make known missing navigation routes reachable without fabricating archive content.
     # These placeholders are visibly marked as incomplete, and are never counted as restored pages.
-    from html import escape
     placeholder_count = 0
     for target, sources in sorted(missing_links.items()):
         parts = safe_route(target)
