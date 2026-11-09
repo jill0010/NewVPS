@@ -39,6 +39,13 @@ def main():
         html = source.read_text(encoding="utf-8", errors="replace")
         # Rewrite captured relative asset URLs only; do not modify copy or wording.
         html = re.sub(r'(?<=["\x27])assets/', f'/_captures/{capture}/assets/', html)
+        # CSS url(assets/...) in captured inline styles is relative to each route.
+        # Resolve it to the same immutable capture asset directory as HTML attributes.
+        html = re.sub(
+            r'url\\(\\s*(["\\x27]?)assets/',
+            lambda m: 'url(' + m.group(1) + f'/_captures/{capture}/assets/',
+            html, flags=re.IGNORECASE
+        )
         if base:
             # GitHub project Pages are served below /NewVPS, not at domain root.
             # Rewrite local navigation and asset URL attributes only.
