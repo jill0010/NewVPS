@@ -1,4 +1,5 @@
 missing_route,linked_from,referring_pages
+/NewVPS/account,1,/topup
 /ru,4,/ | /ru/ | /ru/alternative-to-aws | /zh/
 /ru/about,3,/about | /ru/ | /ru/alternative-to-aws
 /ru/account,3,/account | /ru/ | /zh/account
@@ -175,7 +176,6 @@ missing_route,linked_from,referring_pages
 /ru/vps/romania,1,/vps/romania
 /ru/vps/russia,1,/vps/russia
 /ru/vps/switzerland,1,/vps/switzerland
-/topup,1,/order
 /zh,15,/ | /ru/ | /zh/ | /zh/account | /zh/alternative-to-aws | /zh/dedicated | /zh/dedicated/moldova | /zh/domains | /zh/gpu | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/order
 /zh/about,14,/about | /zh/ | /zh/account | /zh/alternative-to-aws | /zh/dedicated | /zh/dedicated/moldova | /zh/domains | /zh/gpu | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/order | /zh/rdp
 /zh/agents,14,/agents | /zh/ | /zh/account | /zh/alternative-to-aws | /zh/dedicated | /zh/dedicated/moldova | /zh/domains | /zh/gpu | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/order | /zh/rdp
