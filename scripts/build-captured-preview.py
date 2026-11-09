@@ -7,6 +7,7 @@ Output: dist-captured/ (deploy this directory as a separate preview, not product
 from pathlib import Path
 from urllib.parse import urlparse
 from html.parser import HTMLParser
+from urllib.parse import urlsplit, unquote
 import csv
 import re
 import shutil
@@ -22,6 +23,19 @@ def safe_route(route):
     if any(part in (".", "..") for part in parts):
         return None
     return parts
+
+class LinkCollector(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.links = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in ("a", "form"):
+            key = "href" if tag == "a" else "action"
+            for name, value in attrs:
+                if name == key and value:
+                    self.links.append(value)
+
 
 def main():
     if not INVENTORY.is_file():
@@ -56,6 +70,37 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
+    # Audit internal navigation against the routes actually generated.
+    # Missing targets are reported without inventing pages or masking real 404s.
+    known = set(written)
+    missing_links = {}
+    for route in known:
+        page = OUT.joinpath(*safe_route(route), "index.html")
+        parser = LinkCollector()
+        parser.feed(page.read_text(encoding="utf-8", errors="replace"))
+        for href in parser.links:
+            parsed = urlsplit(href)
+            if parsed.scheme and parsed.scheme not in ("http", "https"):
+                continue
+            if parsed.netloc and parsed.netloc.lower() not in ("anonport.com", "www.anonport.com"):
+                continue
+            if not href.startswith("/") and not parsed.netloc:
+                continue
+            target = unquote(parsed.path).rstrip("/") or "/"
+            if target.startswith("/_captures/") or target.startswith("/assets/"):
+                continue
+            if "." in target.rsplit("/", 1)[-1]:
+                continue
+            if target not in known:
+                missing_links.setdefault(target, set()).add(route)
+    report = ROOT / "reports" / "captured-preview-missing-links.csv"
+    report.parent.mkdir(exist_ok=True)
+    with report.open("w", encoding="utf-8", newline="") as output:
+        writer = csv.writer(output)
+        writer.writerow(("missing_route", "linked_from", "referring_pages"))
+        for target, sources in sorted(missing_links.items()):
+            writer.writerow((target, len(sources), " | ".join(sorted(sources)[:12])))
+    print(f"Navigation audit: {len(missing_links)} unresolved internal routes -> {report}")
     print(f"Built {len(written)} static preview routes in {OUT}")
     print("This is a static archive preview. Login, registration, checkout and payments are NOT functional.")
     print("Do not deploy to production without validating interactive functionality.")
