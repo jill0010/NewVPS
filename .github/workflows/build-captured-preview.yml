@@ -29,6 +29,7 @@ jobs:
           from pathlib import Path
           import csv
           import re
+          import html
           root = Path('dist-captured')
           with open('reports/captured-route-inventory.csv', encoding='utf-8', newline='') as f:
               rows = list(csv.DictReader(f))
