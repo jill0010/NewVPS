@@ -70,6 +70,22 @@ jobs:
           print(f'Prepared {route_count} archived pages for GitHub Pages navigation')
           (root / '.nojekyll').touch()
           PY
+      - name: Verify preview entry and representative routes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          root = Path('dist-captured')
+          required = ['index.html', 'vps/index.html', 'missing-routes.csv']
+          for rel in required:
+              path = root / rel
+              if not path.is_file() or not path.stat().st_size:
+                  raise SystemExit(f'Missing preview output: {rel}')
+              print(f'OK: {rel} ({path.stat().st_size} bytes)')
+          pages = list(root.rglob('index.html'))
+          if len(pages) < 120:
+              raise SystemExit(f'Expected at least 120 preview HTML pages, got {len(pages)}')
+          print(f'OK: {len(pages)} preview entry pages')
+          PY
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
