@@ -39,7 +39,7 @@ def main():
     if not SOURCE.is_dir():
         sys.exit("ERROR: extracted/ is missing")
     pages = []
-    for path in sorted(list(SOURCE.glob("newvps*/cloned-page-*/index.html")) + list(SOURCE.glob("new-captures/**/cloned-page-*/index.html"))):
+    for path in list(sorted(SOURCE.glob("newvps*/cloned-page-*/index.html"))) + list(sorted(SOURCE.glob("new-captures/**/cloned-page-*/index.html"))):
         parser = Metadata()
         parser.feed(path.read_text(encoding="utf-8", errors="replace"))
         url = parser.canonical
