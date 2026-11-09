@@ -134,6 +134,24 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(html, encoding="utf-8")
 
+    # Some snapshots retain original /assets/img/*.webp references while the
+    # identical image was captured in another page under its hashed name.
+    # Restore only these verified originals; never synthesize replacement art.
+    archived_rdp_images = {
+        "hero-rdp.webp": "hero-rdp-*.webp",
+        "cta-rdp.webp": "cta-rdp-*.webp",
+    }
+    for original_name, pattern in archived_rdp_images.items():
+        candidates = sorted((ROOT / "extracted").glob(
+            f"newvps*/cloned-page-*/assets/anonport_com/{pattern}"
+        ))
+        if candidates:
+            dst = OUT / "assets" / "img" / original_name
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(candidates[0], dst)
+        else:
+            root_asset_gaps.add(f"assets/img/{original_name}")
+
     # Restore original icon bytes from captured, content-hashed asset files.
     # Never substitute invented images. Missing non-captured metadata is reported.
     icon_patterns = {
