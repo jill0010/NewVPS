@@ -42,7 +42,7 @@ def main():
         # CSS url(assets/...) in captured inline styles is relative to each route.
         # Resolve it to the same immutable capture asset directory as HTML attributes.
         html = re.sub(
-            r'url\\(\\s*(["\\x27]?)assets/',
+            r'url\(\s*(["\x27]?)assets/',
             lambda m: 'url(' + m.group(1) + f'/_captures/{capture}/assets/',
             html, flags=re.IGNORECASE
         )
