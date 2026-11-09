@@ -94,6 +94,14 @@ def main():
 """.replace("__BASE__", json.dumps(base))
             html = html.replace("</body>", nav_fix + "</body>")
         if base:
+            # Correct captured same-site absolute URLs to the deployed preview.
+            # Keep external destinations, mailto links and source snapshots intact.
+            html = re.sub(
+                r'(?P<attr>\\b(?:href|action)\\s*=\\s*["\\x27])https?://(?:www\\.)?anonport\\.com(?P<path>/[^"\\x27]*)',
+                lambda m: m.group('attr') + base + m.group('path'),
+                html, flags=re.IGNORECASE
+            )
+        if base:
             # The supplied DOM snapshots contain no executable menu handlers.
             # Restore only the existing captured controls in the preview.
             menu_fix = """
