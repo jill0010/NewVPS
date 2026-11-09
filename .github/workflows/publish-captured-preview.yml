@@ -11,7 +11,7 @@ on:
       - '.github/workflows/publish-captured-preview.yml'
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -31,6 +31,19 @@ jobs:
         run: |
           python3 scripts/inventory-captured-routes.py
           python3 scripts/build-captured-preview.py
+      - name: Commit missing-route audit to repository
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- reports/captured-preview-missing-links.csv
+          if git diff --cached --quiet; then
+            echo 'Missing-route audit unchanged.'
+          else
+            git commit -m 'Update NewVPS missing-route audit'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
       - name: Upload missing-route audit
         uses: actions/upload-artifact@v4
         with:
