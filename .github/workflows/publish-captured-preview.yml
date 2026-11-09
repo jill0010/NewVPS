@@ -88,6 +88,12 @@ jobs:
                               updated.append(' '.join(parts))
                           return match.group(1) + ', '.join(updated) + quote
                       content = pattern.sub(rewrite_sources, content)
+              # Preserve original absolute image references as local archive resources
+              # when the page already carries a captured hashed asset.
+              # Fix URLs in inline styles using the same project prefix.
+              content = re.sub(r'url\\(\\s*([\\"\\\']?)\\/(?!NewVPS/)([^)\\"\\\']+)\\1\\s*\\)',
+                               lambda m: 'url(' + m.group(1) + base + '/' + m.group(2) + m.group(1) + ')',
+                               content)
               for token in ('url(/', 'url("/', "url('/"):
                   content = content.replace(token, token[:-1] + base + '/')
               content = content.replace('/_captures/', base + '/_captures/')
