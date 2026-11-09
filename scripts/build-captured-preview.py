@@ -184,24 +184,40 @@ def main():
             '<ul>' + links + '</ul></main></body></html>', encoding="utf-8")
         written[hub] = "generated index of original captured pages"
         print(f"Restored navigable {hub}/ index with {len(candidates)} captured destinations")
-    # The archived dataset does not contain the site's root homepage.
-    # Provide an explicit preview entry instead of returning a root 404.
-    # Do not pretend this fallback is a restored original homepage.
+    # Original homepage is absent; provide a useful, explicitly reconstructed
+    # homepage with direct links to real captured sections instead of redirecting.
     if "/" not in written:
-        fallback = "vps/" if "/vps" in written else (sorted(written)[0].lstrip("/") + "/" if written else "")
-        if fallback:
-            (OUT / "index.html").write_text(
-                '<!doctype html><html lang="en"><head><meta charset="utf-8">'
-                '<meta name="viewport" content="width=device-width,initial-scale=1">'
-                '<title>NewVPS archived preview</title>'
-                '<meta http-equiv="refresh" content="0;url=' + fallback + '">'
-                '</head><body><main><h1>NewVPS archived preview</h1>'
-                '<p>The original homepage has not yet been captured. '
-                'Opening an available archived page.</p>'
-                '<p><a href="' + fallback + '">Open archived VPS page</a></p>'
-                '</main></body></html>', encoding="utf-8"
-            )
-            print(f"Root preview entry generated, pointing to archived {fallback}")
+        cards = [
+            ("/vps/", "VPS hosting", "Browse the original archived VPS catalog"),
+            ("/dedicated/", "Dedicated servers", "Explore captured dedicated server locations"),
+            ("/gpu/", "GPU hosting", "Explore captured GPU server locations"),
+            ("/guides/", "Technical guides", "Read the archived technical articles"),
+            ("/locations/", "Locations", "Browse captured country and product pages"),
+            ("/order/", "Order preview", "View the archived order screen (static only)"),
+        ]
+        cards = [item for item in cards if (OUT / item[0].strip("/") / "index.html").is_file()]
+        links = "".join('<a class="card" href="' + escape(url, quote=True) + '"><h2>'
+                        + escape(title) + '</h2><p>' + escape(description) + '</p></a>'
+                        for url, title, description in cards)
+        (OUT / "index.html").write_text(
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>NewVPS — Archived hosting pages</title>'
+            '<style>body{margin:0;background:#0b1220;color:#edf4fc;font:16px system-ui}'
+            'main{max-width:1120px;margin:0 auto;padding:60px 24px}'
+            'h1{font-size:clamp(32px,5vw,58px);margin-bottom:12px}'
+            'p{color:#b6c7d9;line-height:1.6}'
+            '.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:36px}'
+            '.card{display:block;text-decoration:none;color:inherit;background:#18283b;'
+            'border:1px solid #35516a;border-radius:14px;padding:24px}'
+            '.card:hover{border-color:#82c5ff}.card h2{margin:0 0 8px;font-size:23px}'
+            '.card p{margin:0}</style></head><body><main>'
+            '<h1>NewVPS</h1>'
+            '<p>Hosting, locations and guides recovered from the supplied AnonPort archives.</p>'
+            '<p>This is a reconstructed navigation homepage, not the missing original homepage. '
+            'Checkout, login and payment are not operational.</p>'
+            '<div class="grid">' + links + '</div></main></body></html>', encoding="utf-8")
+        print(f"Generated navigable reconstructed homepage with {len(cards)} archive sections")
     # Preserve order captures even when their canonical URL duplicates the VPS catalog.
     order_count = 0
     for entry in entries:
