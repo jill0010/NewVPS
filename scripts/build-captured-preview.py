@@ -51,7 +51,7 @@ def main():
     def capture_priority(entry):
         route = entry["route"]
         capture = entry["capture"].lower()
-        if route == "/vps":
+        if route in ("/vps", "/zh/vps"):
             return (1 if "order-pages" in capture else 0, capture)
         return (0 if "order-pages" not in capture else 1, capture)
 
