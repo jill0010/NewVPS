@@ -67,10 +67,9 @@ def main():
         if not source.is_relative_to((ROOT / "extracted").resolve()) or not source.is_file():
             continue
         capture_id = source.parent.name
-        # Namespace assets by capture to prevent CSS, flag and background collisions.
+        # Share immutable hashed assets across captured pages.
         prefix = "/_captures/shared/assets/"
         asset_source = source.parent / "assets"
-        asset_dest = OUT / "_captures" / capture_id / "assets"
         # All captured assets share immutable hashed filenames. Deploy each
         # unique filename once; original captures in extracted/ remain intact.
         shared_dest = OUT / "_captures" / "shared" / "assets"
@@ -122,7 +121,7 @@ def main():
         source = ROOT / entry["capture"]
         capture_id = source.parent.name
         html = source.read_text(encoding="utf-8", errors="replace")
-        html = re.sub(r'(?<![\\w/])assets/', "/_captures/shared/assets/", html)
+        html = re.sub(r'(?<![\w/])assets/', "/_captures/shared/assets/", html)
         destination = OUT.joinpath(*safe_route(route), "index.html")
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
