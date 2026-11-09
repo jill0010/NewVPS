@@ -5,6 +5,7 @@ on:
     branches: [restore-frontend]
     paths:
       - 'restoration/compare_original_and_online.cjs'
+      - 'restoration/build_static_preview.py'
       - '.github/workflows/restore-frontend-baseline-compare.yml'
 permissions:
   contents: read
