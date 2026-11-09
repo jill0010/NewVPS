@@ -206,6 +206,9 @@ def main():
     for missing_route in missing_capture_routes:
         if not missing_route or missing_route == "/" or ".." in Path(missing_route).parts:
             continue
+        # File URLs are resources, not missing HTML pages.
+        if Path(missing_route).suffix.lower() in {".webp", ".png", ".jpg", ".jpeg", ".svg", ".gif", ".ico", ".pdf", ".xml", ".json", ".txt", ".md", ".css", ".js"}:
+            continue
         dest = OUT / missing_route.lstrip("/") / "index.html"
         if dest.exists() or (OUT / missing_route.lstrip("/")).is_file():
             continue
@@ -263,7 +266,7 @@ def main():
         "captures": len(data["pages"]),
         "localized_fallback_redirects": missing_localized,
         "unresolved_navigation_links": unresolved_links,
-        "missing_capture_notice_routes": missing_capture_routes,
+        "missing_capture_notice_routes": [route for route in missing_capture_routes if not Path(route).suffix],
         "published_routes": len(seen),
         "conflicts": conflicts,
         "root_asset_gaps": sorted(root_asset_gaps),
