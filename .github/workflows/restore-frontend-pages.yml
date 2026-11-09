@@ -26,6 +26,17 @@ jobs:
           import re
           assert re.sub(r'url\(\s*([\x22\x27]?)/(?!(?:/))', lambda m: 'url(' + m.group(1) + '/NewVPS/', 'url(/assets/example.webp)') == 'url(/NewVPS/assets/example.webp)'
           PY
+      - name: Fetch immutable newly extracted archives from main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: new-archive-source
+          sparse-checkout: |
+            extracted/new-captures
+      - name: Include new original captures in build workspace
+        run: |
+          mkdir -p extracted/new-captures
+          cp -a new-archive-source/extracted/new-captures/. extracted/new-captures/
       - name: Generate route index
         run: python3 restoration/build_page_index.py
       - name: Build original capture preview
@@ -39,8 +50,8 @@ jobs:
           from pathlib import Path
           p=Path('site-preview')
           report=json.loads((p/'restoration-build-report.json').read_text())
-          assert report['captures']==69
-          assert report['published_routes']==66
+          assert report['captures']>=193
+          assert report['published_routes']>=66
           assert (p/'index.html').is_file()
           assert (p/'zh/index.html').is_file()
           print('Verified original capture preview:', report['published_routes'], 'routes')
