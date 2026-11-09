@@ -134,6 +134,34 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(html, encoding="utf-8")
 
+    # Captured navigation advertises localized paths that are absent from the
+    # supplied archives. Provide explicit redirects to existing captured pages,
+    # never fabricated translations or copied content under a false language.
+    missing_localized = []
+    known_routes = set(seen)
+    for language in ("zh", "ru"):
+        for route in sorted(known_routes):
+            if route == "/" or route.startswith(("/zh/", "/ru/")):
+                continue
+            localized = f"/{language}{route}"
+            if localized in known_routes:
+                continue
+            fallback = route.rstrip("/") + "/"
+            target = OUT / localized.lstrip("/") / "index.html"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target_url = (base + fallback) if base else fallback
+            # Redirect immediately; do not present English content as translated.
+            target.write_text(
+                '<!doctype html><html><head><meta charset="utf-8">'
+                '<meta name="robots" content="noindex">'
+                '<meta http-equiv="refresh" content="0;url=' + target_url + '">'
+                '<title>Redirect to available captured page</title>'
+                '</head><body><a href="' + target_url + '">'
+                'Open available captured page</a></body></html>',
+                encoding="utf-8"
+            )
+            missing_localized.append({"requested": localized, "fallback": route})
+
     # Some snapshots retain original /assets/img/*.webp references while the
     # identical image was captured in another page under its hashed name.
     # Restore only these verified originals; never synthesize replacement art.
@@ -174,6 +202,7 @@ def main():
     (OUT / ".nojekyll").write_text("")
     report = {
         "captures": len(data["pages"]),
+        "localized_fallback_redirects": missing_localized,
         "published_routes": len(seen),
         "conflicts": conflicts,
         "root_asset_gaps": sorted(root_asset_gaps),
