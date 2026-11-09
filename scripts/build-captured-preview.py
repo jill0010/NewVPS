@@ -76,6 +76,8 @@ def main():
         html = source.read_text(encoding="utf-8", errors="replace")
         # Rewrite only captured relative asset references, including inline CSS URLs.
         html = re.sub(r'(?<![\w/])assets/', prefix, html)
+        # Captured HTML contains live-site absolute paths and relative references.
+        # Keep the original page markup; do not silently substitute fabricated content.
         # Remove browser-extension annotations captured by the archiver.
         html = re.sub(r'\sdata-immersive-translate-[\w-]+="[^"]*"', '', html)
         destination = OUT.joinpath(*parts, "index.html")
