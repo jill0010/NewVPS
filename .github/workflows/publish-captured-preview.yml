@@ -53,6 +53,19 @@ jobs:
           name: newvps-missing-routes
           path: reports/captured-preview-missing-links.csv
           retention-days: 14
+      - name: Exclude redundant raw archive copies from Pages upload
+        run: |
+          # The authoritative captures remain unchanged under extracted/ in Git.
+          # Their duplicate comparison copies need not be published to Pages.
+          rm -rf dist-captured/original-captures
+          # Order snapshots remain available from the archived source repository.
+          rm -rf dist-captured/archived-order
+          python3 - <<'PY'
+          from pathlib import Path
+          root=Path('dist-captured')
+          files=[p for p in root.rglob('*') if p.is_file()]
+          print(f'Publishing {len(files)} files, {sum(p.stat().st_size for p in files):,} uncompressed bytes')
+          PY
       - name: Rewrite absolute paths for GitHub Pages project subdirectory
         run: |
           python3 - <<'PY'
