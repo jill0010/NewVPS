@@ -123,7 +123,36 @@ def main():
       if (event.key === 'Escape') setOpen(false);
     });
   }
-  function init() { bind('langBtn', 'langMenu'); bind('mobBtn', 'mobMenu'); }
+  function init() {
+    bind('langBtn', 'langMenu');
+    bind('mobBtn', 'mobMenu');
+    const pairs = [['langBtn', 'langMenu'], ['mobBtn', 'mobMenu']];
+    pairs.forEach(function (pair) {
+      const button = document.getElementById(pair[0]);
+      const panel = document.getElementById(pair[1]);
+      if (!button || !panel) return;
+      button.setAttribute('aria-haspopup', 'true');
+      if (!panel.id) panel.id = pair[1];
+      button.setAttribute('aria-controls', panel.id);
+      button.addEventListener('click', function () {
+        if (button.getAttribute('aria-expanded') !== 'true') return;
+        pairs.forEach(function (other) {
+          if (other[0] === pair[0]) return;
+          const otherButton = document.getElementById(other[0]);
+          const otherPanel = document.getElementById(other[1]);
+          if (otherButton && otherPanel) {
+            otherButton.setAttribute('aria-expanded', 'false');
+            otherPanel.style.setProperty('display', 'none', 'important');
+            otherPanel.style.setProperty('pointer-events', 'none', 'important');
+          }
+        });
+      });
+      panel.addEventListener('click', function (event) {
+        const link = event.target.closest('a[href]');
+        if (link) button.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
