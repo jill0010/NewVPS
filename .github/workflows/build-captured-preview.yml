@@ -1,0 +1,60 @@
+name: Build archived-page static preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build-captured-preview.py'
+      - 'scripts/inventory-captured-routes.py'
+      - 'reports/captured-route-inventory.csv'
+      - '.github/workflows/build-captured-preview.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh route inventory and build preview
+        run: |
+          set -euo pipefail
+          python3 scripts/inventory-captured-routes.py
+          python3 scripts/build-captured-preview.py
+      - name: Validate generated routes and local assets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import csv
+          import re
+          root = Path('dist-captured')
+          with open('reports/captured-route-inventory.csv', encoding='utf-8', newline='') as f:
+              rows = list(csv.DictReader(f))
+          routes = {r['route'] for r in rows if r['route'].startswith('/')}
+          missing = []
+          for route in routes:
+              path = root.joinpath(*route.strip('/').split('/'), 'index.html') if route != '/' else root / 'index.html'
+              if not path.is_file():
+                  missing.append(route)
+          pages = list(root.rglob('index.html'))
+          print(f'Generated {len(pages)} pages; {len(routes)} distinct routes; {len(missing)} missing')
+          for route in missing[:30]:
+              print('MISSING', route)
+          if missing:
+              raise SystemExit(1)
+          for page in pages:
+              text = page.read_text(encoding='utf-8')
+              for match in re.findall(r'/_captures/[^\s"\x27)<>]+', text):
+                  local = root / match.lstrip('/')
+                  if not local.is_file():
+                      raise SystemExit(f'Missing local asset {match} referenced by {page}')
+          print('Captured relative asset references validated')
+          PY
+      - name: Upload static preview build
+        uses: actions/upload-artifact@v4
+        with:
+          name: newvps-captured-static-preview
+          path: dist-captured/
+          retention-days: 7
