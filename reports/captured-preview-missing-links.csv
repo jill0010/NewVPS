@@ -1,7 +1,7 @@
 missing_route,linked_from,referring_pages
 /,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /about,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
-/account,2,/vps | /zh/account
+/account,1,/zh/account
 /agents,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /ai-agent-hosting,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /alternatives,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
@@ -26,7 +26,7 @@ missing_route,linked_from,referring_pages
 /no-kyc-rdp,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /node-hosting,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /offshore-hosting,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
-/order,36,/censorship-resistant-hosting/hysteria2 | /censorship-resistant-hosting/mtproto | /censorship-resistant-hosting/shadowsocks | /censorship-resistant-hosting/v2ray | /censorship-resistant-hosting/vless-reality | /dedicated/iceland | /dedicated/moldova | /dedicated/netherlands | /dedicated/panama | /dedicated/romania | /dedicated/russia | /dedicated/switzerland
+/order,35,/censorship-resistant-hosting/hysteria2 | /censorship-resistant-hosting/mtproto | /censorship-resistant-hosting/shadowsocks | /censorship-resistant-hosting/v2ray | /censorship-resistant-hosting/vless-reality | /dedicated/iceland | /dedicated/moldova | /dedicated/netherlands | /dedicated/panama | /dedicated/romania | /dedicated/russia | /dedicated/switzerland
 /press,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /pricing,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /privacy,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
@@ -163,7 +163,6 @@ missing_route,linked_from,referring_pages
 /ru/node-hosting/solana,1,/node-hosting/solana
 /ru/node-hosting/tron,1,/node-hosting/tron
 /ru/offshore-hosting,1,/ru/alternative-to-aws
-/ru/order,2,/vps | /zh/vps
 /ru/press,1,/ru/alternative-to-aws
 /ru/pricing,1,/ru/alternative-to-aws
 /ru/privacy,1,/ru/alternative-to-aws
@@ -189,7 +188,7 @@ missing_route,linked_from,referring_pages
 /ru/use-cases/seedbox-hosting,1,/ru/alternative-to-aws
 /ru/use-cases/tor-hosting,1,/ru/alternative-to-aws
 /ru/use-cases/vpn-hosting,1,/ru/alternative-to-aws
-/ru/vps,1,/ru/alternative-to-aws
+/ru/vps,3,/ru/alternative-to-aws | /vps | /zh/vps
 /ru/vps/iceland,2,/vps/iceland | /zh/vps/iceland
 /ru/vps/moldova,1,/vps/moldova
 /ru/vps/netherlands,1,/vps/netherlands
@@ -205,7 +204,6 @@ missing_route,linked_from,referring_pages
 /servers/russia,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /servers/switzerland,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /status,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
-/topup,1,/vps
 /tos,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /uncensored-ai-hosting,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
 /use-cases,118,/alternative-to-1984-hosting | /alternative-to-abelohost | /alternative-to-anubizhost | /alternative-to-aws | /alternative-to-azure | /alternative-to-bahnhof | /alternative-to-blueangelhost | /alternative-to-buyvm | /alternative-to-cherry-servers | /alternative-to-clientvps | /alternative-to-cloudzy | /alternative-to-contabo
@@ -346,7 +344,7 @@ missing_route,linked_from,referring_pages
 /zh/node-hosting/solana,1,/node-hosting/solana
 /zh/node-hosting/tron,1,/node-hosting/tron
 /zh/offshore-hosting,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
-/zh/order,5,/vps | /zh/dedicated/moldova | /zh/gpu/romania | /zh/vps | /zh/vps/iceland
+/zh/order,4,/zh/dedicated/moldova | /zh/gpu/romania | /zh/vps | /zh/vps/iceland
 /zh/press,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/pricing,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/privacy,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
@@ -363,7 +361,6 @@ missing_route,linked_from,referring_pages
 /zh/servers/russia,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/servers/switzerland,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/status,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
-/zh/topup,1,/zh/vps
 /zh/tos,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/uncensored-ai-hosting,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/use-cases,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
@@ -373,9 +370,9 @@ missing_route,linked_from,referring_pages
 /zh/use-cases/seedbox-hosting,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/use-cases/tor-hosting,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
 /zh/use-cases/vpn-hosting,7,/zh/account | /zh/alternative-to-aws | /zh/dedicated/moldova | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/vps | /zh/vps/iceland
-/zh/vps/moldova,3,/vps/moldova | /zh/dedicated/moldova | /zh/vps/iceland
-/zh/vps/netherlands,2,/vps/netherlands | /zh/vps/iceland
-/zh/vps/panama,2,/vps/panama | /zh/vps/iceland
-/zh/vps/romania,2,/vps/romania | /zh/vps/iceland
-/zh/vps/russia,2,/vps/russia | /zh/vps/iceland
-/zh/vps/switzerland,2,/vps/switzerland | /zh/vps/iceland
+/zh/vps/moldova,4,/vps/moldova | /zh/dedicated/moldova | /zh/vps | /zh/vps/iceland
+/zh/vps/netherlands,3,/vps/netherlands | /zh/vps | /zh/vps/iceland
+/zh/vps/panama,3,/vps/panama | /zh/vps | /zh/vps/iceland
+/zh/vps/romania,3,/vps/romania | /zh/vps | /zh/vps/iceland
+/zh/vps/russia,3,/vps/russia | /zh/vps | /zh/vps/iceland
+/zh/vps/switzerland,3,/vps/switzerland | /zh/vps | /zh/vps/iceland
