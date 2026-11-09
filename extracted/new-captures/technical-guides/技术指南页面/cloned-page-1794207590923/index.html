@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-immersive-translate-page-theme="light" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); overflow: clip visible"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>VPS Backup Strategy: Encrypted, Off-Site, Restorable</title>
+<meta name="description" content="Your host keeps no backups. What destroys servers, why push backups die with them, restic vs Borg, the keys everyone forgets, and how to test a restore.">
+<!-- Favicon -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon-32-v2.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v2.png" sizes="180x180">
+<link rel="manifest" href="/manifest.json">
+
+<!-- SEO Meta -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://anonport.com/guides/vps-backup-strategy">
+
+<!-- Hreflang -->
+<link rel="alternate" hreflang="en" href="https://anonport.com/guides/vps-backup-strategy">
+<link rel="alternate" hreflang="ru" href="https://anonport.com/ru/guides/vps-backup-strategy">
+<link rel="alternate" hreflang="zh" href="https://anonport.com/zh/guides/vps-backup-strategy">
+<link rel="alternate" hreflang="x-default" href="https://anonport.com/guides/vps-backup-strategy">
+
+<!-- Markdown twin for LLMs -->
+<link rel="alternate" type="text/markdown" href="https://anonport.com/guides/vps-backup-strategy.md">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AnonPort">
+<meta property="og:title" content="VPS Backup Strategy: Encrypted, Off-Site, Restorable">
+<meta property="og:description" content="Your host keeps no backups. What destroys servers, why push backups die with them, restic vs Borg, the keys everyone forgets, and how to test a restore.">
+<meta property="og:url" content="https://anonport.com/guides/vps-backup-strategy">
+<meta property="og:image" content="https://anonport.com/assets/img/guides/vps-backup-strategy.webp?v=1787218773">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:locale:alternate" content="zh_CN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VPS Backup Strategy: Encrypted, Off-Site, Restorable">
+<meta name="twitter:description" content="Your host keeps no backups. What destroys servers, why push backups die with them, restic vs Borg, the keys everyone forgets, and how to test a restore.">
+<meta name="twitter:image" content="https://anonport.com/assets/img/guides/vps-backup-strategy.webp?v=1787218773">
+
+<!-- Theme (theme-color : une seule balise, posee par header.php selon le bandeau promo) -->
+<meta name="msapplication-TileColor" content="#1a56db">
+
+
+
+
+
+
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2" crossorigin>
+<link rel="stylesheet" href="assets/anonport_com/fonts-b7334b1298d07d070db7d4f7e032a715c9c4b2e9529344aa8571ad2fb1b42486.css">
+<link rel="stylesheet" href="assets/anonport_com/flags-5cbb272bae146718d4bd828a4ff17f41b624ae132ba5591b9dcbaf28120d55bf.css">
+<link rel="stylesheet" href="assets/anonport_com/style-43152d4ee1dca81ed6392465060c6b76fcd47bb1dbc09aa8db3d442285983c64.css"><link rel="agent" href="/.well-known/agent.json">
+<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt">
+<meta name="x402" content="supported; network=base; asset=USDC">
+<style>@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}</style></head>
+<body class="pg-vps-backup-strategy has-bnav" style="overflow: clip visible">
+<header class="hd is-scrolled" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); z-index: 100; box-shadow: rgb(236, 236, 236) 0px 1px 0px 0px, rgba(10, 22, 40, 0.06) 0px 4px 16px 0px"><div class="w hd-in">
+  <a href="/" class="logo">
+    <img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="105" height="28">
+  </a>
+  <nav class="hd-nav" id="nav">
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" title="Limited offer on .com" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+  </nav>
+  <div class="hd-r">
+    <a href="/status" class="hd-status" title="Server Status" style="color: rgb(10, 122, 65); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.34) 0px 0px 0px 0.58844px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span>
+      <span class="hd-status-txt">Operational</span>
+    </a>
+    <div class="lang-sw" id="langSw"><button type="button" class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span>EN</span><svg width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true" style="opacity: 0.5; overflow: hidden; transition: transform 0.18s; transition-property: transform; transition-duration: 0.18s"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></button><div class="lang-menu few" id="langMenu" role="listbox" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); opacity: 0; z-index: 200; box-shadow: rgba(0, 0, 0, 0.12) 0px 12px 32px 0px, rgba(0, 0, 0, 0.04) 0px 2px 6px 0px; transition: opacity 0.15s, transform 0.15s; transition-property: opacity, transform; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s"><div class="lang-grid" id="langGrid"><a href="/guides/vps-backup-strategy" class="lang-opt on" role="option" aria-selected="true" data-search="en english gb" data-pseudo-states="░color:var(--tx)" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">English</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/ru/guides/vps-backup-strategy" class="lang-opt" role="option" aria-selected="false" data-search="ru Русский ru" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">Русский</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/zh/guides/vps-backup-strategy" class="lang-opt" role="option" aria-selected="false" data-search="zh 简体中文 cn" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">简体中文</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div><div class="lang-empty" id="langEmpty" hidden style="color: rgb(93, 102, 111)">No match</div></div></div>          <a href="#" class="bt bt-o bt-sm hd-auth" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      </div>
+  <button class="mob-btn" id="mobBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobMenu" style="background-color: rgba(0, 0, 0, 0); transition: 0.2s; transition-duration: 0.2s">
+    <span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span>
+  </button>
+</div>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu" style="background-color: rgb(255, 255, 255); z-index: 99; overflow: auto">
+  <div class="mob-nav">
+    <div class="mob-sec">Services</div>
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+    <div class="mob-sec">Solutions</div>
+    <a href="/pricing" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Pricing</a>
+    <a href="/locations" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+    <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+    <a href="/guides" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+    <a href="/alternatives" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+    <div class="mob-sec">Company</div>
+    <a href="/about" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">About</a>
+    <a href="/faq" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+    <a href="/contact" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+    <a href="/status" class="mob-status" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.4) 0px 0px 0px 0px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span> Server Status    </a>
+  </div>
+  <div class="mob-bottom" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+    <div class="mob-lang">
+            <a href="/guides/vps-backup-strategy" class="mob-lang-opt on" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); border-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">English</span>
+      </a>
+            <a href="/ru/guides/vps-backup-strategy" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">Русский</span>
+      </a>
+            <a href="/zh/guides/vps-backup-strategy" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">简体中文</span>
+      </a>
+          </div>
+          <a href="#" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;justify-content:center">Login</a>
+      </div>
+</div>
+</header>
+
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="modalOverlay" style="background-color: rgba(10, 22, 40, 0.6); z-index: 9999; backdrop-filter: blur(6px)">
+  <div class="modal" style="background-color: rgb(255, 255, 255); opacity: 0; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.25) 0px 24px 80px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; animation: 0.25s cubic-bezier(0.16, 1, 0.3, 1) modalIn; animation-name: modalIn; animation-duration: 0.25s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1)">
+    <button class="modal-close" data-pseudo-states="░color:var(--tx)" style="color: rgb(104, 112, 122); background-color: rgb(247, 248, 250); z-index: 2; transition: 0.12s; transition-duration: 0.12s">×</button>
+
+    <!-- Header -->
+    <div class="modal-head">
+      <div class="modal-icon" style="background-color: rgb(237, 241, 252)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
+      </div>
+      <div id="modal-title" class="modal-h2" style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px">Welcome back</div>
+      <p class="modal-desc" id="modal-desc" style="color: rgb(93, 102, 111)">Access your server dashboard</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="modal-tabs" style="border-color: rgb(236, 236, 236); overflow: hidden">
+      <a id="mtab-login" class="on" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); border-color: rgb(255, 255, 255) rgb(236, 236, 236) rgb(255, 255, 255) rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      <a id="mtab-register" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Register</a>
+    </div>
+
+    <!-- Login -->
+    <div class="modal-body" id="tab-login">
+      <form id="loginForm">
+        <input type="hidden" name="_token" data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgba(0, 0, 0, 0)">
+
+        <div id="loginStepToken">
+          <label style="color: rgb(85, 85, 85)">Access Token</label>
+          <input type="text" id="loginToken" name="token" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" required value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+        </div>
+
+        <div id="loginStepTotp" style="display:none">
+          <label style="color: rgb(85, 85, 85)">2FA code</label>
+          <input type="text" id="loginTotp" name="totp" placeholder="123456" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" spellcheck="false" value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+          <p class="modal-totp-hint" style="color: rgb(93, 102, 111)">Enter the 6-digit code from your authenticator app.</p>
+        </div>
+
+        <div id="loginError" style="display:none;font-size:12px;color:#dc2626;margin-bottom:10px"></div>
+        <button type="submit" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="loginBtn">Login</button>
+      </form>
+    </div>
+
+    <!-- Register -->
+    <div class="modal-body" id="tab-register" style="display:none">
+      <!-- Step A: explainer + create button -->
+      <div id="register-intro">
+        <div class="modal-notice" style="border-color: rgb(212, 222, 245); background-image: linear-gradient(135deg, rgb(240, 244, 255), rgb(248, 249, 255))">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+          <div>
+            <strong>Account creation is free and instant.</strong>
+            <p style="color: rgb(85, 85, 85)">One token replaces your name, email and password. We hash it on creation and never see the full value again. You'll need to add credit before deploying.</p>
+          </div>
+        </div>
+        <div class="modal-steps">
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">1</span> Click below to generate your token</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">2</span> Save it (we cannot recover it)</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">3</span> Top up &amp; deploy any service</div>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="signupBtn">Create my token</button>
+        <div id="signupError" style="display:none;font-size:12px;color:#dc2626;margin-top:8px"></div>
+      </div>
+
+      <!-- Step B: token reveal + saved gate -->
+      <div id="register-token" style="display:none">
+        <div class="modal-token-banner" style="background-color: rgb(237, 241, 252); border-color: rgb(196, 214, 247)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: rgb(26, 86, 219); overflow: hidden"><path d="M12 3l8 3v6c0 4.5-3.4 8.5-8 9.5C7.4 20.5 4 16.5 4 12V6l8-3z"></path><path d="M9 12l2 2 4-4"></path></svg>
+          <div class="modal-token-banner-tx">
+            <strong style="color: rgb(18, 68, 176)">Your access token — shown once</strong>
+            <p style="color: rgb(85, 85, 85)">Copy it now — we can't recover it, reset it, or show it again.</p>
+          </div>
+        </div>
+        <div class="modal-token-box" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224)">
+          <code id="newTokenValue" style="overflow: hidden">XXXX-XXXX-XXXX-XXXX</code>
+          <button type="button" id="copyTokenBtn" class="modal-token-copy" data-copy data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="overflow: hidden"><rect x="5" y="5" width="9" height="9" rx="1.4"></rect><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"></path></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;margin-top:12px" id="continueBtn">Continue to my account</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer" id="modal-footer-login" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111)">
+      No account? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">See how to register</a>
+    </div>
+    <div class="modal-footer" id="modal-footer-register" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111); display:none">
+      Already have a token? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">Login</a>
+    </div>
+  </div>
+</div>
+
+
+
+<main>
+
+<div style="border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(236, 236, 236); padding:8px 0;border-bottom:1px solid var(--bd2);font-size:12px;color:var(--tx3)"><div class="w">
+  <a href="/" style="color:var(--tx3)">Home</a> <span style="margin:0 4px">/</span>
+  <a href="/guides" style="color:var(--tx3)">Privacy Hosting Guides</a> <span style="margin:0 4px">/</span>
+  <span style="color:var(--tx)">VPS Backup Strategy: Encrypted, Off-Site, Restorable</span>
+</div></div>
+
+<section class="loc-hero" style="color: rgb(255, 255, 255); background-color: rgb(10, 22, 40); overflow: hidden; background-position: 50% 50%; background-size: cover; background-repeat: no-repeat; background-image:url(&quot;assets/anonport_com/vps-backup-strategy-ce9dd2990576550ecc2e23cddea0af1d0ebbc5f3b24fcd5e39ebff31fe260400.webp&quot;)">
+  <div class="w">
+    <div class="loc-hero-row" style="z-index: 1">
+      <div class="loc-hero-left">
+        <div class="topic-icon" style="background-color: rgba(96, 165, 250, 0.15); border-color: rgba(96, 165, 250, 0.3); backdrop-filter: blur(4px)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="3" y="4" width="18" height="6" rx="1"></rect><rect x="3" y="14" width="18" height="6" rx="1"></rect><path d="M7 7h.01M7 17h.01"></path></svg></div>
+        <div>
+          <div class="loc-hero-tag" style="color: rgb(96, 165, 250)">Operations</div>
+          <h1>VPS Backups That Actually Restore</h1>
+          <p style="color: rgba(255, 255, 255, 0.6)">No-KYC hosting removes the safety net along with the paperwork: no backups retained, data destroyed within 24 hours of termination, and no support path that ends in a recovered copy. This is the working plan — what to copy, where to put it, how to stop an attacker deleting it, and how to prove it restores.</p>
+          <div class="hero-acts" style="margin-top:16px">
+            <a href="#guide-body" class="bt bt-p" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.9)" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">Read the guide <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+            <a href="#guide-faq" class="bt bt-s" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.18)" style="background-color: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+          </div>
+        </div>
+      </div>
+      <div class="loc-hero-legal" style="background-color: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.1)">
+        <h2 style="color: rgba(255, 255, 255, 0.4)">On this page</h2>
+        <ul>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-body" style="color:inherit;text-decoration:none">Guide</a></li>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-faq" style="color:inherit;text-decoration:none">FAQ</a></li>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-related" style="color:inherit;text-decoration:none">Related guides</a></li>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-cta" style="color:inherit;text-decoration:none">Recommended pages</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strip" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="w"><div class="strip-in">
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> No KYC</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> Crypto Only</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> No Logs</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> DMCA Ignored</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> Full Root</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> NVMe SSD</div>
+</div></div></section>
+
+<section class="sc g-article" id="guide-body"><div class="w">
+  <div class="g-grid">
+    <aside class="g-toc">
+      <div class="g-toc-sticky" style="overflow: auto">
+        <div class="g-toc-meta" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+          <div class="g-meta-row" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14" style="color: rgb(26, 86, 219); overflow: hidden"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> <span>17 min read</span></div>
+          <div class="g-meta-row" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14" style="color: rgb(26, 86, 219); overflow: hidden"><path d="M21 12a9 9 0 11-9-9c2.4 0 4.6 1 6.3 2.6L21 8"></path><path d="M21 3v5h-5"></path></svg> <span>Updated Aug 2026</span></div>
+        </div>
+        <div class="g-toc-title" style="color: rgb(93, 102, 111)">On this page</div>
+        <nav class="g-toc-nav">
+                      <a href="#what-actually-destroys-servers" data-toc="what-actually-destroys-servers" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">01</span>What actually destroys servers</a>
+                      <a href="#a-snapshot-is-not-a-backup-and-your-host-is-not-one-either" data-toc="a-snapshot-is-not-a-backup-and-your-host-is-not-one-either" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">02</span>A snapshot is not a backup, and your host is not one either</a>
+                      <a href="#3-2-1-rewritten-for-people-who-never-showed-id" data-toc="3-2-1-rewritten-for-people-who-never-showed-id" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">03</span>3-2-1, rewritten for people who never showed ID</a>
+                      <a href="#push-pull-and-the-mistake-that-lets-one-bad-night-eat-both-c" data-toc="push-pull-and-the-mistake-that-lets-one-bad-night-eat-both-c" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">04</span>Push, pull, and the mistake that lets one bad night eat both copies</a>
+                      <a href="#encrypt-at-the-source-then-decide-who-holds-the-key" data-toc="encrypt-at-the-source-then-decide-who-holds-the-key" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">05</span>Encrypt at the source, then decide who holds the key</a>
+                      <a href="#choosing-a-tool-in-one-table" data-toc="choosing-a-tool-in-one-table" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">06</span>Choosing a tool, in one table</a>
+                      <a href="#anything-that-is-running-is-not-a-file" data-toc="anything-that-is-running-is-not-a-file" class="active" data-pseudo-states="░color:var(--tx)" style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(17, 17, 17) rgb(26, 86, 219); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">07</span>Anything that is running is not a file</a>
+                      <a href="#what-to-back-up-and-the-parts-everyone-forgets" data-toc="what-to-back-up-and-the-parts-everyone-forgets" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">08</span>What to back up, and the parts everyone forgets</a>
+                      <a href="#a-restore-you-have-not-tested-is-a-rumour" data-toc="a-restore-you-have-not-tested-is-a-rumour" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">09</span>A restore you have not tested is a rumour</a>
+                      <a href="#automating-it-so-it-keeps-happening" data-toc="automating-it-so-it-keeps-happening" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">10</span>Automating it so it keeps happening</a>
+                      <a href="#the-short-version" data-toc="the-short-version" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">11</span>The short version</a>
+                    <a href="#guide-faq" class="g-toc-extra" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(26, 86, 219)">FAQ</span>Common questions</a>
+          <a href="#guide-cta" class="g-toc-extra" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(26, 86, 219)">→</span>Recommended pages</a>
+        </nav>
+      </div>
+    </aside>
+    <article class="g-main">
+      <div class="g-body" style="--sec-total:11">
+        <div class="topic-block">
+<p class="lead" style="color: rgb(85, 85, 85)">A backup strategy is never tested on the night the server dies. It is tested weeks earlier, in three quiet decisions nobody writes down: where the copy goes, who is allowed to delete it, and whether anyone has ever actually read one back.</p>
+<p style="color: rgb(85, 85, 85)">Hosting that never asked for your identity gives something up in exchange, and this is the honest place to say it. There is no account manager to call, no ticket that resurrects a wiped volume, and <a href="/privacy" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">our own retention policy</a> is blunt about the reason: server data is destroyed within 24 hours of termination, disks are cryptographically wiped rather than formatted, and <strong style="color: rgb(17, 17, 17)">no backups are retained</strong>. That is the same property that makes the platform worth buying, seen from the other side. Anything you would want back after a bad night has to already be somewhere else, and you are the one who puts it there.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="what-actually-destroys-servers"><a href="#what-actually-destroys-servers" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>What actually destroys servers</h2>
+<p style="color: rgb(85, 85, 85)">Almost nobody loses a server the way they imagine. Catastrophic hardware failure is real but rare, and it is the one case a competent host already engineers against. The losses that actually happen are duller, and each one defeats a different kind of copy — which is why "I have a backup" is not an answer until you say which of these it survives.</p>
+<div class="hscroll-wrap"><div class="g-tbl-wrap" style="border-color: rgb(236, 236, 236); overflow: auto"><table class="g-tbl" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden">
+  <thead style="background-color: rgb(247, 248, 250)"><tr><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">What goes wrong</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">How it usually happens</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">What gets you back</th></tr></thead>
+  <tbody>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">Your own hand</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">An <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">rm -rf</code> where a shell variable was empty, a migration pointed at production, a deploy that dropped the wrong table</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Any off-box copy from <em>before</em> the mistake — which means retention has to reach back further than the time it takes you to notice</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">Quiet corruption</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">A dying NVMe, a truncated write during a reboot, a database that has been writing damaged rows for a week</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Versioned copies deep enough to reach a known-good point. A single mirrored copy faithfully mirrors the damage</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">Compromise</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">A stolen key, an unpatched application, a poisoned dependency — and then, deliberately, your backups</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">A copy the compromised machine had no power to delete. Nothing else counts here</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">A provider or country event</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Hardware loss, a legal action at the datacentre, an account or token you can no longer reach</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">A copy that is not at that provider and not under that jurisdiction</td></tr>
+  <tr><td style="color: rgb(85, 85, 85)"><strong style="color: rgb(17, 17, 17)">Losing the key</strong></td><td style="color: rgb(85, 85, 85)">A forgotten passphrase, a keyfile wiped with the server it protected, a LUKS header nobody exported</td><td style="color: rgb(85, 85, 85)"><strong style="color: rgb(17, 17, 17)">Nothing.</strong> This is the only row with no recovery column, and it is more common than hardware failure</td></tr>
+  </tbody>
+</table></div><div class="hs-l" style="opacity: 0; z-index: 2; background-image: linear-gradient(to right, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div><div class="hs-r" style="opacity: 0; z-index: 2; background-image: linear-gradient(to left, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div></div>
+<p style="color: rgb(85, 85, 85)">Read that table as a checklist rather than a list of fears. A nightly copy to a second disk in the same machine answers row one and nothing else. A snapshot in the same panel answers rows one and two. Only a copy held somewhere the server cannot reach, under a key you still have, answers all five.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<figure class="g-fig"><img src="assets/anonport_com/hero-dedicated-7135c71b93ba7ca9f3583445becbceda0101a163f9988795cb871529ea1781ce.webp" alt="VPS Backups That Actually Restore" loading="lazy" decoding="async" width="1600" height="900" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><figcaption style="color: rgb(93, 102, 111)">A backup target needs disk and an address, not cores. The cheapest second machine in a different jurisdiction is a competent endpoint — and the only copy that survives an event at the first provider.</figcaption></figure><h2 id="a-snapshot-is-not-a-backup-and-your-host-is-not-one-either"><a href="#a-snapshot-is-not-a-backup-and-your-host-is-not-one-either" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>A snapshot is not a backup, and your host is not one either</h2>
+<p style="color: rgb(85, 85, 85)">Snapshots are excellent at what they do: they roll back an upgrade that went wrong, in seconds, with no transfer. What they cannot do is survive the thing that took the server, because they share every failure domain with it — the same provider, the same account, the same billing token, the same country, often the same storage cluster. A snapshot protects you against <em>yourself</em>. A backup protects you against everything else.</p>
+<p style="color: rgb(85, 85, 85)">The distinction matters more here than at a mainstream host, because the usual safety nets were removed on purpose. Nobody logs into customer servers, so nobody notices that your backup job has been failing since March. There is no identity attached to the account, so there is no human path to "prove who you are and we will restore it". And termination is genuinely terminal: an expired balance is a data-loss event, not a billing event.</p>
+<div class="g-callout" style="color: rgb(85, 85, 85); background-color: color(srgb 0.946118 0.960235 0.991529); border-color: color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) rgb(26, 86, 219)"><p><strong style="color: rgb(17, 17, 17)">The 24-hour clause is the whole argument.</strong> On this platform a terminated server's data is destroyed within a day, and the disks are cryptographically wiped rather than formatted. There is no undelete, no quiet cold-storage tier, no support outcome that ends in "we found an older copy" — because keeping one would mean holding your data after you asked us not to. The safety net and the privacy are the same trade, made once.</p></div>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="3-2-1-rewritten-for-people-who-never-showed-id"><a href="#3-2-1-rewritten-for-people-who-never-showed-id" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>3-2-1, rewritten for people who never showed ID</h2>
+<p style="color: rgb(85, 85, 85)">The classic rule says three copies, on two kinds of media, one of them off-site. It was written for an era of tape and spinning disk, and the media clause has quietly stopped meaning anything: your production disk is NVMe, your backup target's disk is NVMe, and calling that "two media" is a story you tell yourself. The clause worth keeping is the one about distance, and for offshore infrastructure distance is not measured in kilometres.</p>
+<p style="color: rgb(85, 85, 85)">Rewrite it as <strong style="color: rgb(17, 17, 17)">three copies, two providers, two jurisdictions</strong>. The failures that take out both copies at once are almost never physical — they are an account you lost access to, a provider that had a bad week, or a legal instrument that lands in one country and has no reach in another. Two servers in the same rack are one copy with extra steps; two servers under the same legal regime are barely better. Our <a href="/guides/choosing-an-offshore-jurisdiction" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">jurisdiction guide</a> covers how to pick a second one that does not simply mirror the first's exposure.</p>
+<p style="color: rgb(85, 85, 85)">In practice this is cheap. A backup target does not need cores, and it barely needs a network — it needs disk and an address. The smallest <a href="/vps" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">VPS tier</a> in a different one of our <a href="/locations" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">seven locations</a> is a competent restic or Borg endpoint, and for archives measured in terabytes a <a href="/dedicated" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">dedicated box</a> with real drives costs less per terabyte than any object store. Where the data is genuinely large and rarely read, the economics favour bare metal by a wide margin.</p>
+<p style="color: rgb(85, 85, 85)">One thing people get right on production and wrong on the backup target: pay for it the same way. A second server bought with a card in your own name quietly re-attaches the identity you spent effort removing from the first, and it now holds a complete copy of everything on it. If the production box is paid for <a href="/guides/how-to-pay-for-hosting-with-monero" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">in Monero</a>, the backup box deserves the same treatment.</p>
+<p style="color: rgb(85, 85, 85)">The third copy is the one most people skip, and it is the only one immune to every remote failure at once: a disk you physically hold, updated occasionally, kept offline. Once a month is enough for most people. It costs a coffee's worth of attention and it is the copy that survives scenarios the other two share.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="push-pull-and-the-mistake-that-lets-one-bad-night-eat-both-c"><a href="#push-pull-and-the-mistake-that-lets-one-bad-night-eat-both-c" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Push, pull, and the mistake that lets one bad night eat both copies</h2>
+<p style="color: rgb(85, 85, 85)">Here is the arrangement almost everyone builds first. A job on the production server runs nightly, holds a key or a token for the backup target, connects, and pushes. It works, it is simple, and it has a property that only becomes visible on the worst day of the server's life: <strong style="color: rgb(17, 17, 17)">whoever controls the production box also controls the backups.</strong></p>
+<p style="color: rgb(85, 85, 85)">That is not a hypothetical. Deleting or encrypting the victim's backups before announcing themselves is standard practice for anyone doing this commercially — the credentials are sitting in a cron job or an environment file, and finding them takes about a minute. A copy your attacker can delete is not a second copy. It is a mirror of the first one with a delay.</p>
+<p style="color: rgb(85, 85, 85)">There are two clean fixes, and they compose well with the <a href="/guides/first-hour-vps-hardening-checklist" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">basic hardening</a> you should already have done.</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Append-only targets.</strong> Both major tools support a mode where a client can add data and cannot remove it. Borg does it by pinning the SSH key on the target to <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">borg serve --append-only</code>; restic does it with a REST server started with <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">--append-only</code>. The production server writes every night and is structurally incapable of destroying history. Pruning old snapshots then happens on the target, in a session the production box cannot start.</li>
+<li><strong style="color: rgb(17, 17, 17)">Pull instead of push.</strong> Invert the direction: the backup host connects to production, reads, and stores. Production holds no credentials for the target at all, so there is nothing to steal. Restrict the key it uses on the production side with <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">restrict</code> and a forced <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">command=</code> so a stolen backup key cannot become a shell.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)">Pull is the stronger model and slightly more work to run; append-only is nearly free if you are already using Borg or restic. Either one turns "the attacker deleted my backups" from an outcome into an attempt. If you take one thing from this guide, take this section.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="encrypt-at-the-source-then-decide-who-holds-the-key"><a href="#encrypt-at-the-source-then-decide-who-holds-the-key" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Encrypt at the source, then decide who holds the key</h2>
+<p style="color: rgb(85, 85, 85)">Both serious tools encrypt on the machine being backed up, before anything crosses the network. The target stores blobs it cannot interpret — which is precisely what makes the cross-provider copy safe. Your second host does not need to be trustworthy, or even friendly; it needs to be reachable and to have disk. That single property is what turns "a server in a country I know nothing about" from a risk into infrastructure.</p>
+<p style="color: rgb(85, 85, 85)">This is a different mechanism from encrypting the server's own disk, and the two answer different questions — our guide on <a href="/guides/full-disk-encryption-on-a-vps" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">full-disk encryption on a VPS</a> works through what disk encryption does and does not protect while the machine is running. Backup encryption is the easier and more valuable of the two, because the threat model is honest: the data is at rest, on hardware you do not control, and the key never goes there.</p>
+<p style="color: rgb(85, 85, 85)">Which moves the entire risk onto key custody. The passphrase is now a single point of total loss, and it is a worse single point than people expect, because losing it is silent — nothing breaks, backups keep running, and you find out at the exact moment you needed them. Three habits fix it:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li>Keep the passphrase on the server only as a file readable by root alone, referenced with <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">--password-file</code>, so it never appears in a process list or a shell history.</li>
+<li>Keep a human-readable copy off every machine involved. Paper in a drawer genuinely beats a password manager that syncs to an account you may also lose access to.</li>
+<li>Add a second key to the repository — <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">restic key add</code>, or an exported Borg key — so that one forgotten passphrase is an inconvenience rather than the end of the archive.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)">The rule underneath all three: <strong style="color: rgb(17, 17, 17)">if the only copy of the key lives on the machine the backup exists to replace, you do not have a backup.</strong> You have an encrypted pile of blocks and a story about them.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="choosing-a-tool-in-one-table"><a href="#choosing-a-tool-in-one-table" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Choosing a tool, in one table</h2>
+<p style="color: rgb(85, 85, 85)">Tool choice matters less than the direction of the connection and the state of your key, which is why it comes sixth rather than first. That said, the differences are real, and picking the wrong shape for the job creates work later.</p>
+<div class="hscroll-wrap"><div class="g-tbl-wrap" style="border-color: rgb(236, 236, 236); overflow: auto"><table class="g-tbl" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden">
+  <thead style="background-color: rgb(247, 248, 250)"><tr><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Tool</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Encrypts before it leaves</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Deduplicates</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Append-only target</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Where it fits</th></tr></thead>
+  <tbody>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">restic</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Yes, whole repository</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Yes</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Yes, via its REST server</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">The default choice. Speaks SFTP, object storage and its own server, so the target can be almost anything</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">BorgBackup</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Yes, whole repository</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Yes, the best of the group</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Yes, natively over SSH</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">One Linux target reached over SSH. Unbeaten when the data is large and repetitive</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">rsync with rotations</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">No — the target sees everything</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Partial, via hardlinks</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">No</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Mirroring to a machine you fully control, when instant partial restores matter more than privacy</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">rclone</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Only with <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">rclone crypt</code></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">No</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Depends on the storage provider</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Moving an archive that already exists into object storage, or between providers</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">ZFS replication</strong></td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Only with an encrypted dataset</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Yes, block level</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Via snapshot permissions</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Replicating between two ZFS machines. Very fast, very rigid about both ends</td></tr>
+  <tr><td style="color: rgb(85, 85, 85)"><strong style="color: rgb(17, 17, 17)">tar with age or GPG</strong></td><td style="color: rgb(85, 85, 85)">Yes, if you encrypt the archive</td><td style="color: rgb(85, 85, 85)">No</td><td style="color: rgb(85, 85, 85)">Not applicable</td><td style="color: rgb(85, 85, 85)">Small, occasional, keep-forever archives where simplicity beats efficiency</td></tr>
+  </tbody>
+</table></div><div class="hs-l" style="opacity: 0; z-index: 2; background-image: linear-gradient(to right, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div><div class="hs-r" style="opacity: 0; z-index: 2; background-image: linear-gradient(to left, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div></div>
+<p style="color: rgb(85, 85, 85)">For a single server, restic to a second VPS is the shortest path to something correct. For a seedbox, a media archive or anything with many similar large files, Borg's deduplication is the difference between a full disk and a comfortable one — the <a href="/guides/seedbox-setup-guide" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">seedbox guide</a> covers the storage side of that workload in more detail.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="anything-that-is-running-is-not-a-file"><a href="#anything-that-is-running-is-not-a-file" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Anything that is running is not a file</h2>
+<p style="color: rgb(85, 85, 85)">The most common corrupt backup in the world is a straight file copy of a live database. It completes without an error, it weighs the right amount, and it restores into a table the engine refuses to open. The database was mid-write when the copy passed; what you saved is a photograph of a page being turned.</p>
+<p style="color: rgb(85, 85, 85)">Three ways out, in increasing order of effort. Dump it: <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">mysqldump --single-transaction</code> gives a consistent InnoDB dump without locking writers, and <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">pg_dump</code> does the same for PostgreSQL. Snapshot it: freeze the filesystem or take an LVM or ZFS snapshot, copy from the snapshot, release it — this is how you handle data sets too large to dump nightly. Or stop it: for a small service, two minutes of downtime at 04:00 is a perfectly respectable consistency strategy, and it is the only one with no edge cases.</p>
+<p style="color: rgb(85, 85, 85)">The same logic reaches past databases. A container's writable layer is disposable, but its volumes are not, and neither is the <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">docker compose</code> file and environment beside them — a backup that restores the data but not the definition leaves you reconstructing the stack from memory. Message queues, Redis with persistence enabled, and a mail spool being written by an MTA all deserve the same treatment: quiesce, snapshot, or dump, but never straight-copy and hope.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="what-to-back-up-and-the-parts-everyone-forgets"><a href="#what-to-back-up-and-the-parts-everyone-forgets" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>What to back up, and the parts everyone forgets</h2>
+<p style="color: rgb(85, 85, 85)">Most people back up the obvious payload — the database and the application directory — and rebuild the rest by hand under pressure. The rebuild is where the hours go. A backup that returns you to a working system, rather than to a pile of correct data, includes the boring layer:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">/etc</code> in full, plus the systemd units and timers you wrote, and any crontabs that live outside it.</li>
+<li>TLS certificates and their private keys, or at minimum the ACME account key, so certificates renew rather than restart from zero.</li>
+<li>Firewall rules and the package list, which together reconstruct the machine's shape faster than any memory of it.</li>
+<li>Application secrets and environment files — the ones deliberately excluded from your code repository, and therefore present nowhere else.</li>
+<li>DNS records exported as text, including reverse-DNS and PTR entries, which live at the provider and not on the server.</li>
+</ul>
+<div class="g-callout" style="color: rgb(85, 85, 85); background-color: color(srgb 0.946118 0.960235 0.991529); border-color: color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) rgb(26, 86, 219)"><p><strong style="color: rgb(17, 17, 17)">Some keys are not data — they are identity.</strong> A Tor onion service's private key <em>is</em> the address: lose it and the site cannot come back at the same <a href="/guides/how-to-host-a-tor-hidden-service" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">.onion name</a>, no matter what else you restored. A WireGuard server key means reissuing every client configuration you ever handed out. A mail server's DKIM key means a new selector and a fresh start on <a href="/guides/offshore-mail-server-setup" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">deliverability</a>. A Lightning node's seed and channel state can mean funds, not files — the <a href="/guides/crypto-node-hosting-guide" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">node hosting guide</a> is explicit about that. Copy these separately, keep them offline, and treat them as more valuable than the data they protect.</p></div>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="a-restore-you-have-not-tested-is-a-rumour"><a href="#a-restore-you-have-not-tested-is-a-rumour" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>A restore you have not tested is a rumour</h2>
+<p style="color: rgb(85, 85, 85)">Backup software reports on itself, and it reports honestly about the wrong thing. "Snapshot completed" means data was written to a repository. It says nothing about whether the repository can be read on a machine that is not this one, by a person who does not remember what they configured eleven months ago.</p>
+<p style="color: rgb(85, 85, 85)">Start with the cheap integrity checks — <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">restic check --read-data-subset=5%</code> or <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">borg check --verify-data</code> on a schedule — and understand that they verify the archive, not your ability to use it. The real drill is different and takes an afternoon, once. Order a fresh server by the hour in a location you do not otherwise use. Restore onto it with nothing but the repository address, the passphrase, and your own notes. Bring the service up. Time the whole thing. Then destroy the machine. Total cost: a few dollars, and it is the only exercise that produces a number you can trust.</p>
+<p style="color: rgb(85, 85, 85)">What it reliably exposes is never the data. It is the missing package nobody wrote down, the config that lived outside the backed-up paths, the passphrase that only ever existed in the shell history of the server you are trying to replace, and the tool version that reads your repository format. Every one of those is trivial to fix in advance and miserable to discover during an outage.</p>
+<p style="color: rgb(85, 85, 85)">Write down the two numbers the drill gives you: how long a restore took, and how much work the schedule can lose. Those are the backup policy. Everything above is implementation detail in service of them.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="automating-it-so-it-keeps-happening"><a href="#automating-it-so-it-keeps-happening" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Automating it so it keeps happening</h2>
+<p style="color: rgb(85, 85, 85)">Run the job from a systemd timer rather than cron. You get logs in one place, a real record of the last run, and a schedule that survives reboots — none of which cron gives you without extra work. Keep the passphrase out of the unit file itself, which anyone with shell access can read straight out of <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">systemctl cat</code>.</p>
+<p style="color: rgb(85, 85, 85)">Then solve the failure mode that actually gets people, which is not an error but silence. A backup that stopped running six weeks ago looks exactly like one that ran perfectly, because both produce no output. <strong style="color: rgb(17, 17, 17)">Alert on absence, not on failure.</strong> Have the job ping a monitor on success and let the monitor complain when the ping does not arrive — and put that monitor anywhere except the server it watches, since a box that is down cannot report that it is down.</p>
+<p style="color: rgb(85, 85, 85)">Set retention deliberately rather than by default. Something like <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">--keep-daily 7 --keep-weekly 4 --keep-monthly 6</code> covers the mistakes you notice tonight and the corruption you notice in spring, without growing forever. Run the pruning on the target side if you have gone append-only, which is the point of having gone append-only. Transfer volume is rarely the constraint on our network — bandwidth is unmetered on every plan — so schedule for consistency rather than for a quota, and check the timing against your own quiet hours. The wider habits around all of this are covered in the <a href="/guides/server-opsec-staying-anonymous" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">server OpSec guide</a>.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="the-short-version"><a href="#the-short-version" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>The short version</h2>
+<p style="color: rgb(85, 85, 85)">If you do nothing else with this page, do these six things, roughly in this order:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li>Put one copy at a second provider, in a second jurisdiction, paid for the same private way as the first.</li>
+<li>Make that copy append-only, or pull it from the target, so a compromised server cannot destroy it.</li>
+<li>Let the tool encrypt at the source, and keep the key off both machines involved.</li>
+<li>Dump databases and stop or snapshot anything that is running; never straight-copy live state.</li>
+<li>Back up the identity keys separately — onion, WireGuard, DKIM, node seeds — because those cannot be regenerated.</li>
+<li>Restore onto a throwaway server once, time it, and write down what was missing.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)">None of this is exotic, and none of it takes a weekend. It is an afternoon of setup and one drill, against a category of loss that ends projects. On a platform that deliberately keeps nothing about you, the copy you made yourself is the only one that exists — which is the cost of the arrangement, and a fair one. <a href="/vps" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">Spin up a second server</a> in a jurisdiction that is not your first, and give tonight's backup somewhere to land.</p>
+</div>      </div>
+    </article>
+  </div>
+</div></section>
+
+<section class="sc sc-a" id="guide-faq" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">FAQ</span><h2>VPS backups — common questions</h2></div>
+  <div class="faq">
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">01</span>
+        <span class="fq-t">Does AnonPort back up my VPS?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">No, and that is deliberate rather than an omission. Our retention policy states that no backups are retained, that server data is destroyed within 24 hours of termination, and that disks are cryptographically wiped rather than formatted. Holding a copy of your data after you asked us to remove it would contradict the reason the platform exists. Everything you want to survive the server has to be copied off it by you, ideally to a second provider in a second jurisdiction.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">02</span>
+        <span class="fq-t">Is a snapshot the same as a backup?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">No. A snapshot shares every failure domain with the server it came from — the same provider, the same account, the same country, often the same storage. It is excellent for undoing an upgrade that went wrong and useless against the loss of the account, the provider or the machine. Treat snapshots as an undo button and backups as insurance; they solve different problems and you want both.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">03</span>
+        <span class="fq-t">restic or BorgBackup — which should I use?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">restic if the target might be object storage, SFTP or something you have not chosen yet, because it speaks the most back ends. BorgBackup if the target is one Linux machine reached over SSH and the data is large and repetitive, because its deduplication is the strongest of the group. Both encrypt on the source before anything leaves the machine, and both support an append-only target, which matters far more than the choice between them.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">04</span>
+        <span class="fq-t">How do I stop an attacker from deleting my backups?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Remove the ability rather than the motive. Either make the target append-only, so the credentials on the production server can add data but never remove it, or invert the connection so the backup host pulls from production and the production server holds no credentials at all. Deleting backups before announcing themselves is standard practice for anyone doing this commercially, and a copy your attacker can delete is not a second copy.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">05</span>
+        <span class="fq-t">Where should the second copy live?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">At a different provider, in a different jurisdiction, and paid for as privately as your production server. The events that take out both copies at once are rarely physical — they are a lost account, a provider having a bad week, or a legal instrument that reaches one country and not another. Two servers in the same rack are one copy with extra steps. Because the tools encrypt at the source, the second host does not have to be one you trust.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">06</span>
+        <span class="fq-t">How often should I back up?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Work backwards from how much work you are willing to redo. A blog can lose a day without anyone noticing; a store cannot lose an hour of orders. Nightly is the right default for most single-server setups, with database dumps more often if writes are valuable. What matters more than frequency is retention depth: corruption is often noticed weeks late, so keep enough history to reach a point before it started.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">07</span>
+        <span class="fq-t">Is an encrypted backup safe on a server I do not control?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">For the contents, yes — restic and Borg encrypt before data leaves the source, so the target stores blobs it cannot read and the key never travels. What the target does learn is metadata: roughly how much data you hold, how it changes, and when your jobs run. That is usually acceptable. If it is not, vary the schedule and keep the repository on a machine whose ownership is not linked to the production one.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">08</span>
+        <span class="fq-t">What happens if I lose the backup passphrase?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">The archive is gone, permanently, with no recourse from anyone. This is the most common total loss in the whole subject and the only failure with no recovery path. Keep the passphrase somewhere off every machine involved, prefer paper over an account you might also lose, and add a second key to the repository so one forgotten password is an inconvenience rather than the end of the archive.</p></div>
+    </details>
+      </div>
+</div></section>
+
+<section class="sc" id="guide-related"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">Related guides</span><h2>Keep reading</h2></div>
+  <div class="locs">
+        <a href="/guides/choosing-an-offshore-jurisdiction" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Choose an Offshore Hosting Jurisdiction in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How to pick an offshore hosting jurisdiction: data-retention law, MLAT exposure, DMCA stance, court speed and real enforcement, country by country.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/vps-vs-dedicated-for-privacy" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="3" y="4" width="18" height="6" rx="1"></rect><rect x="3" y="14" width="18" height="6" rx="1"></rect><path d="M7 7h.01M7 17h.01"></path></svg></span>
+        <div class="loc-id">
+          <h3>VPS vs Dedicated Server for Privacy-Critical Workloads</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">When a VPS is fine, when shared tenancy is a liability, and when bare metal is the only honest answer: isolation, hypervisor risk, cost vs threat model.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-hosted-vpn-wireguard-vs-openvpn" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Self-Hosted VPN on a No-KYC VPS: WireGuard vs OpenVPN</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Why a self-hosted VPN beats commercial providers, and how WireGuard and OpenVPN really compare on privacy, performance and operational risk in 2026.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/rtx-4090-vs-h100-for-ai-inference" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle><path d="M22 10v4M2 10v4"></path></svg></span>
+        <div class="loc-id">
+          <h3>RTX 4090 vs H100 for AI Inference (RTX 5090 Included)</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Which NVIDIA GPU for self-hosted LLM, image, video and speech work in 2026: RTX 4090 vs RTX 5090 vs H100 SXM5 on VRAM, throughput and $/token.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/offshore-windows-rdp-for-forex-trading" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="4" width="20" height="13" rx="2"></rect><path d="M8 21h8M12 17v4M6 8h6M6 12h4"></path></svg></span>
+        <div class="loc-id">
+          <h3>Offshore Windows RDP for MT4 / MT5 / cTrader Forex Trading</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Why a Windows RDP for forex trading, how to pick a low-latency offshore jurisdiction, MT4/MT5/cTrader and EA setup, broker latency, and the no-KYC checkout.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/dmca-ignored-hosting-explained" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 008 0L7 7M17 7l-3 7a4 4 0 008 0l-3-7M7 21h10"></path></svg></span>
+        <div class="loc-id">
+          <h3>DMCA-Ignored Hosting Explained: What It Really Means in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">What DMCA-ignored hosting really buys you, which jurisdictions back it up, the workloads that need it, and the copyright traps the term does not cover.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/anonymous-domain-registration-with-crypto" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>Anonymous Domain Registration with Crypto — 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Register a domain without revealing your identity: WHOIS regimes by TLD, registrar choice, crypto payment options, and the mistakes that leak you anyway.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/crypto-payments-monero-vs-bitcoin-vs-usdt" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>Crypto Payments for Hosting: Monero vs Bitcoin vs USDT</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How the coin you pay with changes what your host learns about you: privacy, fees, finality and chain-analysis exposure for XMR, BTC and USDT.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/is-offshore-hosting-truly-anonymous" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Is Offshore Hosting Truly Anonymous? An Honest Answer</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Offshore no-KYC hosting removes the identity a normal host collects, but anonymity also depends on payment, logging and your own OpSec. What is traceable.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/first-hour-vps-hardening-checklist" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="3" y="4" width="18" height="6" rx="1"></rect><rect x="3" y="14" width="18" height="6" rx="1"></rect><path d="M7 7h.01M7 17h.01"></path></svg></span>
+        <div class="loc-id">
+          <h3>The First Hour of VPS Hardening: A Checklist</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">An ordered checklist to secure a new VPS in under an hour: SSH keys, firewall, fail2ban, automatic updates and the attack-surface cuts that stop most attacks.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/what-is-no-kyc-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>What Is No-KYC Hosting? Definition, Legality &amp; How It Works</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">No-KYC hosting means renting a server with zero identity checks: no name, email or ID. What it means, how it works, whether it is legal, how to choose one.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/is-offshore-hosting-legal" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 008 0L7 7M17 7l-3 7a4 4 0 008 0l-3-7M7 21h10"></path></svg></span>
+        <div class="loc-id">
+          <h3>Is Offshore Hosting Legal? The Honest 2026 Answer</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Offshore hosting is legal, for you and the provider. What the term means, where the legal line sits, the myths worth dropping, how to use it responsibly.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-pay-for-hosting-with-monero" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Pay for Hosting with Monero (XMR) — Step by Step</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Step by step: paying for a VPS or dedicated server with Monero (XMR). Why XMR is the most private option, how to get it, and how checkout works end to end.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-host-a-website-anonymously" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Host a Website Anonymously — A Practical 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">A layered guide to hosting a website with no identity attached: account, payment, domain, jurisdiction, your connection and the content, each explained.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-set-up-wireguard-vpn-on-a-vps" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Set Up a WireGuard VPN on a VPS — Step-by-Step Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Build your own private VPN on a VPS with WireGuard: why self-hosted beats commercial, the full setup from install to a connected client, and how to harden it.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-host-an-llm-on-a-gpu-server" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle><path d="M22 10v4M2 10v4"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Self-Host an LLM on a GPU Server — 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run your own LLM on a rented GPU server: why self-hosting beats an API, which GPU and model to choose, the setup with Ollama or vLLM, and what it costs.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/bulletproof-vs-offshore-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Bulletproof vs Offshore Hosting — What's the Difference?</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Bulletproof hosting and offshore hosting are constantly confused, and they are not the same thing. The real difference, why it matters, which one you want.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-buy-a-vps-with-bitcoin" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Buy a VPS with Bitcoin — Step-by-Step (2026)</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">A beginner-friendly walkthrough of buying a VPS with Bitcoin: getting BTC, choosing a plan, paying the invoice, and getting a server with no name attached.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/best-countries-for-dmca-ignored-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Best Countries for DMCA-Ignored Hosting in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Where to host beyond the easy reach of US-style takedowns: the jurisdictions that work, what DMCA-ignored really means, and how to choose between them.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-host-a-tor-hidden-service" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Host a Tor Hidden Service (.onion Site) — 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Set up a Tor onion service on a VPS: what a hidden service is, why it is the strongest form of anonymous hosting, the setup, and how to keep it anonymous.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/offshore-mail-server-setup" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>Offshore Mail Server Setup — Self-Host Private Email in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run a private email server on an offshore VPS: why self-host email, what you need, a realistic all-in-one mail stack, and how to get deliverability right.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/crypto-node-hosting-guide" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>Crypto Node Hosting Guide — Run a Blockchain Node on a VPS</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How to host a blockchain node on a server: why run your own node, sizing the server for Bitcoin, Ethereum, Monero and more, the setup, and keeping it private.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/gpu-hosting-for-stable-diffusion" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle><path d="M22 10v4M2 10v4"></path></svg></span>
+        <div class="loc-id">
+          <h3>GPU Hosting for Stable Diffusion — Run Your Own Image Server</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run Stable Diffusion on your own GPU server: why self-host image generation, which GPU to pick, the web UI setup, and what it costs versus a hosted service.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/server-opsec-staying-anonymous" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Server OpSec — Staying Anonymous When You Run a Server</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Operational security for anyone running an anonymous server: the mistakes that deanonymise people, the habits that prevent them, how to keep identities apart.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/seedbox-setup-guide" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Seedbox Setup Guide — Build Your Own Private Seedbox in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How to build your own seedbox on a server: what a seedbox is, sizing it, installing a torrent client with a web UI, and keeping it private and secure.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/bypass-dpi-censorship-with-your-own-vps" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Bypass DPI Censorship with Your Own VPS (2026 Guide)</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Bypass DPI censorship with your own VPS: what deep packet inspection detects, which protocol beats which block, and a full VLESS+REALITY walkthrough.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/full-disk-encryption-on-a-vps" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>Full-Disk Encryption on a VPS: LUKS Setup Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Encrypt a VPS with LUKS: encrypted data volumes, full-root encryption with remote unlock over SSH, the settings that matter on a small server, what it stops.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/hiding-your-origin-server-ip" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Hiding Your Origin Server IP: CDNs, Proxies &amp; Leaks</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Should you put a CDN in front of an offshore server? What it hides, the abuse desk you inherit, six ways an origin IP leaks anyway, and how to audit yours.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-host-a-matrix-server" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Self-Hosting Matrix: Federation, Metadata &amp; E2EE Limits</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">What a Matrix homeserver really gives you: Synapse vs Conduit, the server_name you can never change, media that eats the disk, and what federation reveals.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/migrate-website-to-offshore-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="3" width="7" height="18" rx="1.5"></rect><rect x="15" y="3" width="7" height="18" rx="1.5"></rect><path d="M5.5 7h.01M18.5 7h.01M10.5 12h3M12.2 10.3 14 12l-1.8 1.7"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Migrate a Website to Offshore Hosting Without Downtime</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Make a host migration boring: lower the DNS TTL early, run both servers in parallel, freeze writes for minutes, clean the passive-DNS, CT and WHOIS trail.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-host-a-crypto-payment-gateway" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Self-Host a Crypto Payment Gateway with BTCPay Server</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run a non-custodial checkout on an offshore VPS with BTCPay Server, a pruned Bitcoin node, Lightning and Monero: disk sizing, keys, where KYC reappears.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/surviving-a-ddos-attack-on-your-vps" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>VPS DDoS Protection: Where Your Host Stops and Layer 7 Begins</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Your host filters packet floods; request floods are yours. How L3/L4 scrubbing works, why Layer 7 passes through, and the caching and limits that keep you up.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/best-offshore-hosting-providers" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 008 0L7 7M17 7l-3 7a4 4 0 008 0l-3-7M7 21h10"></path></svg></span>
+        <div class="loc-id">
+          <h3>Best Offshore Hosting Providers in 2026: 12 Compared</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">12 offshore and anonymous hosts compared on signup identity, Monero, jurisdictions, DMCA policy and bare metal — including where AnonPort loses.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+      </div>
+</div></section>
+
+<section class="cta" id="guide-cta" style="color: rgb(255, 255, 255); background-color: rgb(10, 22, 40); overflow: hidden; background-position: 50% 50%; background-size: cover; background-repeat: no-repeat; background-image:url(&quot;assets/anonport_com/cta-vps-4e4361f5468982e63e9e0d3ed0f4fd88ae94d2d93099742574edd8566c01e967.webp&quot;)"><div class="w" style="z-index: 1">
+  <h2>Give tonight’s backup somewhere to land</h2>
+  <p style="color: rgba(255, 255, 255, 0.55)">Seven jurisdictions, unmetered bandwidth on every plan, and servers from $7.50/mo that make competent restic or Borg endpoints. No KYC, no email, crypto only — for the backup target as much as for production.</p>
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <a href="/vps" class="bt bt-w" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">View VPS Plans</a>
+        <a href="/dedicated" class="bt bt-g" data-pseudo-states="░color:rgb(255, 255, 255)" style="color: rgba(255, 255, 255, 0.6); transition: 0.12s; transition-duration: 0.12s">Dedicated Servers</a>
+        <a href="/locations" class="bt bt-g" data-pseudo-states="░color:rgb(255, 255, 255)" style="color: rgba(255, 255, 255, 0.6); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+      </div>
+</div></section>
+
+
+</main>
+<footer class="ft" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)"><div class="w">
+  <div class="ft-g">
+    <div class="ft-brand">
+      <div class="logo"><img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="120" height="32"></div>
+      <p class="ft-desc" style="color: rgb(93, 102, 111)">Offshore VPS &amp; dedicated servers in 7 offshore jurisdictions. No KYC, no logs, crypto only. Privacy by architecture.</p>
+      <div class="cry" style="margin-top:14px" title="8 crypto coins accepted: BTC, XMR, ETH, USDT, SOL, LTC, TRX"><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">BTC</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">XMR</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">ETH</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">USDT</span><span class="cry-more" style="color: rgb(93, 102, 111); border-color: rgb(236, 236, 236)">+5</span></div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Services</p>
+      <div class="ft-lk">
+        <a href="/vps" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+        <a href="/dedicated" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+        <a href="/rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Windows RDP</a>
+        <a href="/gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU AI Hosting <span style="display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:#76b900;color:#132a00;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/node-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Node Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/censorship-resistant-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anti-Censorship Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/domains" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domain Names <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+                <a href="/com-domain" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">.com $4.99</a>
+        <a href="/locations" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+        <a href="/jurisdiction-selector" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Find Best Jurisdiction</a>
+        <a href="/alternatives" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+        <a href="/guides" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+        <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+        <a href="/faq" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Solutions</p>
+      <div class="ft-lk">
+        <a href="/no-kyc-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No KYC Hosting</a>
+        <a href="/dmca-ignored-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">DMCA Ignored</a>
+        <a href="/bitcoin-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Bitcoin Hosting</a>
+        <a href="/anonymous-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anonymous Hosting</a>
+        <a href="/offshore-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Offshore Hosting</a>
+        <a href="/monero-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Monero Hosting</a>
+        <a href="/no-kyc-rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC RDP</a>
+        <a href="/no-kyc-gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC GPU</a>
+        <a href="/uncensored-ai-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Uncensored AI Hosting</a>
+        <a href="/crypto-gpu-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Crypto GPU Hosting</a>
+        <a href="/ai-agent-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">AI Agent Hosting</a>
+        <a href="/agents" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Agent API <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Company</p>
+      <div class="ft-lk">
+        <a href="/about" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">About</a>
+        <a href="/contact" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+        <a href="/status" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Status</a>
+        <a href="/canary" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Warrant Canary</a>
+        <a href="/press" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Press Kit</a>
+        <a href="/tos" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Terms of Service</a>
+        <a href="/privacy" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ft-bt" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <p class="ft-updated" style="font-size:12px;color:var(--tx4);margin:0 0 6px">Last updated: <time datetime="2026-10-18" style="color:var(--tx2,#444);font-weight:500">October 18, 2026</time></p>
+    <p style="color: rgb(104, 112, 122)">© 2026 AnonPort — No registered entity. No personal data stored. No logs. No KYC.</p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Jurisdictions:</span>
+      <a href="/servers/iceland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Iceland</a> ·
+      <a href="/servers/panama" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Panama</a> ·
+      <a href="/servers/moldova" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Moldova</a> ·
+      <a href="/servers/romania" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Romania</a> ·
+      <a href="/servers/switzerland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Switzerland</a> ·
+      <a href="/servers/netherlands" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Netherlands</a> ·
+      <a href="/servers/russia" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Russia</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Use cases:</span>
+      <a href="/use-cases/tor-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Tor</a> ·
+      <a href="/use-cases/vpn-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">VPN</a> ·
+      <a href="/use-cases/mail-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Mail</a> ·
+      <a href="/use-cases/game-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Game</a> ·
+      <a href="/use-cases/crypto-node-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Crypto nodes</a> ·
+      <a href="/use-cases/seedbox-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Seedbox</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Compare:</span>
+      <a href="/guides/best-offshore-hosting-providers" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Best offshore hosts 2026</a> ·
+      <a href="/alternative-to-njalla" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Njalla</a> ·
+      <a href="/alternative-to-flokinet" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">FlokiNET</a> ·
+      <a href="/alternative-to-1984-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">1984</a> ·
+      <a href="/alternative-to-orangewebsite" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OrangeWebsite</a> ·
+      <a href="/alternative-to-buyvm" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">BuyVM</a> ·
+      <a href="/alternative-to-hetzner" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Hetzner</a> ·
+      <a href="/alternative-to-ovh" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OVH</a> ·
+      <a href="/alternative-to-aws" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">AWS</a>
+    </p>
+  </div>
+</div></footer>
+<nav class="bnav" aria-label="Services">
+  <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg>
+    <span>Home</span>
+  </a>
+  <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="3" y="4" width="18" height="7" rx="1.5"></rect><rect x="3" y="13" width="18" height="7" rx="1.5"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>
+    <span>VPS</span>
+  </a>
+  <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="5" y="5" width="14" height="14" rx="2"></rect><rect x="9.5" y="9.5" width="5" height="5" rx="1"></rect><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path></svg>
+    <span>GPU</span>
+  </a>
+  <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a13.5 13.5 0 0 1 0 18M12 3a13.5 13.5 0 0 0 0 18"></path></svg>
+    <span>Domains</span>
+  </a>
+    <a href="#" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+    <span>Account</span>
+  </a>
+</nav>
+
+<div class="read-progress" id="readProgress" aria-hidden="true" style="z-index: 200; background-image: linear-gradient(90deg, rgb(26, 86, 219), rgb(96, 165, 250)); transition: width 0.1s linear; transition-property: width; transition-duration: 0.1s; transition-timing-function: linear; width: 50.8005%;"></div>
+
+
+
+
+
+
+</body><div id="immersive-translate-browser-popup" style="--bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; all: initial"><div id="mount" style="position: absolute; top: 14012.5px; right: 3175px; bottom: -12741.5px; left: 0px; inset: 14012.5px 3175px -12741.5px 0px; width: 250px; min-width: 250px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; transform-origin: 125px 0px; perspective-origin: 125px 0px; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; display: block;"><div hidden id="immersive-translate-popup-overlay" class="immersive-translate-popup-overlay" style="position: fixed; top: 0px; left: 0px; inset: 0px auto auto 0px; width: 100%; height: 100%; box-sizing: border-box; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgba(0, 0, 0, 0.5) none repeat scroll 0% 0% / auto padding-box border-box; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; z-index: 2147483647; background-color: rgba(0, 0, 0, 0.5);"><div class="immersive-translate-popup-wrapper" style="inset: 50% auto auto 50%; width: auto; height: auto; border-radius: 20px; box-sizing: border-box; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; background-color: rgb(255, 255, 255); box-shadow: rgba(14, 18, 22, 0.08) 2px 10px 24px 0px; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; position: fixed; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);"></div></div></div></div></html>

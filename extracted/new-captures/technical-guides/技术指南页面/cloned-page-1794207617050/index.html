@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-immersive-translate-page-theme="light" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); overflow: clip visible"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>VPS DDoS Protection: Where Your Host Stops and Layer 7 Begins</title>
+<meta name="description" content="Your host filters packet floods; request floods are yours. How L3/L4 scrubbing works, why Layer 7 passes through, and the caching and limits that keep you up.">
+<!-- Favicon -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon-32-v2.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v2.png" sizes="180x180">
+<link rel="manifest" href="/manifest.json">
+
+<!-- SEO Meta -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://anonport.com/guides/surviving-a-ddos-attack-on-your-vps">
+
+<!-- Hreflang -->
+<link rel="alternate" hreflang="en" href="https://anonport.com/guides/surviving-a-ddos-attack-on-your-vps">
+<link rel="alternate" hreflang="ru" href="https://anonport.com/ru/guides/surviving-a-ddos-attack-on-your-vps">
+<link rel="alternate" hreflang="zh" href="https://anonport.com/zh/guides/surviving-a-ddos-attack-on-your-vps">
+<link rel="alternate" hreflang="x-default" href="https://anonport.com/guides/surviving-a-ddos-attack-on-your-vps">
+
+<!-- Markdown twin for LLMs -->
+<link rel="alternate" type="text/markdown" href="https://anonport.com/guides/surviving-a-ddos-attack-on-your-vps.md">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AnonPort">
+<meta property="og:title" content="VPS DDoS Protection: Where Your Host Stops and Layer 7 Begins">
+<meta property="og:description" content="Your host filters packet floods; request floods are yours. How L3/L4 scrubbing works, why Layer 7 passes through, and the caching and limits that keep you up.">
+<meta property="og:url" content="https://anonport.com/guides/surviving-a-ddos-attack-on-your-vps">
+<meta property="og:image" content="https://anonport.com/assets/img/guides/surviving-a-ddos-attack-on-your-vps.webp?v=1788769011">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:locale:alternate" content="zh_CN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VPS DDoS Protection: Where Your Host Stops and Layer 7 Begins">
+<meta name="twitter:description" content="Your host filters packet floods; request floods are yours. How L3/L4 scrubbing works, why Layer 7 passes through, and the caching and limits that keep you up.">
+<meta name="twitter:image" content="https://anonport.com/assets/img/guides/surviving-a-ddos-attack-on-your-vps.webp?v=1788769011">
+
+<!-- Theme (theme-color : une seule balise, posee par header.php selon le bandeau promo) -->
+<meta name="msapplication-TileColor" content="#1a56db">
+
+
+
+
+
+
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2" crossorigin>
+<link rel="stylesheet" href="assets/anonport_com/fonts-b7334b1298d07d070db7d4f7e032a715c9c4b2e9529344aa8571ad2fb1b42486.css">
+<link rel="stylesheet" href="assets/anonport_com/flags-5cbb272bae146718d4bd828a4ff17f41b624ae132ba5591b9dcbaf28120d55bf.css">
+<link rel="stylesheet" href="assets/anonport_com/style-43152d4ee1dca81ed6392465060c6b76fcd47bb1dbc09aa8db3d442285983c64.css"><link rel="agent" href="/.well-known/agent.json">
+<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt">
+<meta name="x402" content="supported; network=base; asset=USDC">
+<style>@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}</style></head>
+<body class="pg-surviving-a-ddos-attack-on-your-vps has-bnav" style="overflow: clip visible">
+<header class="hd is-scrolled" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); z-index: 100; box-shadow: rgb(236, 236, 236) 0px 1px 0px 0px, rgba(10, 22, 40, 0.06) 0px 4px 16px 0px"><div class="w hd-in">
+  <a href="/" class="logo">
+    <img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="105" height="28">
+  </a>
+  <nav class="hd-nav" id="nav">
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" title="Limited offer on .com" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+  </nav>
+  <div class="hd-r">
+    <a href="/status" class="hd-status" title="Server Status" style="color: rgb(10, 122, 65); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.07) 0px 0px 0px 3.31107px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span>
+      <span class="hd-status-txt">Operational</span>
+    </a>
+    <div class="lang-sw" id="langSw"><button type="button" class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span>EN</span><svg width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true" style="opacity: 0.5; overflow: hidden; transition: transform 0.18s; transition-property: transform; transition-duration: 0.18s"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></button><div class="lang-menu few" id="langMenu" role="listbox" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); opacity: 0; z-index: 200; box-shadow: rgba(0, 0, 0, 0.12) 0px 12px 32px 0px, rgba(0, 0, 0, 0.04) 0px 2px 6px 0px; transition: opacity 0.15s, transform 0.15s; transition-property: opacity, transform; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s"><div class="lang-grid" id="langGrid"><a href="/guides/surviving-a-ddos-attack-on-your-vps" class="lang-opt on" role="option" aria-selected="true" data-search="en english gb" data-pseudo-states="░color:var(--tx)" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">English</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/ru/guides/surviving-a-ddos-attack-on-your-vps" class="lang-opt" role="option" aria-selected="false" data-search="ru Русский ru" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">Русский</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/zh/guides/surviving-a-ddos-attack-on-your-vps" class="lang-opt" role="option" aria-selected="false" data-search="zh 简体中文 cn" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">简体中文</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div><div class="lang-empty" id="langEmpty" hidden style="color: rgb(93, 102, 111)">No match</div></div></div>          <a href="#" class="bt bt-o bt-sm hd-auth" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      </div>
+  <button class="mob-btn" id="mobBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobMenu" style="background-color: rgba(0, 0, 0, 0); transition: 0.2s; transition-duration: 0.2s">
+    <span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span>
+  </button>
+</div>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu" style="background-color: rgb(255, 255, 255); z-index: 99; overflow: auto">
+  <div class="mob-nav">
+    <div class="mob-sec">Services</div>
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+    <div class="mob-sec">Solutions</div>
+    <a href="/pricing" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Pricing</a>
+    <a href="/locations" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+    <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+    <a href="/guides" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+    <a href="/alternatives" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+    <div class="mob-sec">Company</div>
+    <a href="/about" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">About</a>
+    <a href="/faq" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+    <a href="/contact" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+    <a href="/status" class="mob-status" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.4) 0px 0px 0px 0px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span> Server Status    </a>
+  </div>
+  <div class="mob-bottom" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+    <div class="mob-lang">
+            <a href="/guides/surviving-a-ddos-attack-on-your-vps" class="mob-lang-opt on" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); border-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">English</span>
+      </a>
+            <a href="/ru/guides/surviving-a-ddos-attack-on-your-vps" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">Русский</span>
+      </a>
+            <a href="/zh/guides/surviving-a-ddos-attack-on-your-vps" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">简体中文</span>
+      </a>
+          </div>
+          <a href="#" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;justify-content:center">Login</a>
+      </div>
+</div>
+</header>
+
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="modalOverlay" style="background-color: rgba(10, 22, 40, 0.6); z-index: 9999; backdrop-filter: blur(6px)">
+  <div class="modal" style="background-color: rgb(255, 255, 255); opacity: 0; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.25) 0px 24px 80px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; animation: 0.25s cubic-bezier(0.16, 1, 0.3, 1) modalIn; animation-name: modalIn; animation-duration: 0.25s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1)">
+    <button class="modal-close" data-pseudo-states="░color:var(--tx)" style="color: rgb(104, 112, 122); background-color: rgb(247, 248, 250); z-index: 2; transition: 0.12s; transition-duration: 0.12s">×</button>
+
+    <!-- Header -->
+    <div class="modal-head">
+      <div class="modal-icon" style="background-color: rgb(237, 241, 252)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
+      </div>
+      <div id="modal-title" class="modal-h2" style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px">Welcome back</div>
+      <p class="modal-desc" id="modal-desc" style="color: rgb(93, 102, 111)">Access your server dashboard</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="modal-tabs" style="border-color: rgb(236, 236, 236); overflow: hidden">
+      <a id="mtab-login" class="on" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); border-color: rgb(255, 255, 255) rgb(236, 236, 236) rgb(255, 255, 255) rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      <a id="mtab-register" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Register</a>
+    </div>
+
+    <!-- Login -->
+    <div class="modal-body" id="tab-login">
+      <form id="loginForm">
+        <input type="hidden" name="_token" data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgba(0, 0, 0, 0)">
+
+        <div id="loginStepToken">
+          <label style="color: rgb(85, 85, 85)">Access Token</label>
+          <input type="text" id="loginToken" name="token" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" required value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+        </div>
+
+        <div id="loginStepTotp" style="display:none">
+          <label style="color: rgb(85, 85, 85)">2FA code</label>
+          <input type="text" id="loginTotp" name="totp" placeholder="123456" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" spellcheck="false" value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+          <p class="modal-totp-hint" style="color: rgb(93, 102, 111)">Enter the 6-digit code from your authenticator app.</p>
+        </div>
+
+        <div id="loginError" style="display:none;font-size:12px;color:#dc2626;margin-bottom:10px"></div>
+        <button type="submit" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="loginBtn">Login</button>
+      </form>
+    </div>
+
+    <!-- Register -->
+    <div class="modal-body" id="tab-register" style="display:none">
+      <!-- Step A: explainer + create button -->
+      <div id="register-intro">
+        <div class="modal-notice" style="border-color: rgb(212, 222, 245); background-image: linear-gradient(135deg, rgb(240, 244, 255), rgb(248, 249, 255))">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+          <div>
+            <strong>Account creation is free and instant.</strong>
+            <p style="color: rgb(85, 85, 85)">One token replaces your name, email and password. We hash it on creation and never see the full value again. You'll need to add credit before deploying.</p>
+          </div>
+        </div>
+        <div class="modal-steps">
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">1</span> Click below to generate your token</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">2</span> Save it (we cannot recover it)</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">3</span> Top up &amp; deploy any service</div>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="signupBtn">Create my token</button>
+        <div id="signupError" style="display:none;font-size:12px;color:#dc2626;margin-top:8px"></div>
+      </div>
+
+      <!-- Step B: token reveal + saved gate -->
+      <div id="register-token" style="display:none">
+        <div class="modal-token-banner" style="background-color: rgb(237, 241, 252); border-color: rgb(196, 214, 247)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: rgb(26, 86, 219); overflow: hidden"><path d="M12 3l8 3v6c0 4.5-3.4 8.5-8 9.5C7.4 20.5 4 16.5 4 12V6l8-3z"></path><path d="M9 12l2 2 4-4"></path></svg>
+          <div class="modal-token-banner-tx">
+            <strong style="color: rgb(18, 68, 176)">Your access token — shown once</strong>
+            <p style="color: rgb(85, 85, 85)">Copy it now — we can't recover it, reset it, or show it again.</p>
+          </div>
+        </div>
+        <div class="modal-token-box" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224)">
+          <code id="newTokenValue" style="overflow: hidden">XXXX-XXXX-XXXX-XXXX</code>
+          <button type="button" id="copyTokenBtn" class="modal-token-copy" data-copy data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="overflow: hidden"><rect x="5" y="5" width="9" height="9" rx="1.4"></rect><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"></path></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;margin-top:12px" id="continueBtn">Continue to my account</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer" id="modal-footer-login" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111)">
+      No account? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">See how to register</a>
+    </div>
+    <div class="modal-footer" id="modal-footer-register" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111); display:none">
+      Already have a token? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">Login</a>
+    </div>
+  </div>
+</div>
+
+
+
+<main>
+
+<div style="border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(236, 236, 236); padding:8px 0;border-bottom:1px solid var(--bd2);font-size:12px;color:var(--tx3)"><div class="w">
+  <a href="/" style="color:var(--tx3)">Home</a> <span style="margin:0 4px">/</span>
+  <a href="/guides" style="color:var(--tx3)">Privacy Hosting Guides</a> <span style="margin:0 4px">/</span>
+  <span style="color:var(--tx)">VPS DDoS Protection: Where Your Host Stops and Layer 7 Begins</span>
+</div></div>
+
+<section class="loc-hero" style="color: rgb(255, 255, 255); background-color: rgb(10, 22, 40); overflow: hidden; background-position: 50% 50%; background-size: cover; background-repeat: no-repeat; background-image:url('/assets/img/guides/surviving-a-ddos-attack-on-your-vps.webp?v=1788769011')">
+  <div class="w">
+    <div class="loc-hero-row" style="z-index: 1">
+      <div class="loc-hero-left">
+        <div class="topic-icon" style="background-color: rgba(96, 165, 250, 0.15); border-color: rgba(96, 165, 250, 0.3); backdrop-filter: blur(4px)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+        <div>
+          <div class="loc-hero-tag" style="color: rgb(96, 165, 250)">Operations</div>
+          <h1>Surviving a DDoS Attack on Your VPS</h1>
+          <p style="color: rgba(255, 255, 255, 0.6)">Every hosting plan says “DDoS protection included”, and every one of them means the same narrow thing: the network absorbs floods measured in gigabits. The attacks that actually take small sites down are measured in requests per second, cost the attacker almost nothing, and arrive looking entirely legitimate. This guide draws the line between the two, shows how to tell within a minute which one you are in, and covers what genuinely holds on the side of the line that belongs to you.</p>
+          <div class="hero-acts" style="margin-top:16px">
+            <a href="#guide-body" class="bt bt-p" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.9)" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">Read the guide <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+            <a href="#guide-faq" class="bt bt-s" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.18)" style="background-color: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+          </div>
+        </div>
+      </div>
+      <div class="loc-hero-legal" style="background-color: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.1)">
+        <h2 style="color: rgba(255, 255, 255, 0.4)">On this page</h2>
+        <ul>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-body" style="color:inherit;text-decoration:none">Guide</a></li>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-faq" style="color:inherit;text-decoration:none">FAQ</a></li>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-related" style="color:inherit;text-decoration:none">Related guides</a></li>
+          <li style="color: rgba(255, 255, 255, 0.7)"><a href="#guide-cta" style="color:inherit;text-decoration:none">Recommended pages</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strip" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="w"><div class="strip-in">
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> No KYC</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> Crypto Only</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> No Logs</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> DMCA Ignored</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> Full Root</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> NVMe SSD</div>
+</div></div></section>
+
+<section class="sc g-article" id="guide-body"><div class="w">
+  <div class="g-grid">
+    <aside class="g-toc">
+      <div class="g-toc-sticky" style="overflow: auto">
+        <div class="g-toc-meta" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">
+          <div class="g-meta-row" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14" style="color: rgb(26, 86, 219); overflow: hidden"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> <span>21 min read</span></div>
+          <div class="g-meta-row" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14" style="color: rgb(26, 86, 219); overflow: hidden"><path d="M21 12a9 9 0 11-9-9c2.4 0 4.6 1 6.3 2.6L21 8"></path><path d="M21 3v5h-5"></path></svg> <span>Updated Sep 2026</span></div>
+        </div>
+        <div class="g-toc-title" style="color: rgb(93, 102, 111)">On this page</div>
+        <nav class="g-toc-nav">
+                      <a href="#two-different-attacks-that-share-one-name" data-toc="two-different-attacks-that-share-one-name" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">01</span>Two different attacks that share one name</a>
+                      <a href="#what-ddos-protection-included-actually-buys" data-toc="what-ddos-protection-included-actually-buys" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">02</span>What “DDoS protection included” actually buys</a>
+                      <a href="#first-decide-whether-this-is-even-an-attack" data-toc="first-decide-whether-this-is-even-an-attack" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">03</span>First, decide whether this is even an attack</a>
+                      <a href="#reading-the-attack-from-the-server-itself" data-toc="reading-the-attack-from-the-server-itself" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">04</span>Reading the attack from the server itself</a>
+                      <a href="#the-first-ten-minutes" data-toc="the-first-ten-minutes" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">05</span>The first ten minutes</a>
+                      <a href="#rate-limits-that-hold-and-the-mistake-everyone-makes" data-toc="rate-limits-that-hold-and-the-mistake-everyone-makes" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">06</span>Rate limits that hold, and the mistake everyone makes</a>
+                      <a href="#caching-is-the-cheapest-mitigation-you-will-ever-deploy" data-toc="caching-is-the-cheapest-mitigation-you-will-ever-deploy" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); background-color: rgba(247, 248, 250, 0.004); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(26, 86, 219, 0.004); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">07</span>Caching is the cheapest mitigation you will ever deploy</a>
+                      <a href="#the-ceilings-that-decide-whether-you-fall-over" data-toc="the-ceilings-that-decide-whether-you-fall-over" class="active" data-pseudo-states="░color:var(--tx)" style="background-color: rgba(247, 248, 250, 0.996); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(17, 17, 17) rgba(26, 86, 219, 0.996); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">08</span>The ceilings that decide whether you fall over</a>
+                      <a href="#putting-something-in-front-of-the-origin" data-toc="putting-something-in-front-of-the-origin" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">09</span>Putting something in front of the origin</a>
+                      <a href="#a-hidden-origin-is-worth-more-than-any-filter" data-toc="a-hidden-origin-is-worth-more-than-any-filter" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">10</span>A hidden origin is worth more than any filter</a>
+                      <a href="#choosing-hardware-and-location-so-attacks-stay-boring" data-toc="choosing-hardware-and-location-so-attacks-stay-boring" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">11</span>Choosing hardware and location so attacks stay boring</a>
+                      <a href="#five-things-not-to-do" data-toc="five-things-not-to-do" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">12</span>Five things not to do</a>
+                      <a href="#the-short-version" data-toc="the-short-version" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(93, 102, 111)">13</span>The short version</a>
+                    <a href="#guide-faq" class="g-toc-extra" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(26, 86, 219)">FAQ</span>Common questions</a>
+          <a href="#guide-cta" class="g-toc-extra" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85) rgba(0, 0, 0, 0); transition: background 0.12s, border-color 0.12s, color 0.12s; transition-property: background, border-color, color; transition-duration: 0.12s, 0.12s, 0.12s; transition-timing-function: ease, ease, ease; transition-delay: 0s, 0s, 0s"><span class="g-toc-num" style="color: rgb(26, 86, 219)">→</span>Recommended pages</a>
+        </nav>
+      </div>
+    </aside>
+    <article class="g-main">
+      <div class="g-body" style="--sec-total:13">
+        <div class="topic-block">
+<p class="lead" style="color: rgb(85, 85, 85)">There are two moments when people learn how DDoS mitigation actually works. The first is calm, at purchase time, reading a feature list that says “DDoS protection included” and quietly assuming the sentence covers everything. The second is at three in the morning, when the site is down, the graphs look wrong in a way that makes no sense, and that included protection is — correctly, and by design — doing nothing at all.</p>
+<p style="color: rgb(85, 85, 85)">Both moments involve the same product and the same truth: a hosting provider filters the attacks that arrive as raw volume, because it owns the pipe those packets travel down and you do not. It cannot filter the attacks that arrive as ordinary-looking requests, because from the network’s point of view they are ordinary-looking requests. That line — between the flood your host absorbs and the flood you have to survive yourself — is the whole subject. Everything below is about finding which side of it you are on, and what to do on each.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="two-different-attacks-that-share-one-name"><a href="#two-different-attacks-that-share-one-name" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Two different attacks that share one name</h2>
+<p style="color: rgb(85, 85, 85)">“DDoS” is one word covering two problems that have almost nothing in common except the outcome. They are stopped in different places, by different people, with different tools, and confusing them is why so much mitigation effort lands in the wrong layer.</p>
+<div class="hscroll-wrap"><div class="g-tbl-wrap" style="border-color: rgb(236, 236, 236); overflow: auto"><table class="g-tbl" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden">
+  <thead style="background-color: rgb(247, 248, 250)"><tr><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"></th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Volumetric — layers 3 and 4</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Application — layer 7</th></tr></thead>
+  <tbody>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">What arrives</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">SYN floods, UDP amplification via open DNS, NTP or memcached reflectors, ACK floods, plain garbage packets</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Ordinary HTTP requests: GET floods, POST floods, slow-loris, cache-busting query strings</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Measured in</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Gigabits and millions of packets per second</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Requests per second — often only a few thousand</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Bandwidth needed to hurt you</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Enormous. This is a capacity contest</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Almost none. A single laptop can do it if the endpoint is expensive enough</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Where it must be stopped</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">Upstream, by your provider.</strong> By the time the packets reach your port, the damage is done</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)"><strong style="color: rgb(17, 17, 17)">On your server, by you</strong>, or on a proxy you control in front of it</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">What it looks like on the box</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Interface saturated, packet counters absurd, CPU may be idle</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Modest bandwidth, but every worker busy, load climbing, database queue growing</td></tr>
+  <tr><td style="color: rgb(85, 85, 85)">Who fixes it</td><td style="color: rgb(85, 85, 85)">Your host’s scrubbing, automatically, usually within seconds</td><td style="color: rgb(85, 85, 85)">Your configuration — rate limits, caching, connection ceilings</td></tr>
+  </tbody>
+</table></div><div class="hs-l" style="opacity: 0; z-index: 2; background-image: linear-gradient(to right, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div><div class="hs-r" style="opacity: 0; z-index: 2; background-image: linear-gradient(to left, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div></div>
+<p style="color: rgb(85, 85, 85)">Read the last two rows again, because they contain the practical point. If the interface is saturated, nothing you type into the server will help: the packets have already consumed the port, and the only party who can drop them is the one who owns the router upstream. If the interface is quiet but the site is still down, the opposite is true — your host sees nothing wrong because, at their layer, nothing <em>is</em> wrong, and the fix is entirely yours.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<figure class="g-fig"><img src="/assets/img/guides/surviving-a-ddos-attack-on-your-vps-inline.webp?v=1788769011" alt="Surviving a DDoS Attack on Your VPS" loading="lazy" decoding="async" width="1600" height="900" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)"><figcaption style="color: rgb(93, 102, 111)">Volumetric floods are filtered upstream, where the capacity is. What survives that filter is ordinary-looking traffic — and stopping it is your job, not your host’s.</figcaption></figure><h2 id="what-ddos-protection-included-actually-buys"><a href="#what-ddos-protection-included-actually-buys" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>What “DDoS protection included” actually buys</h2>
+<p style="color: rgb(85, 85, 85)">Network-layer protection is real, valuable, and almost always misread. When a provider advertises L3/L4 filtering, they mean their network monitors traffic destined for your address, and when a flood is detected the traffic is diverted through scrubbing hardware that drops the malicious portion and forwards what looks legitimate. It happens without a support ticket and usually without you noticing more than a brief blip.</p>
+<p style="color: rgb(85, 85, 85)">That single sentence is doing a lot of work, so it is worth unpacking what it does and does not include:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">It covers the attacks you cannot survive alone.</strong> A 200 Gbps amplification flood against a server with a 1 Gbps port is not a configuration problem. It is arithmetic. Upstream scrubbing is the only answer that exists.</li>
+<li><strong style="color: rgb(17, 17, 17)">It is stateless about your application.</strong> The filter does not know which of your URLs are expensive, which visitors are logged in, or that a request to your search endpoint costs four hundred times a request to your logo.</li>
+<li><strong style="color: rgb(17, 17, 17)">It reacts to a threshold, not to your suffering.</strong> Detection triggers on traffic volume. An attack that never crosses the threshold never triggers it, no matter how comprehensively it has taken your site down.</li>
+<li><strong style="color: rgb(17, 17, 17)">It may briefly null-route in extreme cases.</strong> Every network has a ceiling. If an attack threatens shared infrastructure, the address may be dropped for a period — this is standard, universal, and worth knowing about before it happens rather than during.</li>
+</ul>
+<div class="g-callout" style="color: rgb(85, 85, 85); background-color: color(srgb 0.946118 0.960235 0.991529); border-color: color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) rgb(26, 86, 219)"><p><strong style="color: rgb(17, 17, 17)">The one-line version:</strong> your host protects its network, and you benefit from that. It does not protect your application, and it has no way to. Layer 7 is not an upsell that was withheld from you — it is a layer your provider cannot see into without terminating your TLS, which for anyone hosting offshore is a trade with its own serious costs.</p></div>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="first-decide-whether-this-is-even-an-attack"><a href="#first-decide-whether-this-is-even-an-attack" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>First, decide whether this is even an attack</h2>
+<p style="color: rgb(85, 85, 85)">An impressive share of suspected DDoS incidents are something else wearing its coat, and the fixes are not interchangeable. Before rate-limiting anything, spend two minutes ruling out the impostors — a misdiagnosis here costs you an hour and, occasionally, your real users.</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">You got popular.</strong> A link on a large aggregator produces a traffic shape that looks exactly like an L7 flood, except the referrers are real and the requests are for pages a human would want. This is a capacity problem with a happy cause; rate-limiting it is self-harm.</li>
+<li><strong style="color: rgb(17, 17, 17)">A crawler lost its manners.</strong> Aggressive scrapers and AI training bots can trivially outrun a small server. The user-agent usually confesses, and the fix is <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">robots.txt</code> plus a targeted limit, not a general one.</li>
+<li><strong style="color: rgb(17, 17, 17)">You broke something.</strong> A deployment that disabled caching, a runaway cron job, a database that lost an index — all present as “sudden load, no obvious cause”. If the timing lines up with a change you made, believe the change.</li>
+<li><strong style="color: rgb(17, 17, 17)">Your own monitoring is the flood.</strong> Rare, embarrassing, and much more common than anyone admits. A health-check loop that retries without a backoff can generate a genuinely impressive request rate.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)">The distinguishing question is simple: <em>does the traffic want something?</em> Real load — even hostile-looking real load — has a shape. It hits pages that exist, follows links, loads assets, and comes from a plausible spread of networks. An attack usually does not bother.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="reading-the-attack-from-the-server-itself"><a href="#reading-the-attack-from-the-server-itself" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Reading the attack from the server itself</h2>
+<p style="color: rgb(85, 85, 85)">You do not need a dashboard to classify what is happening. Four commands, run in order, will tell you which layer you are fighting in under a minute — and knowing that determines everything you do next.</p>
+<p style="color: rgb(85, 85, 85)"><strong style="color: rgb(17, 17, 17)">Is the pipe full?</strong> Watch the interface counters. If throughput is pinned near the port’s ceiling, you are in a volumetric attack and your work is a support ticket, not a config change:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">vnstat -tr 10</code> — average throughput over ten seconds, the fastest honest read on saturation.</li>
+<li><code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">cat /proc/net/dev</code> twice, a second apart — packet and byte deltas per interface, no tooling required.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)"><strong style="color: rgb(17, 17, 17)">Is it a SYN flood?</strong> Half-open connections pile up in <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">SYN-RECV</code>. A handful is normal; thousands is not:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">ss -s</code> — the summary line, connection counts by state at a glance.</li>
+<li><code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">ss -tn state syn-recv | wc -l</code> — the specific number that matters.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)"><strong style="color: rgb(17, 17, 17)">Is it layer 7?</strong> If bandwidth is unremarkable but everything is slow, count requests per client in your access log. A single address with tens of thousands of hits is an amateur; a hundred thousand addresses with three hits each is the real thing:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">tail -n 100000 access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head -30</code></li>
+<li>Swap <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">$1</code> for <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">$7</code> to rank the requested paths instead. If one expensive endpoint dominates, you have found the target and half the fix.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)"><strong style="color: rgb(17, 17, 17)">What is actually exhausted?</strong> Load average tells you little on its own. Look for the specific ceiling you have hit: PHP-FPM children all busy, database connections at their limit, file descriptors exhausted, or workers stuck in <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">D</code> state waiting on disk. That ceiling — not the traffic — is what took the site down, and raising it is often faster than filtering anything.</p>
+<div class="g-callout" style="color: rgb(85, 85, 85); background-color: color(srgb 0.946118 0.960235 0.991529); border-color: color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) rgb(26, 86, 219)"><p><strong style="color: rgb(17, 17, 17)">Keep this in mind while you look:</strong> if you run a privacy-focused service, an attack is precisely when you are most tempted to turn logging up and keep it there. Turn it up if you must, then turn it back down and rotate the files aggressively afterwards. An incident that leaves a month of full-detail visitor logs on disk has traded one problem for a worse and longer-lived one. Our <a href="/guides/server-opsec-staying-anonymous" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">server OpSec guide</a> covers the discipline this belongs to.</p></div>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="the-first-ten-minutes"><a href="#the-first-ten-minutes" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>The first ten minutes</h2>
+<p style="color: rgb(85, 85, 85)">Under pressure, people reach for the biggest lever available, and the biggest lever is usually wrong. This is the order that limits the damage, roughly fastest-and-safest first:</p>
+<ol style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Classify before acting.</strong> Saturated interface means volumetric; quiet interface with busy workers means layer 7. Thirty seconds spent here saves you from fixing the wrong layer for an hour.</li>
+<li><strong style="color: rgb(17, 17, 17)">If it is volumetric, open a ticket immediately</strong> and include the destination address, the start time, and your interface counters. Then stop typing into the server — you cannot fix this from inside it.</li>
+<li><strong style="color: rgb(17, 17, 17)">If it is layer 7, cache first.</strong> Turning on aggressive full-page caching for anonymous visitors is the single fastest way to convert an outage into a shrug, and it is the only measure that helps against real traffic too.</li>
+<li><strong style="color: rgb(17, 17, 17)">Then rate-limit</strong> — the targeted endpoint first, everything else after. Start conservative. A limit that takes out your own users is a self-inflicted continuation of the attack.</li>
+<li><strong style="color: rgb(17, 17, 17)">Block only what is unambiguous.</strong> A dozen addresses with a hundred thousand requests each, an obviously fake user-agent, one country you have no users in. Resist the urge to write elaborate rules while under fire; you will not remember them next month.</li>
+<li><strong style="color: rgb(17, 17, 17)">Shed load deliberately if you must.</strong> Serving a static “under maintenance” page to unauthenticated visitors keeps the box alive, keeps your API up, and buys thinking time. Deciding what to sacrifice is better than having it decided for you.</li>
+<li><strong style="color: rgb(17, 17, 17)">Write down what you did.</strong> Every temporary rule you added is a landmine for future-you. The rules that helped become permanent; the rest come out tomorrow.</li>
+</ol>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="rate-limits-that-hold-and-the-mistake-everyone-makes"><a href="#rate-limits-that-hold-and-the-mistake-everyone-makes" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Rate limits that hold, and the mistake everyone makes</h2>
+<p style="color: rgb(85, 85, 85)">Rate limiting is the main instrument for layer 7, and nginx does it well with two directives that solve two genuinely different problems. <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">limit_req</code> caps request <em>rate</em> — how often a client may ask. <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">limit_conn</code> caps <em>concurrency</em> — how many connections one client may hold open at once. Floods need the first; slow-loris attacks, which hold thousands of near-idle connections to exhaust your worker pool, need the second. Deploy only one and you are covered against half the problem.</p>
+<p style="color: rgb(85, 85, 85)">Three details separate a limit that works from one that is decorative:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Use a burst, and use <code style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">nodelay</code>.</strong> Real browsers are bursty — a single page view fires a dozen near-simultaneous asset requests. A limit without headroom throttles genuine visitors while an attacker pacing itself just under the threshold sails through.</li>
+<li><strong style="color: rgb(17, 17, 17)">Limit the expensive endpoints separately.</strong> Your search page, login form, password reset and any endpoint that writes to the database deserve a much tighter budget than your static assets. Attackers find these without trying, because they are the ones that hurt.</li>
+<li><strong style="color: rgb(17, 17, 17)">Return 429, not 503.</strong> The status code is a signal to well-behaved clients and to search engines that this is throttling rather than failure — and it keeps a bad afternoon from turning into a ranking problem.</li>
+</ul>
+<div class="g-callout" style="color: rgb(85, 85, 85); background-color: color(srgb 0.946118 0.960235 0.991529); border-color: color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) rgb(26, 86, 219)"><p><strong style="color: rgb(17, 17, 17)">The mistake that silently voids all of it:</strong> if anything sits in front of your server — a CDN, a load balancer, your own reverse proxy — then every request arrives from <em>its</em> address, not the visitor’s. A per-client rate limit then counts the whole internet as one client, and it will either do nothing at all or ban your entire audience at once. You must configure your real-IP source (in nginx, <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">set_real_ip_from</code> for the proxy’s ranges plus <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">real_ip_header</code> for the header it sends) <em>before</em> the limits mean anything. Restrict it to the proxy’s own ranges, too: trusting a client-supplied header from the open internet lets an attacker forge a new identity per request and walk straight through every limit you own.</p></div>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="caching-is-the-cheapest-mitigation-you-will-ever-deploy"><a href="#caching-is-the-cheapest-mitigation-you-will-ever-deploy" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Caching is the cheapest mitigation you will ever deploy</h2>
+<p style="color: rgb(85, 85, 85)">A rate limit rejects work. A cache makes the work not exist. For anything an anonymous visitor sees, full-page caching changes the economics of the entire attack: a request that would have cost a database round-trip, a template render and a PHP worker becomes a file read measured in microseconds. The same server that collapsed at four hundred dynamic requests per second will serve tens of thousands of cached ones without noticing.</p>
+<p style="color: rgb(85, 85, 85)">The things that matter when you turn it on in anger:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Cache for anonymous visitors only.</strong> Bypass on a session cookie. Serving one logged-in user’s page to another is a far worse incident than the outage you were fixing.</li>
+<li><strong style="color: rgb(17, 17, 17)">Serve stale on purpose.</strong> nginx’s <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">proxy_cache_use_stale</code> with <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">updating error timeout</code> means that when your backend is struggling, visitors get a slightly old page instead of an error. During an attack this is the difference between a site that looks fine and one that looks dead.</li>
+<li><strong style="color: rgb(17, 17, 17)">Collapse duplicate misses.</strong> <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">proxy_cache_lock</code> ensures that a thousand simultaneous requests for the same uncached page produce one backend request, not a thousand. Without it, a cache-busting attack passes straight through the cache and lands on your database at full force.</li>
+<li><strong style="color: rgb(17, 17, 17)">Neutralise cache-busting query strings.</strong> The standard trick is appending <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">?</code> and a random value so every request is a unique key and misses forever. Normalise your cache key to ignore query parameters your application does not actually use.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)">There is a pleasant asymmetry here that is worth internalising: every hour you spend on caching also makes the site faster on its best day, cheaper to run, and better at surviving success. Almost no other line of defence pays a dividend when nothing is wrong.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="the-ceilings-that-decide-whether-you-fall-over"><a href="#the-ceilings-that-decide-whether-you-fall-over" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>The ceilings that decide whether you fall over</h2>
+<p style="color: rgb(85, 85, 85)">Most servers do not die because they ran out of CPU. They die because they hit an invisible ceiling nobody set deliberately — a default from a decade ago that made sense on hardware nobody uses any more. Under attack, these are what actually break first:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Application workers.</strong> PHP-FPM’s <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">pm.max_children</code>, your Python worker count, your Node cluster size. This is the real concurrency limit of your site. When they are all busy, every additional visitor queues, and the site is down regardless of how idle the CPU looks. Raise it only as far as memory allows — swapping is worse than queueing.</li>
+<li><strong style="color: rgb(17, 17, 17)">The accept queue.</strong> <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">net.core.somaxconn</code> and your listen backlog decide how many connections may wait to be accepted. A small backlog turns a survivable burst into refused connections.</li>
+<li><strong style="color: rgb(17, 17, 17)">SYN cookies.</strong> <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">net.ipv4.tcp_syncookies</code> lets the kernel answer a SYN flood without allocating state for connections that will never complete. Modern kernels enable it by default; verify rather than assume, because it costs nothing and saves you from the most common flood there is.</li>
+<li><strong style="color: rgb(17, 17, 17)">File descriptors.</strong> Every connection is a descriptor. The default <code style="color: rgb(17, 17, 17); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236)">nofile</code> limit is frequently lower than the number of connections you are trying to serve, and the failure mode — accepts failing while everything looks healthy — is genuinely confusing at 3am.</li>
+<li><strong style="color: rgb(17, 17, 17)">Database connections.</strong> Raising your worker count without raising the connection pool just moves the queue somewhere harder to see. These two numbers must be adjusted together.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)">Tune these on a calm day, not during an incident. The point of knowing them is that when the site falls over, you can name the ceiling it hit instead of guessing — and a named ceiling is a fixed one.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="putting-something-in-front-of-the-origin"><a href="#putting-something-in-front-of-the-origin" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Putting something in front of the origin</h2>
+<p style="color: rgb(85, 85, 85)">Everything above happens on the server. The next step is deciding whether the server should be the thing receiving the traffic at all. There are three honest options, and the right answer depends far more on what you host than on what you can afford.</p>
+<div class="hscroll-wrap"><div class="g-tbl-wrap" style="border-color: rgb(236, 236, 236); overflow: auto"><table class="g-tbl" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden">
+  <thead style="background-color: rgb(247, 248, 250)"><tr><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">Approach</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">What it gives you</th><th style="background-color: rgb(247, 248, 250); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">What it costs you</th></tr></thead>
+  <tbody>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Origin directly exposed, hardened</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Simplicity, no third party, no TLS termination you do not control</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Your address is public and permanent. Layer 7 is entirely on you</td></tr>
+  <tr><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Commercial CDN or scrubbing service</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">Enormous absorption capacity, a challenge page in one click, global caching</td><td style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(85, 85, 85) rgb(236, 236, 236)">An abuse desk with an opinion about your content, and a company that can see your traffic. For offshore or DMCA-sensitive projects this can be the weakest link in an otherwise careful setup</td></tr>
+  <tr><td style="color: rgb(85, 85, 85)">Your own front node — a small VPS running nginx, proxying to a firewalled origin</td><td style="color: rgb(85, 85, 85)">Full control, no third party in the request path, an address you can burn and replace, and a real address that stays hidden</td><td style="color: rgb(85, 85, 85)">Its own capacity limits, and one more machine to run. Two or three fronts in different networks make it meaningfully harder to take down</td></tr>
+  </tbody>
+</table></div><div class="hs-l" style="opacity: 0; z-index: 2; background-image: linear-gradient(to right, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div><div class="hs-r" style="opacity: 0; z-index: 2; background-image: linear-gradient(to left, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div></div>
+<p style="color: rgb(85, 85, 85)">The self-hosted front node deserves more attention than it usually gets, particularly for anyone who chose offshore hosting for reasons a large CDN might not sympathise with. The pattern is unglamorous: cheap proxy nodes in front, origin firewalled to accept connections only from those nodes, DNS pointing at the fronts. If a front is attacked, you replace it with a new address in minutes and the origin never noticed. The full version of this architecture — including the six ways an origin address leaks anyway — is the subject of our guide on <a href="/guides/hiding-your-origin-server-ip" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">hiding your origin server IP</a>.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="a-hidden-origin-is-worth-more-than-any-filter"><a href="#a-hidden-origin-is-worth-more-than-any-filter" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>A hidden origin is worth more than any filter</h2>
+<p style="color: rgb(85, 85, 85)">It is worth stating bluntly, because it inverts the usual priority: the cheapest DDoS mitigation available to you is an address the attacker does not have. Filtering is what you do when that has already failed.</p>
+<p style="color: rgb(85, 85, 85)">This matters more than it sounds, because origin addresses leak constantly and quietly. Historical DNS records from before you put a proxy in front outlive the change by years. Mail sent directly from the application carries the address in its headers. A TLS certificate issued on the raw address is published permanently in certificate transparency logs. An error page, a redirect, or an obscure subdomain that was never proxied all give it away. If you have put a CDN in front of a server that used to be exposed, assume the old address is known until you have changed it.</p>
+<div class="g-callout" style="color: rgb(85, 85, 85); background-color: color(srgb 0.946118 0.960235 0.991529); border-color: color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) color(srgb 0.744314 0.796078 0.910824) rgb(26, 86, 219)"><p><strong style="color: rgb(17, 17, 17)">The corollary is a firewall rule, and it is the most valuable single line in this guide:</strong> once something sits in front, the origin should refuse connections on 80 and 443 from everything except that front’s addresses. Without it, the proxy is a suggestion — anyone who learns the real address simply steps around it and attacks you directly, and everything you configured at the front becomes decorative.</p></div>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="choosing-hardware-and-location-so-attacks-stay-boring"><a href="#choosing-hardware-and-location-so-attacks-stay-boring" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Choosing hardware and location so attacks stay boring</h2>
+<p style="color: rgb(85, 85, 85)">Some of this is decided before an attack ever happens, at the moment you pick a plan. Three properties matter far more than the specification sheet suggests:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Unmetered bandwidth.</strong> On a metered plan, an attack is not only an outage — it is an invoice. Traffic you never asked for and could not refuse still counts against an allowance. Unmetered transfer converts a financial risk into a purely technical one, which is a much better class of problem.</li>
+<li><strong style="color: rgb(17, 17, 17)">Whether the port is yours.</strong> On a shared virtualised host, a neighbour under attack can degrade you, and your own protection ceiling is shared. <a href="/dedicated" data-pseudo-states="░border-bottom-color:var(--ac)" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">Dedicated hardware</a> with its own port removes both effects. For a project that expects hostile attention, this is the clearest reason to move up from a <a href="/vps" data-pseudo-states="░border-bottom-color:var(--ac)" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">VPS</a> — more than cores or RAM.</li>
+<li><strong style="color: rgb(17, 17, 17)">Where the network sits.</strong> A well-connected European network with real transit capacity absorbs a flood that a poorly-peered one will not, and the jurisdiction you chose for legal reasons has network characteristics too. It is worth checking both when picking from the available <a href="/locations" data-pseudo-states="░border-bottom-color:var(--ac)" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">locations</a>.</li>
+</ul>
+<p style="color: rgb(85, 85, 85)">There is also a scale argument that quietly favours simplicity. A static site behind a cache on a modest server is extraordinarily hard to take down; the same content on a heavyweight CMS with an uncached search endpoint can be broken by one determined person with a script. Reducing what is dynamic is a mitigation, and it is free. If your project genuinely lives under sustained load, our <a href="/use-cases/high-traffic-hosting" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">high-traffic hosting</a> notes cover the sizing side of the same question.</p>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="five-things-not-to-do"><a href="#five-things-not-to-do" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>Five things not to do</h2>
+<p style="color: rgb(85, 85, 85)">The failure modes here are consistent enough to list, and each one has cost somebody a weekend:</p>
+<ul style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Do not null-route yourself.</strong> Blackholing your own address ends the attack in the most literal way possible — nobody can reach you, including your users. It is a tool of last resort for your provider, not an action you take voluntarily.</li>
+<li><strong style="color: rgb(17, 17, 17)">Do not treat fail2ban as DDoS protection.</strong> It is a fine tool against brute-force attempts from a few addresses. Against a distributed flood it reacts in minutes to something that arrives in seconds, and a rule that bans thousands of addresses can cost more in firewall processing than the attack cost you.</li>
+<li><strong style="color: rgb(17, 17, 17)">Do not pay a ransom.</strong> The overwhelming majority of extortion emails threatening a devastating attack come from people with no capability who send thousands of identical messages. The small minority who can follow through will come back, because you have proven you pay.</li>
+<li><strong style="color: rgb(17, 17, 17)">Do not retaliate.</strong> Beyond being illegal essentially everywhere, the sources are compromised third parties. You would be attacking victims, and doing it from an address that is unambiguously yours.</li>
+<li><strong style="color: rgb(17, 17, 17)">Do not migrate in a panic.</strong> Moving hosts mid-attack means the new address is public within minutes and you have no working configuration. Stabilise first, move deliberately later — and if you do move, our guide on <a href="/guides/migrate-website-to-offshore-hosting" data-pseudo-states="░border-bottom-color:var(--ac)" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">migrating without downtime</a> exists precisely so that the move is not a second incident.</li>
+</ul>
+</div>
+
+<div class="topic-block" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+<h2 id="the-short-version"><a href="#the-short-version" class="g-anchor" aria-label="anchor" data-pseudo-states="░border-bottom-color:var(--ac);opacity:0.8" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); opacity: 0; transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s"></a>The short version</h2>
+<p style="color: rgb(85, 85, 85)">Stripped of the reasoning, the working model fits in eight lines:</p>
+<ol style="color: rgb(85, 85, 85)">
+<li><strong style="color: rgb(17, 17, 17)">Classify first.</strong> Saturated interface means volumetric and belongs to your host. Quiet interface with exhausted workers means layer 7 and belongs to you.</li>
+<li><strong style="color: rgb(17, 17, 17)">For volumetric, file a ticket</strong> with the address, the timestamp and your counters — then stop touching the server.</li>
+<li><strong style="color: rgb(17, 17, 17)">Cache aggressively for anonymous visitors,</strong> serve stale under stress, and collapse duplicate misses. This is the highest-leverage change you can make.</li>
+<li><strong style="color: rgb(17, 17, 17)">Rate-limit by request rate and by concurrency,</strong> tightest on the endpoints that cost the most, and return 429.</li>
+<li><strong style="color: rgb(17, 17, 17)">Fix your real-IP configuration before any of it,</strong> or every per-client limit behind a proxy is either useless or catastrophic.</li>
+<li><strong style="color: rgb(17, 17, 17)">Know your ceilings</strong> — workers, backlog, descriptors, database connections — and raise them deliberately on a calm day.</li>
+<li><strong style="color: rgb(17, 17, 17)">Keep the origin address secret and firewalled</strong> to your front nodes. This is worth more than every filter combined.</li>
+<li><strong style="color: rgb(17, 17, 17)">Buy unmetered bandwidth</strong> so that traffic you did not ask for is never also a bill.</li>
+</ol>
+<p style="color: rgb(85, 85, 85)">None of this makes you immune, and anyone selling immunity is selling something. What it does is move you out of the population that gets taken offline by a bored teenager and into the one that requires genuine resources and genuine intent to disturb — which, for the overwhelming majority of projects, is indistinguishable from safe. The rest is the same unglamorous work that makes a server good at everything else: <a href="/guides/first-hour-vps-hardening-checklist" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">hardened on the first day</a>, <a href="/guides/vps-backup-strategy" data-pseudo-states="░border-bottom-color:var(--ac);text-decoration-color:currentcolor" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) color(srgb 0.101961 0.337255 0.858824 / 0.28); transition: border-color 0.12s; transition-property: border-color; transition-duration: 0.12s">restorable on the worst one</a>, and running somewhere that treats your traffic as your business.</p>
+</div>      </div>
+    </article>
+  </div>
+</div></section>
+
+<section class="sc sc-a" id="guide-faq" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">FAQ</span><h2>DDoS on a small server — common questions</h2></div>
+  <div class="faq">
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">01</span>
+        <span class="fq-t">Does “DDoS protection included” mean I am safe from everything?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">No, and the gap is precise rather than vague. Included protection is network-layer filtering: it drops volumetric floods — SYN floods, UDP amplification, raw packet storms — upstream, before they reach your port. That is the category you genuinely cannot handle yourself, so it is the right thing to include. It does not inspect your application, so an HTTP flood of a few thousand requests per second against an expensive endpoint passes through it untouched and takes your site down while every network graph looks normal. Layer 7 is configuration you own: caching, rate limits and connection ceilings.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">02</span>
+        <span class="fq-t">How do I tell a DDoS attack from a traffic spike?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Ask whether the traffic wants something. Real visitors, even a sudden flood of them from a popular link, request pages that exist, load the assets on those pages, arrive with plausible referrers and spread across many networks in a natural pattern. An attack usually hammers one path, ignores assets, sends implausible or absent user-agents, and shows a distribution that looks synthetic. Check your access log for requests per client address and per path: if one endpoint dominates and nothing else is being loaded, it is an attack. If the same pages a human would want are being served and your referrers are real, you have a capacity problem with a happy cause.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">03</span>
+        <span class="fq-t">What is the single most effective thing I can do while under attack?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Turn on full-page caching for anonymous visitors, and configure it to serve stale content when the backend is struggling. A rate limit rejects work; a cache makes the work not exist. A request that cost a database query, a template render and an application worker becomes a file read, and the same hardware that collapsed at a few hundred dynamic requests per second will serve tens of thousands of cached ones. It is also the only measure on the list that helps identically against real traffic, so unlike a rate limit it cannot backfire on your own users.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">04</span>
+        <span class="fq-t">Why did my nginx rate limit stop working after I put a CDN in front?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Because every request now arrives from the CDN’s address rather than the visitor’s, so a per-client limit is counting the entire internet as a single client. Depending on the threshold, it will either never trigger or ban all of your traffic at once. Configure your real-IP source — in nginx, the trusted proxy ranges plus the header the proxy sends — so the limit keys on the actual visitor again. Restrict that trust to the proxy’s own ranges: if you accept a client-supplied header from the open internet, an attacker can forge a fresh identity on every request and walk through every limit you have.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">05</span>
+        <span class="fq-t">Is fail2ban enough to stop a DDoS attack?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">No. fail2ban reads logs on an interval and bans offending addresses after a threshold, which suits brute-force attempts from a small number of sources. A distributed attack arrives in seconds from thousands of addresses that each send only a handful of requests, so the threshold is never reached and the reaction time is far too slow regardless. Worse, a ruleset that grows to tens of thousands of entries can consume more resources than the attack. Keep it for SSH and login endpoints, and handle floods with caching, rate limiting and an upstream filter.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">06</span>
+        <span class="fq-t">Should I use a CDN, or run my own reverse proxy in front?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">It depends on what you host rather than on your budget. A commercial CDN brings absorption capacity you cannot match and a challenge page one click away, but you inherit its abuse desk and it can see your traffic — which for offshore or DMCA-sensitive projects is often the weakest link in an otherwise careful setup. Your own front nodes cost more work and have real capacity limits, but there is no third party in the request path and a front that gets attacked can be replaced with a new address in minutes. Either way, the origin must be firewalled to accept web traffic only from the front, or the whole arrangement is decorative.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">07</span>
+        <span class="fq-t">Will an attack cost me money as well as uptime?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">On a metered plan, yes — traffic you never asked for and could not refuse still counts against your transfer allowance, and a sustained flood can produce an overage bill larger than a year of hosting. This is the practical reason unmetered bandwidth matters more than it looks on a specification sheet: it converts a financial risk into a purely technical one. It is also worth knowing in advance that if an attack threatens shared infrastructure, providers may temporarily null-route the address; that is standard practice everywhere, not a failure of your particular host.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">08</span>
+        <span class="fq-t">Does moving to an offshore or no-KYC host make attacks more likely?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">The hosting choice itself is neutral; what you run is what attracts attention. Game servers, forums, streaming, marketplaces and anything with a competitor or a grudge draw attacks regardless of jurisdiction. What does change offshore is your recourse: you are less likely to be dropped for being inconvenient, which cuts both ways — the protection is technical rather than contractual. Choose a location with genuine transit capacity, take unmetered bandwidth, keep the origin address hidden, and treat layer 7 as your own responsibility from the first day rather than the first incident.</p></div>
+    </details>
+      </div>
+</div></section>
+
+<section class="sc" id="guide-related"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">Related guides</span><h2>Keep reading</h2></div>
+  <div class="locs">
+        <a href="/guides/choosing-an-offshore-jurisdiction" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Choose an Offshore Hosting Jurisdiction in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How to pick an offshore hosting jurisdiction: data-retention law, MLAT exposure, DMCA stance, court speed and real enforcement, country by country.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/vps-vs-dedicated-for-privacy" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="3" y="4" width="18" height="6" rx="1"></rect><rect x="3" y="14" width="18" height="6" rx="1"></rect><path d="M7 7h.01M7 17h.01"></path></svg></span>
+        <div class="loc-id">
+          <h3>VPS vs Dedicated Server for Privacy-Critical Workloads</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">When a VPS is fine, when shared tenancy is a liability, and when bare metal is the only honest answer: isolation, hypervisor risk, cost vs threat model.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-hosted-vpn-wireguard-vs-openvpn" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Self-Hosted VPN on a No-KYC VPS: WireGuard vs OpenVPN</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Why a self-hosted VPN beats commercial providers, and how WireGuard and OpenVPN really compare on privacy, performance and operational risk in 2026.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/rtx-4090-vs-h100-for-ai-inference" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle><path d="M22 10v4M2 10v4"></path></svg></span>
+        <div class="loc-id">
+          <h3>RTX 4090 vs H100 for AI Inference (RTX 5090 Included)</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Which NVIDIA GPU for self-hosted LLM, image, video and speech work in 2026: RTX 4090 vs RTX 5090 vs H100 SXM5 on VRAM, throughput and $/token.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/offshore-windows-rdp-for-forex-trading" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="4" width="20" height="13" rx="2"></rect><path d="M8 21h8M12 17v4M6 8h6M6 12h4"></path></svg></span>
+        <div class="loc-id">
+          <h3>Offshore Windows RDP for MT4 / MT5 / cTrader Forex Trading</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Why a Windows RDP for forex trading, how to pick a low-latency offshore jurisdiction, MT4/MT5/cTrader and EA setup, broker latency, and the no-KYC checkout.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/dmca-ignored-hosting-explained" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 008 0L7 7M17 7l-3 7a4 4 0 008 0l-3-7M7 21h10"></path></svg></span>
+        <div class="loc-id">
+          <h3>DMCA-Ignored Hosting Explained: What It Really Means in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">What DMCA-ignored hosting really buys you, which jurisdictions back it up, the workloads that need it, and the copyright traps the term does not cover.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/anonymous-domain-registration-with-crypto" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>Anonymous Domain Registration with Crypto — 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Register a domain without revealing your identity: WHOIS regimes by TLD, registrar choice, crypto payment options, and the mistakes that leak you anyway.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/crypto-payments-monero-vs-bitcoin-vs-usdt" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>Crypto Payments for Hosting: Monero vs Bitcoin vs USDT</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How the coin you pay with changes what your host learns about you: privacy, fees, finality and chain-analysis exposure for XMR, BTC and USDT.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/is-offshore-hosting-truly-anonymous" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Is Offshore Hosting Truly Anonymous? An Honest Answer</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Offshore no-KYC hosting removes the identity a normal host collects, but anonymity also depends on payment, logging and your own OpSec. What is traceable.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/first-hour-vps-hardening-checklist" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="3" y="4" width="18" height="6" rx="1"></rect><rect x="3" y="14" width="18" height="6" rx="1"></rect><path d="M7 7h.01M7 17h.01"></path></svg></span>
+        <div class="loc-id">
+          <h3>The First Hour of VPS Hardening: A Checklist</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">An ordered checklist to secure a new VPS in under an hour: SSH keys, firewall, fail2ban, automatic updates and the attack-surface cuts that stop most attacks.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/what-is-no-kyc-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>What Is No-KYC Hosting? Definition, Legality &amp; How It Works</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">No-KYC hosting means renting a server with zero identity checks: no name, email or ID. What it means, how it works, whether it is legal, how to choose one.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/is-offshore-hosting-legal" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 008 0L7 7M17 7l-3 7a4 4 0 008 0l-3-7M7 21h10"></path></svg></span>
+        <div class="loc-id">
+          <h3>Is Offshore Hosting Legal? The Honest 2026 Answer</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Offshore hosting is legal, for you and the provider. What the term means, where the legal line sits, the myths worth dropping, how to use it responsibly.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-pay-for-hosting-with-monero" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Pay for Hosting with Monero (XMR) — Step by Step</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Step by step: paying for a VPS or dedicated server with Monero (XMR). Why XMR is the most private option, how to get it, and how checkout works end to end.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-host-a-website-anonymously" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Host a Website Anonymously — A Practical 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">A layered guide to hosting a website with no identity attached: account, payment, domain, jurisdiction, your connection and the content, each explained.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-set-up-wireguard-vpn-on-a-vps" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Set Up a WireGuard VPN on a VPS — Step-by-Step Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Build your own private VPN on a VPS with WireGuard: why self-hosted beats commercial, the full setup from install to a connected client, and how to harden it.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-host-an-llm-on-a-gpu-server" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle><path d="M22 10v4M2 10v4"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Self-Host an LLM on a GPU Server — 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run your own LLM on a rented GPU server: why self-hosting beats an API, which GPU and model to choose, the setup with Ollama or vLLM, and what it costs.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/bulletproof-vs-offshore-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Bulletproof vs Offshore Hosting — What's the Difference?</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Bulletproof hosting and offshore hosting are constantly confused, and they are not the same thing. The real difference, why it matters, which one you want.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-buy-a-vps-with-bitcoin" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Buy a VPS with Bitcoin — Step-by-Step (2026)</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">A beginner-friendly walkthrough of buying a VPS with Bitcoin: getting BTC, choosing a plan, paying the invoice, and getting a server with no name attached.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/best-countries-for-dmca-ignored-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Best Countries for DMCA-Ignored Hosting in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Where to host beyond the easy reach of US-style takedowns: the jurisdictions that work, what DMCA-ignored really means, and how to choose between them.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/how-to-host-a-tor-hidden-service" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Host a Tor Hidden Service (.onion Site) — 2026 Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Set up a Tor onion service on a VPS: what a hidden service is, why it is the strongest form of anonymous hosting, the setup, and how to keep it anonymous.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/offshore-mail-server-setup" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>Offshore Mail Server Setup — Self-Host Private Email in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run a private email server on an offshore VPS: why self-host email, what you need, a realistic all-in-one mail stack, and how to get deliverability right.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/crypto-node-hosting-guide" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>Crypto Node Hosting Guide — Run a Blockchain Node on a VPS</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How to host a blockchain node on a server: why run your own node, sizing the server for Bitcoin, Ethereum, Monero and more, the setup, and keeping it private.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/gpu-hosting-for-stable-diffusion" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle><path d="M22 10v4M2 10v4"></path></svg></span>
+        <div class="loc-id">
+          <h3>GPU Hosting for Stable Diffusion — Run Your Own Image Server</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run Stable Diffusion on your own GPU server: why self-host image generation, which GPU to pick, the web UI setup, and what it costs versus a hosted service.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/server-opsec-staying-anonymous" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Server OpSec — Staying Anonymous When You Run a Server</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Operational security for anyone running an anonymous server: the mistakes that deanonymise people, the habits that prevent them, how to keep identities apart.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/seedbox-setup-guide" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Seedbox Setup Guide — Build Your Own Private Seedbox in 2026</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">How to build your own seedbox on a server: what a seedbox is, sizing it, installing a torrent client with a web UI, and keeping it private and secure.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/bypass-dpi-censorship-with-your-own-vps" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Bypass DPI Censorship with Your Own VPS (2026 Guide)</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Bypass DPI censorship with your own VPS: what deep packet inspection detects, which protocol beats which block, and a full VLESS+REALITY walkthrough.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/full-disk-encryption-on-a-vps" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path><circle cx="12" cy="16" r="1.2"></circle></svg></span>
+        <div class="loc-id">
+          <h3>Full-Disk Encryption on a VPS: LUKS Setup Guide</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Encrypt a VPS with LUKS: encrypted data volumes, full-root encryption with remote unlock over SSH, the settings that matter on a small server, what it stops.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/hiding-your-origin-server-ip" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <div class="loc-id">
+          <h3>Hiding Your Origin Server IP: CDNs, Proxies &amp; Leaks</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Privacy</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Should you put a CDN in front of an offshore server? What it hides, the abuse desk you inherit, six ways an origin IP leaks anyway, and how to audit yours.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/vps-backup-strategy" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="3" y="4" width="18" height="6" rx="1"></rect><rect x="3" y="14" width="18" height="6" rx="1"></rect><path d="M7 7h.01M7 17h.01"></path></svg></span>
+        <div class="loc-id">
+          <h3>VPS Backup Strategy: Encrypted, Off-Site, Restorable</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Your host keeps no backups. What destroys servers, why push backups die with them, restic vs Borg, the keys everyone forgets, and how to test a restore.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-host-a-matrix-server" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"></path></svg></span>
+        <div class="loc-id">
+          <h3>Self-Hosting Matrix: Federation, Metadata &amp; E2EE Limits</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">What a Matrix homeserver really gives you: Synapse vs Conduit, the server_name you can never change, media that eats the disk, and what federation reveals.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/migrate-website-to-offshore-hosting" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><rect x="2" y="3" width="7" height="18" rx="1.5"></rect><rect x="15" y="3" width="7" height="18" rx="1.5"></rect><path d="M5.5 7h.01M18.5 7h.01M10.5 12h3M12.2 10.3 14 12l-1.8 1.7"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Migrate a Website to Offshore Hosting Without Downtime</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Make a host migration boring: lower the DNS TTL early, run both servers in parallel, freeze writes for minutes, clean the passive-DNS, CT and WHOIS trail.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/self-host-a-crypto-payment-gateway" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"></path></svg></span>
+        <div class="loc-id">
+          <h3>How to Self-Host a Crypto Payment Gateway with BTCPay Server</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Operations</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">Run a non-custodial checkout on an offshore VPS with BTCPay Server, a pruned Bitcoin node, Lightning and Monero: disk sizing, keys, where KYC reappears.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">8-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+        <a href="/guides/best-offshore-hosting-providers" class="loc" data-pseudo-states="░box-shadow:rgba(26, 86, 219, 0.08) 0px 4px 20px;transform:translateY(-2px)" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.18s; transition-duration: 0.18s">
+      <div class="loc-top">
+        <span class="topic-icon" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236); backdrop-filter: blur(4px); width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;color:var(--ac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 008 0L7 7M17 7l-3 7a4 4 0 008 0l-3-7M7 21h10"></path></svg></span>
+        <div class="loc-id">
+          <h3>Best Offshore Hosting Providers in 2026: 12 Compared</h3>
+          <span class="loc-tag" style="color: rgb(26, 86, 219)">Buying</span>
+        </div>
+      </div>
+      <p style="color: rgb(93, 102, 111)">12 offshore and anonymous hosts compared on signup identity, Monero, jurisdictions, DMCA policy and bare metal — including where AnonPort loses.</p>
+      <div class="loc-bottom" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <div class="loc-prices">
+          <span class="loc-pr-item" style="color: rgb(85, 85, 85)"><em style="color: rgb(104, 112, 122)">6-question FAQ</em></span>
+        </div>
+        <span class="loc-arrow" style="background-color: rgb(247, 248, 250); transition: 0.18s; transition-duration: 0.18s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(104, 112, 122); overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>
+      </div>
+    </a>
+      </div>
+</div></section>
+
+<section class="cta" id="guide-cta" style="color: rgb(255, 255, 255); background-color: rgb(10, 22, 40); overflow: hidden; background-position: 50% 50%; background-size: cover; background-repeat: no-repeat; background-image:url(&quot;assets/anonport_com/cta-vps-4e4361f5468982e63e9e0d3ed0f4fd88ae94d2d93099742574edd8566c01e967.webp&quot;)"><div class="w" style="z-index: 1">
+  <h2>Put it somewhere that filters the floods</h2>
+  <p style="color: rgba(255, 255, 255, 0.55)">Offshore KVM servers in seven jurisdictions with L3/L4 DDoS filtering, unmetered bandwidth, full root and NVMe storage. No KYC, crypto payment, deployed minutes after the transaction confirms.</p>
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <a href="/vps" class="bt bt-w" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">View VPS Plans</a>
+        <a href="/dedicated" class="bt bt-g" data-pseudo-states="░color:rgb(255, 255, 255)" style="color: rgba(255, 255, 255, 0.6); transition: 0.12s; transition-duration: 0.12s">Dedicated Servers</a>
+        <a href="/offshore-hosting" class="bt bt-g" data-pseudo-states="░color:rgb(255, 255, 255)" style="color: rgba(255, 255, 255, 0.6); transition: 0.12s; transition-duration: 0.12s">Offshore Hosting</a>
+      </div>
+</div></section>
+
+
+</main>
+<footer class="ft" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)"><div class="w">
+  <div class="ft-g">
+    <div class="ft-brand">
+      <div class="logo"><img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="120" height="32"></div>
+      <p class="ft-desc" style="color: rgb(93, 102, 111)">Offshore VPS &amp; dedicated servers in 7 offshore jurisdictions. No KYC, no logs, crypto only. Privacy by architecture.</p>
+      <div class="cry" style="margin-top:14px" title="8 crypto coins accepted: BTC, XMR, ETH, USDT, SOL, LTC, TRX"><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">BTC</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">XMR</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">ETH</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">USDT</span><span class="cry-more" style="color: rgb(93, 102, 111); border-color: rgb(236, 236, 236)">+5</span></div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Services</p>
+      <div class="ft-lk">
+        <a href="/vps" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+        <a href="/dedicated" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+        <a href="/rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Windows RDP</a>
+        <a href="/gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU AI Hosting <span style="display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:#76b900;color:#132a00;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/node-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Node Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/censorship-resistant-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anti-Censorship Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/domains" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domain Names <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+                <a href="/com-domain" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">.com $4.99</a>
+        <a href="/locations" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+        <a href="/jurisdiction-selector" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Find Best Jurisdiction</a>
+        <a href="/alternatives" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+        <a href="/guides" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+        <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+        <a href="/faq" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Solutions</p>
+      <div class="ft-lk">
+        <a href="/no-kyc-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No KYC Hosting</a>
+        <a href="/dmca-ignored-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">DMCA Ignored</a>
+        <a href="/bitcoin-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Bitcoin Hosting</a>
+        <a href="/anonymous-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anonymous Hosting</a>
+        <a href="/offshore-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Offshore Hosting</a>
+        <a href="/monero-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Monero Hosting</a>
+        <a href="/no-kyc-rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC RDP</a>
+        <a href="/no-kyc-gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC GPU</a>
+        <a href="/uncensored-ai-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Uncensored AI Hosting</a>
+        <a href="/crypto-gpu-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Crypto GPU Hosting</a>
+        <a href="/ai-agent-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">AI Agent Hosting</a>
+        <a href="/agents" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Agent API <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Company</p>
+      <div class="ft-lk">
+        <a href="/about" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">About</a>
+        <a href="/contact" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+        <a href="/status" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Status</a>
+        <a href="/canary" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Warrant Canary</a>
+        <a href="/press" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Press Kit</a>
+        <a href="/tos" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Terms of Service</a>
+        <a href="/privacy" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ft-bt" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <p class="ft-updated" style="font-size:12px;color:var(--tx4);margin:0 0 6px">Last updated: <time datetime="2026-10-18" style="color:var(--tx2,#444);font-weight:500">October 18, 2026</time></p>
+    <p style="color: rgb(104, 112, 122)">© 2026 AnonPort — No registered entity. No personal data stored. No logs. No KYC.</p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Jurisdictions:</span>
+      <a href="/servers/iceland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Iceland</a> ·
+      <a href="/servers/panama" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Panama</a> ·
+      <a href="/servers/moldova" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Moldova</a> ·
+      <a href="/servers/romania" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Romania</a> ·
+      <a href="/servers/switzerland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Switzerland</a> ·
+      <a href="/servers/netherlands" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Netherlands</a> ·
+      <a href="/servers/russia" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Russia</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Use cases:</span>
+      <a href="/use-cases/tor-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Tor</a> ·
+      <a href="/use-cases/vpn-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">VPN</a> ·
+      <a href="/use-cases/mail-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Mail</a> ·
+      <a href="/use-cases/game-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Game</a> ·
+      <a href="/use-cases/crypto-node-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Crypto nodes</a> ·
+      <a href="/use-cases/seedbox-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Seedbox</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Compare:</span>
+      <a href="/guides/best-offshore-hosting-providers" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Best offshore hosts 2026</a> ·
+      <a href="/alternative-to-njalla" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Njalla</a> ·
+      <a href="/alternative-to-flokinet" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">FlokiNET</a> ·
+      <a href="/alternative-to-1984-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">1984</a> ·
+      <a href="/alternative-to-orangewebsite" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OrangeWebsite</a> ·
+      <a href="/alternative-to-buyvm" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">BuyVM</a> ·
+      <a href="/alternative-to-hetzner" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Hetzner</a> ·
+      <a href="/alternative-to-ovh" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OVH</a> ·
+      <a href="/alternative-to-aws" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">AWS</a>
+    </p>
+  </div>
+</div></footer>
+<nav class="bnav" aria-label="Services">
+  <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg>
+    <span>Home</span>
+  </a>
+  <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="3" y="4" width="18" height="7" rx="1.5"></rect><rect x="3" y="13" width="18" height="7" rx="1.5"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>
+    <span>VPS</span>
+  </a>
+  <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="5" y="5" width="14" height="14" rx="2"></rect><rect x="9.5" y="9.5" width="5" height="5" rx="1"></rect><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path></svg>
+    <span>GPU</span>
+  </a>
+  <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a13.5 13.5 0 0 1 0 18M12 3a13.5 13.5 0 0 0 0 18"></path></svg>
+    <span>Domains</span>
+  </a>
+    <a href="#" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+    <span>Account</span>
+  </a>
+</nav>
+
+<div class="read-progress" id="readProgress" aria-hidden="true" style="z-index: 200; background-image: linear-gradient(90deg, rgb(26, 86, 219), rgb(96, 165, 250)); transition: width 0.1s linear; transition-property: width; transition-duration: 0.1s; transition-timing-function: linear; width: 48.6618%;"></div>
+
+
+
+
+
+
+</body><div id="immersive-translate-browser-popup" style="--bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; all: initial"><div id="mount" style="position: absolute; top: 16327.9px; right: 3175px; bottom: -15056.9px; left: 0px; inset: 16327.9px 3175px -15056.9px 0px; width: 250px; min-width: 250px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; transform-origin: 125px 0px; perspective-origin: 125px 0px; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; display: block;"><div hidden id="immersive-translate-popup-overlay" class="immersive-translate-popup-overlay" style="position: fixed; top: 0px; left: 0px; inset: 0px auto auto 0px; width: 100%; height: 100%; box-sizing: border-box; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgba(0, 0, 0, 0.5) none repeat scroll 0% 0% / auto padding-box border-box; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; z-index: 2147483647; background-color: rgba(0, 0, 0, 0.5);"><div class="immersive-translate-popup-wrapper" style="inset: 50% auto auto 50%; width: auto; height: auto; border-radius: 20px; box-sizing: border-box; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; background-color: rgb(255, 255, 255); box-shadow: rgba(14, 18, 22, 0.08) 2px 10px 24px 0px; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; position: fixed; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);"></div></div></div></div></html>

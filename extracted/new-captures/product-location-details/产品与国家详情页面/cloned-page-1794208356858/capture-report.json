@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "capturedAt": "2026-11-09T07:12:36.682Z",
+  "sourceUrl": "https://anonport.com/vps/russia",
+  "filtersApplied": {
+    "excludeTrackingPixels": true,
+    "excludeThirdPartyFonts": false,
+    "excludeThirdPartyStyles": false
+  },
+  "excludedResources": [
+    {
+      "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+      "kind": "image",
+      "reason": {
+        "type": "tracking",
+        "domain": "cloudflareinsights.com"
+      }
+    }
+  ],
+  "missingResources": [
+    {
+      "url": "https://anonport.com/assets/img/hero-russia.webp",
+      "reason": "request timed out"
+    },
+    {
+      "url": "https://anonport.com/assets/img/cta-russia.webp",
+      "reason": "request timed out"
+    }
+  ],
+  "fonts": {
+    "declared": [
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-400-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-700-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-600-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-800-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-400-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-500-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-500-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-600-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-700-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-800-normal.woff2"
+    ],
+    "downloaded": [
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-400-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-700-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-600-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-800-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-400-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-500-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-500-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-600-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-700-normal.woff2",
+      "https://anonport.com/assets/fonts/plus-jakarta-sans-latin-ext-800-normal.woff2"
+    ]
+  },
+  "baseline": null
+}

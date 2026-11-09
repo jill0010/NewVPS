@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-immersive-translate-page-theme="light" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); overflow: clip visible"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Lightning Node Hosting — LND &amp; Core Lightning Offshore</title>
+<meta name="description" content="Host a Lightning routing node with 24/7 uptime, NVMe and unmetered traffic. LND or Core Lightning over your own bitcoind, Tor-ready. From $24.50/mo in BTC.">
+<!-- Favicon -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon-32-v2.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon-v2.png" sizes="180x180">
+<link rel="manifest" href="/manifest.json">
+
+<!-- SEO Meta -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://anonport.com/node-hosting/lightning">
+
+<!-- Hreflang -->
+<link rel="alternate" hreflang="en" href="https://anonport.com/node-hosting/lightning">
+<link rel="alternate" hreflang="ru" href="https://anonport.com/ru/node-hosting/lightning">
+<link rel="alternate" hreflang="zh" href="https://anonport.com/zh/node-hosting/lightning">
+<link rel="alternate" hreflang="x-default" href="https://anonport.com/node-hosting/lightning">
+
+<!-- Markdown twin for LLMs -->
+<link rel="alternate" type="text/markdown" href="https://anonport.com/node-hosting/lightning.md">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AnonPort">
+<meta property="og:title" content="Lightning Node Hosting — LND &amp; Core Lightning Offshore">
+<meta property="og:description" content="Host a Lightning routing node with 24/7 uptime, NVMe and unmetered traffic. LND or Core Lightning over your own bitcoind, Tor-ready. From $24.50/mo in BTC.">
+<meta property="og:url" content="https://anonport.com/node-hosting/lightning">
+<meta property="og:image" content="https://anonport.com/assets/img/hero-node-lightning.webp">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:locale:alternate" content="zh_CN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lightning Node Hosting — LND &amp; Core Lightning Offshore">
+<meta name="twitter:description" content="Host a Lightning routing node with 24/7 uptime, NVMe and unmetered traffic. LND or Core Lightning over your own bitcoind, Tor-ready. From $24.50/mo in BTC.">
+<meta name="twitter:image" content="https://anonport.com/assets/img/hero-node-lightning.webp">
+
+<!-- Theme (theme-color : une seule balise, posee par header.php selon le bandeau promo) -->
+<meta name="msapplication-TileColor" content="#1a56db">
+
+
+
+
+
+
+
+
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2" crossorigin>
+<link rel="stylesheet" href="assets/anonport_com/fonts-b7334b1298d07d070db7d4f7e032a715c9c4b2e9529344aa8571ad2fb1b42486.css">
+<link rel="stylesheet" href="assets/anonport_com/flags-5cbb272bae146718d4bd828a4ff17f41b624ae132ba5591b9dcbaf28120d55bf.css">
+<link rel="stylesheet" href="assets/anonport_com/style-43152d4ee1dca81ed6392465060c6b76fcd47bb1dbc09aa8db3d442285983c64.css"><link rel="agent" href="/.well-known/agent.json">
+<link rel="alternate" type="text/markdown" title="llms.txt" href="/llms.txt">
+<meta name="x402" content="supported; network=base; asset=USDC">
+<style>@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 400; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 800; font-display: optional; src: url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-400-normal-221a4135d06a4b33abbd535e9a0da4e565d19545ddd9267c4e678a916d54d9b6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-400-normal-65b5680bf2ba9c6c42af74ddd2e8aadde93af7c523454ebb3d4e32fdba3f94db.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-500-normal-bad081c8dbc15aed6c5e4cde5461914f7b3bdc295b7a7aed177e4beddb79bffa.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-500-normal-d1584f50c388cae7e570bed35be331fa4a9afd6832ef45a32fa8bf81930e6db9.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-600-normal-8872bb5c9111df9bd3162c2394aee6354d782b13408a4dd5bbf65c48207206e6.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-600-normal-080a1fea8589c2bd4fa08750d0d99b3388be63df8c41a649de05cb2dda1ec007.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-700-normal-2050755bf475817c96ac7d914c7f07cc3c2d11ff4b3fb4747b8d41de584aad17.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-700-normal-b202ec87899e78825db955e6ab43858b88c0cd444abe2dfac2e763f837b8f234.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-800-normal-5f301a8ef9c266c8b596e6793d3cc826daeff9849c5af035f5386439137955ad.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:800;font-display:optional;src:url("assets/anonport_com/plus-jakarta-sans-latin-ext-800-normal-7c27e3fd36e9c1d6a2f354943b32993b01dc0b1e64e8275bdd5122b260ca6a24.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}</style></head>
+<body class="pg-lightning has-bnav" style="overflow: clip visible">
+<header class="hd is-scrolled" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); z-index: 100; box-shadow: rgb(236, 236, 236) 0px 1px 0px 0px, rgba(10, 22, 40, 0.06) 0px 4px 16px 0px"><div class="w hd-in">
+  <a href="/" class="logo">
+    <img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="105" height="28">
+  </a>
+  <nav class="hd-nav" id="nav">
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" title="Limited offer on .com" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+  </nav>
+  <div class="hd-r">
+    <a href="/status" class="hd-status" title="Server Status" style="color: rgb(10, 122, 65); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.024) 0px 0px 0px 3.77428px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span>
+      <span class="hd-status-txt">Operational</span>
+    </a>
+    <div class="lang-sw" id="langSw"><button type="button" class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span>EN</span><svg width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true" style="opacity: 0.5; overflow: hidden; transition: transform 0.18s; transition-property: transform; transition-duration: 0.18s"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></button><div class="lang-menu few" id="langMenu" role="listbox" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); opacity: 0; z-index: 200; box-shadow: rgba(0, 0, 0, 0.12) 0px 12px 32px 0px, rgba(0, 0, 0, 0.04) 0px 2px 6px 0px; transition: opacity 0.15s, transform 0.15s; transition-property: opacity, transform; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s"><div class="lang-grid" id="langGrid"><a href="/node-hosting/lightning" class="lang-opt on" role="option" aria-selected="true" data-search="en english gb" data-pseudo-states="░color:var(--tx)" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">English</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/ru/node-hosting/lightning" class="lang-opt" role="option" aria-selected="false" data-search="ru Русский ru" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">Русский</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a><a href="/zh/node-hosting/lightning" class="lang-opt" role="option" aria-selected="false" data-search="zh 简体中文 cn" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.1s; transition-duration: 0.1s"><span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span><span class="lang-opt-name" style="overflow: hidden">简体中文</span><svg class="lang-opt-check" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="color: rgb(26, 86, 219); opacity: 0; overflow: hidden; transition: opacity 0.12s; transition-property: opacity; transition-duration: 0.12s"><path d="M2.5 6.5L5 9l4.5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div><div class="lang-empty" id="langEmpty" hidden style="color: rgb(93, 102, 111)">No match</div></div></div>          <a href="#" class="bt bt-o bt-sm hd-auth" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      </div>
+  <button class="mob-btn" id="mobBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobMenu" style="background-color: rgba(0, 0, 0, 0); transition: 0.2s; transition-duration: 0.2s">
+    <span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span><span style="background-color: rgb(17, 17, 17); transition: 0.25s; transition-duration: 0.25s"></span>
+  </button>
+</div>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu" style="background-color: rgb(255, 255, 255); z-index: 99; overflow: auto">
+  <div class="mob-nav">
+    <div class="mob-sec">Services</div>
+    <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Home</a>
+    <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+    <a href="/dedicated" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+    <a href="/rdp" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">RDP</a>
+    <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">GPU</a>
+    <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Domains <span class="hd-nav-promo" style="color: rgb(10, 22, 40); background-image: linear-gradient(120deg, rgb(245, 158, 11), rgb(251, 191, 36)); box-shadow: rgba(245, 158, 11, 0.32) 0px 1px 4px 0px; transition: 0.15s; transition-duration: 0.15s">.com $4.99</span></a>
+    <div class="mob-sec">Solutions</div>
+    <a href="/pricing" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Pricing</a>
+    <a href="/locations" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+    <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+    <a href="/guides" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+    <a href="/alternatives" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+    <div class="mob-sec">Company</div>
+    <a href="/about" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">About</a>
+    <a href="/faq" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+    <a href="/contact" class data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+    <a href="/status" class="mob-status" data-pseudo-states="░color:var(--tx)" style="color: rgb(85, 85, 85); border-color: rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85); transition: 0.12s; transition-duration: 0.12s">
+      <span class="hd-status-dot" style="background-color: rgb(10, 122, 65); box-shadow: rgba(10, 138, 74, 0.4) 0px 0px 0px 0px; animation: 2s ease-in-out infinite statusPulse; animation-name: statusPulse; animation-duration: 2s; animation-timing-function: ease-in-out; animation-iteration-count: infinite"></span> Server Status    </a>
+  </div>
+  <div class="mob-bottom" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+    <div class="mob-lang">
+            <a href="/node-hosting/lightning" class="mob-lang-opt on" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); border-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-gb" style="background-image: url(&quot;assets/anonport_com/gb-c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">English</span>
+      </a>
+            <a href="/ru/node-hosting/lightning" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">Русский</span>
+      </a>
+            <a href="/zh/node-hosting/lightning" class="mob-lang-opt " style="color: rgb(85, 85, 85); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); transition: 0.12s; transition-duration: 0.12s">
+        <span class="fi fi-cn" style="background-image: url(&quot;assets/anonport_com/cn-981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span>
+        <span class="mob-lang-opt-name" style="overflow: hidden">简体中文</span>
+      </a>
+          </div>
+          <a href="#" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;justify-content:center">Login</a>
+      </div>
+</div>
+</header>
+
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="modalOverlay" style="background-color: rgba(10, 22, 40, 0.6); z-index: 9999; backdrop-filter: blur(6px)">
+  <div class="modal" style="background-color: rgb(255, 255, 255); opacity: 0; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.25) 0px 24px 80px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; animation: 0.25s cubic-bezier(0.16, 1, 0.3, 1) modalIn; animation-name: modalIn; animation-duration: 0.25s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1)">
+    <button class="modal-close" data-pseudo-states="░color:var(--tx)" style="color: rgb(104, 112, 122); background-color: rgb(247, 248, 250); z-index: 2; transition: 0.12s; transition-duration: 0.12s">×</button>
+
+    <!-- Header -->
+    <div class="modal-head">
+      <div class="modal-icon" style="background-color: rgb(237, 241, 252)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
+      </div>
+      <div id="modal-title" class="modal-h2" style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px">Welcome back</div>
+      <p class="modal-desc" id="modal-desc" style="color: rgb(93, 102, 111)">Access your server dashboard</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="modal-tabs" style="border-color: rgb(236, 236, 236); overflow: hidden">
+      <a id="mtab-login" class="on" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); border-color: rgb(255, 255, 255) rgb(236, 236, 236) rgb(255, 255, 255) rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">Login</a>
+      <a id="mtab-register" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Register</a>
+    </div>
+
+    <!-- Login -->
+    <div class="modal-body" id="tab-login">
+      <form id="loginForm">
+        <input type="hidden" name="_token" data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgba(0, 0, 0, 0)">
+
+        <div id="loginStepToken">
+          <label style="color: rgb(85, 85, 85)">Access Token</label>
+          <input type="text" id="loginToken" name="token" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" required value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+        </div>
+
+        <div id="loginStepTotp" style="display:none">
+          <label style="color: rgb(85, 85, 85)">2FA code</label>
+          <input type="text" id="loginTotp" name="totp" placeholder="123456" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" spellcheck="false" value data-pseudo-states="▒outline-style:none;box-shadow:rgba(26, 86, 219, 0.08) 0px 0px 0px 3px" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224); transition: 0.15s; transition-duration: 0.15s">
+          <p class="modal-totp-hint" style="color: rgb(93, 102, 111)">Enter the 6-digit code from your authenticator app.</p>
+        </div>
+
+        <div id="loginError" style="display:none;font-size:12px;color:#dc2626;margin-bottom:10px"></div>
+        <button type="submit" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="loginBtn">Login</button>
+      </form>
+    </div>
+
+    <!-- Register -->
+    <div class="modal-body" id="tab-register" style="display:none">
+      <!-- Step A: explainer + create button -->
+      <div id="register-intro">
+        <div class="modal-notice" style="border-color: rgb(212, 222, 245); background-image: linear-gradient(135deg, rgb(240, 244, 255), rgb(248, 249, 255))">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(26, 86, 219); overflow: hidden"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+          <div>
+            <strong>Account creation is free and instant.</strong>
+            <p style="color: rgb(85, 85, 85)">One token replaces your name, email and password. We hash it on creation and never see the full value again. You'll need to add credit before deploying.</p>
+          </div>
+        </div>
+        <div class="modal-steps">
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">1</span> Click below to generate your token</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">2</span> Save it (we cannot recover it)</div>
+          <div class="modal-step" style="color: rgb(85, 85, 85)"><span class="modal-step-num" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219)">3</span> Top up &amp; deploy any service</div>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%" id="signupBtn">Create my token</button>
+        <div id="signupError" style="display:none;font-size:12px;color:#dc2626;margin-top:8px"></div>
+      </div>
+
+      <!-- Step B: token reveal + saved gate -->
+      <div id="register-token" style="display:none">
+        <div class="modal-token-banner" style="background-color: rgb(237, 241, 252); border-color: rgb(196, 214, 247)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: rgb(26, 86, 219); overflow: hidden"><path d="M12 3l8 3v6c0 4.5-3.4 8.5-8 9.5C7.4 20.5 4 16.5 4 12V6l8-3z"></path><path d="M9 12l2 2 4-4"></path></svg>
+          <div class="modal-token-banner-tx">
+            <strong style="color: rgb(18, 68, 176)">Your access token — shown once</strong>
+            <p style="color: rgb(85, 85, 85)">Copy it now — we can't recover it, reset it, or show it again.</p>
+          </div>
+        </div>
+        <div class="modal-token-box" style="background-color: rgb(247, 248, 250); border-color: rgb(224, 224, 224)">
+          <code id="newTokenValue" style="overflow: hidden">XXXX-XXXX-XXXX-XXXX</code>
+          <button type="button" id="copyTokenBtn" class="modal-token-copy" data-copy data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="overflow: hidden"><rect x="5" y="5" width="9" height="9" rx="1.4"></rect><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"></path></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <button type="button" class="bt bt-p" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s; width:100%;margin-top:12px" id="continueBtn">Continue to my account</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer" id="modal-footer-login" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111)">
+      No account? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">See how to register</a>
+    </div>
+    <div class="modal-footer" id="modal-footer-register" style="color: rgb(93, 102, 111); background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(93, 102, 111) rgb(93, 102, 111); display:none">
+      Already have a token? <a href="#" data-pseudo-states="░text-decoration-line:underline" style="color: rgb(26, 86, 219)">Login</a>
+    </div>
+  </div>
+</div>
+
+
+
+<main>
+
+<div style="border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(236, 236, 236); padding:8px 0;border-bottom:1px solid var(--bd2);font-size:12px;color:var(--tx3)"><div class="w">
+  <a href="/" style="color:var(--tx3)">Home</a> <span style="margin:0 4px">/</span>
+  <a href="/node-hosting" style="color:var(--tx3)">Blockchain Node Hosting</a> <span style="margin:0 4px">/</span>
+  <span style="color:var(--tx)">Lightning Node Hosting</span>
+</div></div>
+
+<section class="loc-hero" style="color: rgb(255, 255, 255); background-color: rgb(10, 22, 40); overflow: hidden; background-position: 50% 50%; background-size: cover; background-repeat: no-repeat; background-image:url(&quot;assets/anonport_com/hero-node-lightning-5f26f8c60e135c5880ccf47b93c41fb09b8a884593df8e2db3018c5ef75b5035.webp&quot;)">
+  <div class="w">
+    <div class="loc-hero-row" style="z-index: 1">
+      <div class="loc-hero-left">
+        <div class="topic-icon" style="background-color: rgba(96, 165, 250, 0.15); border-color: rgba(96, 165, 250, 0.3); backdrop-filter: blur(4px)"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: rgb(147, 197, 253); overflow: hidden"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div>
+        <div>
+          <div class="loc-hero-tag" style="color:#eab308">Instant payments, your channels</div>
+          <h1>Lightning Node Hosting</h1>
+          <p style="color: rgba(255, 255, 255, 0.6)">A Lightning node is only as good as its uptime. Run LND or Core Lightning on always-on offshore hardware with your own Bitcoin backend, keep your channel keys, and route payments from an IP that isn't your living room.</p>
+          <div class="hero-acts" style="margin-top:16px">
+            <a href="#plans" class="bt bt-p" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.9)" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">View recommended servers <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="overflow: hidden"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+            <a href="/node-hosting" class="bt bt-s" data-pseudo-states="░background-color:rgba(255, 255, 255, 0.18)" style="background-color: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); transition: 0.12s; transition-duration: 0.12s">All node types</a>
+          </div>
+        </div>
+      </div>
+      <div class="loc-hero-legal" style="background-color: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.1)">
+        <h2 style="color: rgba(255, 255, 255, 0.4)">Node requirements at a glance</h2>
+        <ul>
+                    <li style="color: rgba(255, 255, 255, 0.7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(52, 211, 153); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> <span style="opacity:.75">Client software:</span> <b style="font-weight:600">LND 0.19 / Core Lightning</b></li>
+                    <li style="color: rgba(255, 255, 255, 0.7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(52, 211, 153); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> <span style="opacity:.75">Chain size:</span> <b style="font-weight:600">BTC backend ≈ 760 GB</b></li>
+                    <li style="color: rgba(255, 255, 255, 0.7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(52, 211, 153); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> <span style="opacity:.75">Recommended RAM:</span> <b style="font-weight:600">8–16 GB</b></li>
+                    <li style="color: rgba(255, 255, 255, 0.7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(52, 211, 153); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> <span style="opacity:.75">Recommended storage:</span> <b style="font-weight:600">1–2 TB NVMe</b></li>
+                    <li style="color: rgba(255, 255, 255, 0.7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(52, 211, 153); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> <span style="opacity:.75">Initial sync:</span> <b style="font-weight:600">hours (over synced bitcoind)</b></li>
+                    <li style="color: rgba(255, 255, 255, 0.7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(52, 211, 153); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> <span style="opacity:.75">P2P port:</span> <b style="font-weight:600">9735 TCP</b></li>
+                  </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strip" style="background-color: rgb(255, 255, 255); border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="w"><div class="strip-in">
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> No KYC</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> Crypto Only</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> No Logs</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> Unlimited bandwidth</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85); border-color: rgb(85, 85, 85) rgb(236, 236, 236) rgb(85, 85, 85) rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> Full Root</div>
+  <div class="strip-i" style="color: rgb(85, 85, 85)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color: rgb(10, 122, 65); overflow: hidden"><path d="M5 12l5 5L20 7"></path></svg> NVMe SSD</div>
+</div></div></section>
+
+<section class="sc" style="padding-top:44px"><div class="w">
+  <div style="max-width:820px;margin:0 auto 40px;text-align:center">
+    <span class="ov" style="color: rgb(26, 86, 219)">Blockchain infrastructure</span>
+    <h2 style="font-size:clamp(20px,2.4vw,28px);font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px">Why host your Lightning node on a server</h2>
+    <p style="font-size:15px;color:var(--tx2);line-height:1.7">Lightning channels are live contracts: if your node goes offline you can't route, can't receive, and in the worst case an old channel state gets force-closed against you. Home nodes die with power cuts and flaky uplinks. A datacenter node with redundant power and unmetered bandwidth keeps your channels breathing 24/7 — and because the node holds hot keys, the no-KYC part matters twice: nobody should be able to look up whose money that is.</p>
+  </div>
+
+  <div class="grid grid-4" style="background-color: rgb(236, 236, 236); border-color: rgb(236, 236, 236); overflow: hidden">
+        <div class="cell cell-step" style="background-color: rgb(255, 255, 255)">
+      <div class="sn" style="color: rgb(26, 86, 219)">01</div>
+      <h3>Uptime is revenue</h3>
+      <p style="color: rgb(93, 102, 111)">Routing fees flow to nodes that are always reachable. Datacenter power and network beat any home setup's nines.</p>
+    </div>
+        <div class="cell cell-step" style="background-color: rgb(255, 255, 255)">
+      <div class="sn" style="color: rgb(26, 86, 219)">02</div>
+      <h3>Your own backend</h3>
+      <p style="color: rgb(93, 102, 111)">Every mapped plan runs bitcoind (pruned or full) on the same box — no third-party block source, no light-client compromise.</p>
+    </div>
+        <div class="cell cell-step" style="background-color: rgb(255, 255, 255)">
+      <div class="sn" style="color: rgb(26, 86, 219)">03</div>
+      <h3>Tor + clearnet hybrid</h3>
+      <p style="color: rgb(93, 102, 111)">Announce a clearnet address for throughput and a Tor address for privacy; LND handles both. Your home IP appears nowhere.</p>
+    </div>
+        <div class="cell cell-step" style="background-color: rgb(255, 255, 255)">
+      <div class="sn" style="color: rgb(26, 86, 219)">04</div>
+      <h3>Hot wallet, cold identity</h3>
+      <p style="color: rgb(93, 102, 111)">The channel wallet is hot by design. Hosting bought with a token and paid in crypto means the machine holding it isn't tied to your name.</p>
+    </div>
+      </div>
+</div></section>
+
+<!-- ─── Requirements table — data from includes/nodes.php ─── -->
+<section class="sc sc-a" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">Requirements</span><h2>Hardware requirements — Lightning Network</h2><p style="color: rgb(85, 85, 85)">Realistic sizing for a mainnet node in 2026 — chain size, memory, disk and bandwidth. Based on what actually runs in production, not on minimum specs that stopped being true two years ago.</p></div>
+  <div class="hscroll-wrap"><div class="tw" style="overflow: auto; max-width:820px;margin:0 auto"><table class="tb" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden">
+    <tbody>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">Client software</th>
+        <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">LND 0.19 / Core Lightning</td>
+      </tr>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">Chain size</th>
+        <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">BTC backend ≈ 760 GB</td>
+      </tr>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">Growth per year</th>
+        <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">channel DB: a few GB</td>
+      </tr>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">Recommended RAM</th>
+        <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">8–16 GB</td>
+      </tr>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">Recommended storage</th>
+        <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">1–2 TB NVMe</td>
+      </tr>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">Initial sync</th>
+        <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">hours (over synced bitcoind)</td>
+      </tr>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">Prunable</th>
+        <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">✓ (pruned bitcoind OK)</td>
+      </tr>
+            <tr>
+        <th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224); width:40%;text-align:left">P2P port</th>
+        <td>9735 TCP</td>
+      </tr>
+          </tbody>
+  </table></div><div class="hs-l" style="opacity: 0; z-index: 2; background-image: linear-gradient(to right, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div><div class="hs-r" style="opacity: 0; z-index: 2; background-image: linear-gradient(to left, rgba(10, 22, 40, 0.12), rgba(0, 0, 0, 0)); transition: opacity 0.18s; transition-property: opacity; transition-duration: 0.18s"></div></div>
+</div></section>
+
+<!-- ─── Recommended plans ─── -->
+<section class="sc" id="plans"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">Matched hardware</span><h2>Recommended servers for Lightning Network</h2><p style="color: rgb(85, 85, 85)">Every plan ships with unlimited bandwidth, NVMe storage and full root access — the three things a node actually consumes. Deploy with a token, pay in the same coin your node secures.</p></div>
+  <div class="grid grid-3" style="background-color: rgb(236, 236, 236); border-color: rgb(236, 236, 236); overflow: hidden">
+        <div class="cell" style="background-color: rgb(255, 255, 255); display:block;position:relative">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);margin-bottom:4px">Starter</div>
+      <h3 style="font-size:17px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px">VPS-XL · VPS</h3>
+            <ul style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:10px">
+        <li style="display:flex;gap:7px;align-items:flex-start"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>AMD EPYC 9124 (8 vCPU)</span></li>
+        <li style="display:flex;gap:7px;align-items:flex-start;margin-top:4px"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>32 GB DDR5 · 400 GB NVMe</span></li>
+        <li style="display:flex;gap:7px;align-items:flex-start;margin-top:4px"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>1 Gbps · Unlimited bandwidth</span></li>
+      </ul>
+      <p style="font-size:12.5px;color:var(--tx3);line-height:1.6;margin-bottom:12px">Pruned bitcoind + LND fit in 400 GB NVMe and 32 GB RAM — a serious hobby routing node at VPS price.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span style="font-size:13px;color:var(--tx2)">From <b class="pr" style="font-size:16px">$24.50</b>/mo</span>
+        <a href="/order?type=vps&amp;plan=MD-XL&amp;location=moldova" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a>
+      </div>
+    </div>
+        <div class="cell" style="background-color: rgb(255, 255, 255); display:block;position:relative;border-color:var(--ac);box-shadow:0 4px 18px rgba(26,86,219,.12)">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ac);margin-bottom:4px">Recommended</div>
+      <h3 style="font-size:17px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px">DS-1 · Dedicated</h3>
+            <ul style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:10px">
+        <li style="display:flex;gap:7px;align-items:flex-start"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>Intel Xeon E-2388G (3.2 GHz) (8C / 16T)</span></li>
+        <li style="display:flex;gap:7px;align-items:flex-start;margin-top:4px"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>64 GB DDR4 ECC · 2x 1TB NVMe</span></li>
+        <li style="display:flex;gap:7px;align-items:flex-start;margin-top:4px"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>2 Gbps · Unlimited bandwidth</span></li>
+      </ul>
+      <p style="font-size:12.5px;color:var(--tx3);line-height:1.6;margin-bottom:12px">Full-chain backend on 2× 1 TB NVMe, ECC RAM for the channel database, headroom for RTL or ThunderHub dashboards.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span style="font-size:13px;color:var(--tx2)">From <b class="pr" style="font-size:16px">$48.50</b>/mo</span>
+        <a href="/order?type=dedicated&amp;plan=MD-1&amp;location=moldova" class="bt bt-p bt-sm" style="color: rgb(255, 255, 255); background-color: rgb(26, 86, 219); transition: 0.12s; transition-duration: 0.12s">Order</a>
+      </div>
+    </div>
+        <div class="cell" style="background-color: rgb(255, 255, 255); display:block;position:relative">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx3);margin-bottom:4px">Performance</div>
+      <h3 style="font-size:17px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px">DS-2 · Dedicated</h3>
+            <ul style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:10px">
+        <li style="display:flex;gap:7px;align-items:flex-start"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>AMD Ryzen 9 7950X (4.5 GHz) (16C / 32T)</span></li>
+        <li style="display:flex;gap:7px;align-items:flex-start;margin-top:4px"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>128 GB DDR5 · 2x 2TB NVMe</span></li>
+        <li style="display:flex;gap:7px;align-items:flex-start;margin-top:4px"><svg viewBox="0 0 24 24" width="13" height="13" style="overflow: hidden; flex-shrink:0;margin-top:4px" fill="none" stroke="var(--gn)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"></path></svg> <span>5 Gbps · Unlimited bandwidth</span></li>
+      </ul>
+      <p style="font-size:12.5px;color:var(--tx3);line-height:1.6;margin-bottom:12px">Big routing nodes: archival bitcoind, multiple Lightning implementations, watchtowers for others — 16 cores and 2× 2 TB NVMe.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span style="font-size:13px;color:var(--tx2)">From <b class="pr" style="font-size:16px">$87.50</b>/mo</span>
+        <a href="/order?type=dedicated&amp;plan=MD-2&amp;location=moldova" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a>
+      </div>
+    </div>
+      </div>
+
+  <!-- Featured tier, every jurisdiction -->
+  <div style="margin-top:36px">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:8px">DS-1 — price by jurisdiction</h3>
+    <div class="tw tw-cards" style="overflow: auto"><table class="tb tb-cardify" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden">
+      <thead style="background-color: rgb(247, 248, 250)"><tr><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">Location</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">CPU</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">RAM</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">Storage</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">Uplink</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)">Price</th><th style="color: rgb(93, 102, 111); border-color: rgb(93, 102, 111) rgb(93, 102, 111) rgb(224, 224, 224)"></th></tr></thead>
+      <tbody>
+                <tr>
+          <td data-th="Location" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><span class="fi fi-md" style="background-image: url(&quot;assets/anonport_com/md-72e632c427bf30c14b9ae17b767d630af1673974cd38f4bec46c634efa026c1c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span> Moldova <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); margin-left:4px">Budget Offshore</span></td>
+          <td data-th="CPU" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="cpu-cell"><div class="cpu-cores">8C / 16T</div><div class="cpu-proc" style="color: rgb(93, 102, 111)">Intel Xeon E-2388G (3.2 GHz)</div></div></td>
+          <td data-th="RAM" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">64 GB DDR4 ECC</td>
+          <td data-th="Storage" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2x 1TB NVMe</td>
+          <td data-th="Uplink" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2 Gbps</td>
+          <td class="pr" data-th="Price" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$48.50/mo</td>
+          <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><a href="/order?type=dedicated&amp;plan=MD-1&amp;location=moldova" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a></td>
+        </tr>
+                <tr>
+          <td data-th="Location" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><span class="fi fi-ru" style="background-image: url(&quot;assets/anonport_com/ru-7100aaae51ff3b6a2bf0ca932b3bc518bdc760814725e7cca31d821a26c3dd7c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span> Russia <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); margin-left:4px">Western-Proof</span></td>
+          <td data-th="CPU" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="cpu-cell"><div class="cpu-cores">8C / 16T</div><div class="cpu-proc" style="color: rgb(93, 102, 111)">Intel Xeon E-2388G (3.2 GHz)</div></div></td>
+          <td data-th="RAM" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">64 GB DDR4 ECC</td>
+          <td data-th="Storage" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2x 1TB NVMe</td>
+          <td data-th="Uplink" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2 Gbps</td>
+          <td class="pr" data-th="Price" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$48.50/mo</td>
+          <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><a href="/order?type=dedicated&amp;plan=RU-1&amp;location=russia" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a></td>
+        </tr>
+                <tr>
+          <td data-th="Location" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><span class="fi fi-pa" style="background-image: url(&quot;assets/anonport_com/pa-6181586e499d3bafb6190e0304904662dc31fc878ec8efcfab879455c15e83c4.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span> Panama <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); margin-left:4px">No Data Retention</span></td>
+          <td data-th="CPU" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="cpu-cell"><div class="cpu-cores">8C / 16T</div><div class="cpu-proc" style="color: rgb(93, 102, 111)">Intel Xeon E-2388G (3.2 GHz)</div></div></td>
+          <td data-th="RAM" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">64 GB DDR4 ECC</td>
+          <td data-th="Storage" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2x 1TB NVMe</td>
+          <td data-th="Uplink" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2 Gbps</td>
+          <td class="pr" data-th="Price" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$53.50/mo</td>
+          <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><a href="/order?type=dedicated&amp;plan=PA-1&amp;location=panama" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a></td>
+        </tr>
+                <tr>
+          <td data-th="Location" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><span class="fi fi-ro" style="background-image: url(&quot;assets/anonport_com/ro-17a3a747fc5e63302aaa670a667e5812f3676f46768e5a3e87b254bd41762840.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span> Romania <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); margin-left:4px">Anti-Retention</span></td>
+          <td data-th="CPU" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="cpu-cell"><div class="cpu-cores">8C / 16T</div><div class="cpu-proc" style="color: rgb(93, 102, 111)">Intel Xeon E-2388G (3.2 GHz)</div></div></td>
+          <td data-th="RAM" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">64 GB DDR4 ECC</td>
+          <td data-th="Storage" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2x 1TB NVMe</td>
+          <td data-th="Uplink" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2 Gbps</td>
+          <td class="pr" data-th="Price" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$53.50/mo</td>
+          <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><a href="/order?type=dedicated&amp;plan=RO-1&amp;location=romania" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a></td>
+        </tr>
+                <tr>
+          <td data-th="Location" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><span class="fi fi-nl" style="background-image: url(&quot;assets/anonport_com/nl-8f691f17fe70894537af8e92f2ca47761d353639b0defc15cbe561eb503ab010.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span> Netherlands <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); margin-left:4px">Best Peering</span></td>
+          <td data-th="CPU" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="cpu-cell"><div class="cpu-cores">8C / 16T</div><div class="cpu-proc" style="color: rgb(93, 102, 111)">Intel Xeon E-2388G (3.2 GHz)</div></div></td>
+          <td data-th="RAM" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">64 GB DDR4 ECC</td>
+          <td data-th="Storage" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2x 1TB NVMe</td>
+          <td data-th="Uplink" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2 Gbps</td>
+          <td class="pr" data-th="Price" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$58.50/mo</td>
+          <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><a href="/order?type=dedicated&amp;plan=NL-1&amp;location=netherlands" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a></td>
+        </tr>
+                <tr>
+          <td data-th="Location" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><span class="fi fi-is" style="background-image: url(&quot;assets/anonport_com/is-4ef2de6fb25ff5a16789e8ffc3b68894527e68c89dce3b4e1118f5bbcc0bb7ae.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span> Iceland <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); margin-left:4px">Free Speech Haven</span></td>
+          <td data-th="CPU" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><div class="cpu-cell"><div class="cpu-cores">8C / 16T</div><div class="cpu-proc" style="color: rgb(93, 102, 111)">Intel Xeon E-2388G (3.2 GHz)</div></div></td>
+          <td data-th="RAM" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">64 GB DDR4 ECC</td>
+          <td data-th="Storage" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2x 1TB NVMe</td>
+          <td data-th="Uplink" style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)">2 Gbps</td>
+          <td class="pr" data-th="Price" style="color: rgb(26, 86, 219); border-color: rgb(26, 86, 219) rgb(26, 86, 219) rgb(236, 236, 236)">$63.00/mo</td>
+          <td style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236)"><a href="/order?type=dedicated&amp;plan=IS-1&amp;location=iceland" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a></td>
+        </tr>
+                <tr>
+          <td data-th="Location"><span class="fi fi-ch" style="background-image: url(&quot;assets/anonport_com/ch-ac676cd39d7032988598ef2dd73f6bebcd767738e3e469705d6a437835ac485c.svg&quot;); background-position: 50% 50%; background-size: contain; background-repeat: no-repeat"></span> Switzerland <span class="tg tg-a" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); margin-left:4px">Premium Privacy</span></td>
+          <td data-th="CPU"><div class="cpu-cell"><div class="cpu-cores">8C / 16T</div><div class="cpu-proc" style="color: rgb(93, 102, 111)">Intel Xeon E-2388G (3.2 GHz)</div></div></td>
+          <td data-th="RAM">64 GB DDR4 ECC</td>
+          <td data-th="Storage">2x 1TB NVMe</td>
+          <td data-th="Uplink">2 Gbps</td>
+          <td class="pr" data-th="Price" style="color: rgb(26, 86, 219)">$68.00/mo</td>
+          <td><a href="/order?type=dedicated&amp;plan=CH-1&amp;location=switzerland" class="bt bt-o bt-sm" data-pseudo-states="░color:var(--ac)" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s">Order</a></td>
+        </tr>
+              </tbody>
+    </table></div>
+    <p style="font-size:13px;color:var(--tx3);margin-top:8px">Need more disk, RAM or a custom RAID layout for your node? <a href="/contact" style="color:var(--ac);font-weight:600" data-pseudo-states="░text-decoration-color:currentcolor">Contact →</a></p>
+  </div>
+</div></section>
+
+<!-- ─── Setup — visible rendition of the HowTo JSON-LD ─── -->
+<section class="sc sc-a" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">Deployment</span><h2>Launch a Lightning routing node in 5 steps</h2><p style="color: rgb(85, 85, 85)">From order to synced node. Commands are copy-paste ready for Ubuntu 24.04 — adapt paths if you run Debian or Rocky.</p></div>
+  <div style="max-width:820px;margin:0 auto">
+    <ol style="list-style:none;padding:0;margin:0">
+            <li style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--bd2)">
+        <div style="background-color: rgb(26, 86, 219); flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">1</div>
+        <div style="flex:1;min-width:0">
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 6px">Order an always-on box</h3>
+          <p style="font-size:14px;line-height:1.7;color:var(--tx2);margin:0">DS-1 recommended — Lightning wants dedicated uptime. <a href="/dedicated/netherlands" data-pseudo-states="░text-decoration-color:currentcolor">Netherlands</a> peering helps you reach the big hub nodes with low latency.</p>
+                  </div>
+      </li>
+            <li style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--bd2)">
+        <div style="background-color: rgb(26, 86, 219); flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">2</div>
+        <div style="flex:1;min-width:0">
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 6px">Harden, then sync the Bitcoin backend</h3>
+          <p style="font-size:14px;line-height:1.7;color:var(--tx2);margin:0">Follow the <a href="/node-hosting/bitcoin" data-pseudo-states="░text-decoration-color:currentcolor">Bitcoin node setup</a> first — pruned is fine for LND. Enable Tor while the chain syncs.</p>
+                  </div>
+      </li>
+            <li style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--bd2)">
+        <div style="background-color: rgb(26, 86, 219); flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">3</div>
+        <div style="flex:1;min-width:0">
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 6px">Install LND (or Core Lightning)</h3>
+          <p style="font-size:14px;line-height:1.7;color:var(--tx2);margin:0">Grab the release binaries, verify signatures, install. Create a dedicated user and a systemd unit so the node survives reboots.</p>
+                    <pre style="overflow: auto; margin:10px 0 0;padding:12px 14px;background:#0a1628;color:#c9d6e8;border-radius:8px;font-size:12px;line-height:1.65;overflow-x:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace"><code># after bitcoind is synced (pruned is fine for LND)
+wget https://github.com/lightningnetwork/lnd/releases/download/v0.19.0-beta/lnd-linux-amd64-v0.19.0-beta.tar.gz
+tar xzf lnd-linux-amd64-v0.19.0-beta.tar.gz &amp;&amp; install -m 0755 lnd-linux-amd64-v0.19.0-beta/* /usr/local/bin/</code></pre>
+                  </div>
+      </li>
+            <li style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--bd2)">
+        <div style="background-color: rgb(26, 86, 219); flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">4</div>
+        <div style="flex:1;min-width:0">
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 6px">Configure for routing</h3>
+          <p style="font-size:14px;line-height:1.7;color:var(--tx2);margin:0">Point LND at your bitcoind, enable tor.active with a static onion address, set your alias and fee policy. Back up the seed offline — channel funds depend on it.</p>
+                    <pre style="overflow: auto; margin:10px 0 0;padding:12px 14px;background:#0a1628;color:#c9d6e8;border-radius:8px;font-size:12px;line-height:1.65;overflow-x:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace"><code># ~/.lnd/lnd.conf
+bitcoin.mainnet=1
+bitcoin.node=bitcoind
+tor.active=1          # hide your node's IP
+tor.v3=1</code></pre>
+                  </div>
+      </li>
+            <li style="border-color: rgb(17, 17, 17) rgb(17, 17, 17) rgb(236, 236, 236); display:flex;gap:18px;padding:16px 0;border-bottom:1px solid var(--bd2)">
+        <div style="background-color: rgb(26, 86, 219); flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">5</div>
+        <div style="flex:1;min-width:0">
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 6px">Open channels &amp; monitor</h3>
+          <p style="font-size:14px;line-height:1.7;color:var(--tx2);margin:0">Fund the wallet, open channels to well-connected peers, install RTL or ThunderHub as a dashboard, and push static channel backups (SCB) off-box automatically.</p>
+                    <pre style="overflow: auto; margin:10px 0 0;padding:12px 14px;background:#0a1628;color:#c9d6e8;border-radius:8px;font-size:12px;line-height:1.65;overflow-x:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace"><code>lnd &amp;
+lncli create        # scripted wallet init
+lncli getinfo</code></pre>
+                  </div>
+      </li>
+          </ol>
+  </div>
+</div></section>
+
+<!-- ─── Deep-dive sections ─── -->
+<section class="sc"><div class="w">
+  <div style="max-width:820px;margin:0 auto">
+    <div class="topic-body">
+            <div class="topic-block" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">
+        <h2>The hardware a Lightning node actually needs</h2>
+        <p style="color: rgb(85, 85, 85)">The Lightning software itself is light — a few GB of channel database, 2–4 GB of RAM. The real weight is the Bitcoin backend behind it: pruned (~50–100 GB) or full (~760 GB). What Lightning uniquely demands is reliability: NVMe that won't corrupt the channel database under sudden load, ECC memory on the dedicated tiers, and a network that never disappears mid-HTLC. That's why the recommended tier is bare metal even though the CPU rarely breaks a sweat.</p>
+      </div>
+            <div class="topic-block" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">
+        <h2>Uptime, watchtowers and not losing money</h2>
+        <p style="color: rgb(85, 85, 85)">Force-closes hurt: if your node is offline while a peer broadcasts an old state, only a watchtower can punish the cheat. Run your node where uptime is backed by a 99.9% SLA, add an external watchtower (or host one for friends on the same box), and keep static channel backups synced off-server. The node's job is to never miss a block — everything else is fee tuning.</p>
+      </div>
+            <div class="topic-block" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">
+        <h2>Privacy for routing node operators</h2>
+        <p style="color: rgb(85, 85, 85)">Your node's alias, pubkey and IP are public on every Lightning explorer. If that IP is your home, your physical location is one lookup away from your channel balances. Hosting offshore under a token breaks the chain: explorers see a Moldovan or Icelandic datacenter, payments route exactly the same, and the operator behind the pubkey stays unmapped. Add a Tor-only announce address if you want the node fully dark.</p>
+      </div>
+            <div class="topic-block" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">
+        <h2>From hobby node to routing business</h2>
+        <p style="color: rgb(85, 85, 85)">Start with a few million sats across 3–5 well-picked channels on the Starter tier. When forwards become steady, move up: more RAM keeps bigger channel graphs in memory, more disk lets the backend go archival, and spare cores host a second implementation or an LNbits stack. Migration is a channel-preserving copy of the LND directory — or run old and new in parallel and rebalance across.</p>
+      </div>
+          </div>
+  </div>
+</div></section>
+
+<!-- ─── FAQ ─── -->
+<section class="sc sc-a" style="background-color: rgb(247, 248, 250)"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">FAQ</span><h2>Lightning node hosting FAQ</h2></div>
+  <div class="faq" style="max-width:820px;margin:0 auto">
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">01</span>
+        <span class="fq-t">Can I run Lightning over a pruned Bitcoin node?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Yes — LND and Core Lightning both work over a pruned bitcoind (keep a comfortable prune target, ≥100 GB, for safety during long channel closes). Full chain removes edge cases and is what the DS-1 tier is sized for.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">02</span>
+        <span class="fq-t">How much uptime do I really need?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">For receiving and routing: as much as possible — every offline minute is a missed forward. For fund safety your node must reappear well within the CLTV window, but don't play with that margin. Datacenter hosting makes the question moot.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">03</span>
+        <span class="fq-t">Is a VPS enough, or do I need dedicated?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">A VPS-XL runs a real routing node fine. Dedicated buys ECC RAM, private NVMe for the channel database and immunity from noisy neighbours during traffic spikes — worth it once channels hold serious value.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">04</span>
+        <span class="fq-t">The node wallet is hot — do you have access to it?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">No. Full root is yours, disks can be LUKS-encrypted, and we keep no images or console trail. Operational security of the seed and macaroons stays entirely in your hands — as it should.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">05</span>
+        <span class="fq-t">Can I actually earn routing fees?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Well-managed nodes with good channel placement and fee tuning earn; poorly placed ones don't. Nobody serious promises yield. What hosting controls is the one variable you can't tune later: being online every hour of every day.</p></div>
+    </details>
+        <details class="fq" style="background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236); overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; transition-property: border-color, box-shadow; transition-duration: 0.15s, 0.15s; transition-timing-function: ease, ease; transition-delay: 0s, 0s">
+      <summary class="fq-q" style="transition: color 0.12s; transition-property: color; transition-duration: 0.12s">
+        <span class="fq-n" style="color: rgb(26, 86, 219); background-color: rgb(237, 241, 252); transition: 0.15s; transition-duration: 0.15s">06</span>
+        <span class="fq-t">Clearnet, Tor, or both?</span>
+        <span class="fq-i" aria-hidden="true" style="opacity: 0.45; transition: opacity 0.15s; transition-property: opacity; transition-duration: 0.15s"></span>
+      </summary>
+      <div class="fq-a"><p style="color: rgb(85, 85, 85)">Both is the pragmatic answer: clearnet for throughput and peer quality, a v3 onion for privacy and NAT-free inbound. LND's tor.active plus externalip covers the hybrid setup — both flags are in step 4.</p></div>
+    </details>
+      </div>
+</div></section>
+
+<!-- ─── Other node types + related reading ─── -->
+<section class="sc"><div class="w">
+  <div class="sc-hd c"><span class="ov" style="color: rgb(26, 86, 219)">Keep exploring</span><h2>Host a node for every chain we accept</h2></div>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+        <a href="/node-hosting/bitcoin" class="bt bt-o bt-sm" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s; display:inline-flex;align-items:center;gap:6px" data-pseudo-states="░color:var(--ac)"><img src="assets/anonport_com/btc-5a8131ecdf855b12cb56080aeeeefea266976529c45b2d58c284a13b7519f4ca.svg" alt aria-hidden="true" width="14" height="14" loading="eager"> Bitcoin Node Hosting</a>
+        <a href="/node-hosting/ethereum" class="bt bt-o bt-sm" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s; display:inline-flex;align-items:center;gap:6px" data-pseudo-states="░color:var(--ac)"><img src="assets/anonport_com/eth-1f94df8533f61806f7b17eaf9cd28678cdba66e1d82a9ca8f9fb38d35a907e9c.svg" alt aria-hidden="true" width="14" height="14" loading="eager"> Ethereum Node Hosting</a>
+        <a href="/node-hosting/monero" class="bt bt-o bt-sm" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s; display:inline-flex;align-items:center;gap:6px" data-pseudo-states="░color:var(--ac)"><img src="assets/anonport_com/xmr-6de76fc228601bf3e523ff3d1c27e36ef6b77ef1dc4915dea977bcdae34ccc9a.svg" alt aria-hidden="true" width="14" height="14" loading="eager"> Monero Node Hosting</a>
+        <a href="/node-hosting/solana" class="bt bt-o bt-sm" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s; display:inline-flex;align-items:center;gap:6px" data-pseudo-states="░color:var(--ac)"><img src="assets/anonport_com/sol-94e47e7c108a338cc4a79b82673d66cfbadfcf4c934ccb9c2ca8f13e8ea7dbb2.svg" alt aria-hidden="true" width="14" height="14" loading="eager"> Solana Validator &amp; RPC Hosting</a>
+        <a href="/node-hosting/litecoin" class="bt bt-o bt-sm" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s; display:inline-flex;align-items:center;gap:6px" data-pseudo-states="░color:var(--ac)"><img src="assets/anonport_com/ltc-85df17a75136131c0bb9065e16adcf82ab6d13a24579ae63af5414e2c4f5af8f.svg" alt aria-hidden="true" width="14" height="14" loading="eager"> Litecoin Node Hosting</a>
+        <a href="/node-hosting/tron" class="bt bt-o bt-sm" style="background-color: rgb(255, 255, 255); border-color: rgb(224, 224, 224); transition: 0.12s; transition-duration: 0.12s; display:inline-flex;align-items:center;gap:6px" data-pseudo-states="░color:var(--ac)"><img src="assets/anonport_com/trx-f114bce881eea10122daf5268bfe373318b467568510bf7fca6dc338ba3533ec.svg" alt aria-hidden="true" width="14" height="14" loading="eager"> TRON Node Hosting</a>
+        <a href="/node-hosting" class="bt bt-s bt-sm" style="background-color: rgb(240, 241, 244); transition: 0.12s; transition-duration: 0.12s">All node types →</a>
+  </div>
+  <p style="font-size:13px;color:var(--tx3);text-align:center;margin-top:18px">
+    Related reading:
+        <a href="/guides/crypto-payments-monero-vs-bitcoin-vs-usdt" style="color:var(--ac);font-weight:600" data-pseudo-states="░text-decoration-color:currentcolor">Crypto Payments for Hosting: Monero vs Bitcoin vs USDT</a> · <a href="/guides/first-hour-vps-hardening-checklist" style="color:var(--ac);font-weight:600" data-pseudo-states="░text-decoration-color:currentcolor">The First Hour of VPS Hardening: A Checklist</a> · <a href="/use-cases/crypto-node-hosting" style="color:var(--ac);font-weight:600" data-pseudo-states="░text-decoration-color:currentcolor">Crypto nodes</a>
+  </p>
+</div></section>
+
+<section class="cta" style="color: rgb(255, 255, 255); background-color: rgb(10, 22, 40); overflow: hidden; background-position: 50% 50%; background-size: cover; background-repeat: no-repeat; background-image:url(&quot;assets/anonport_com/cta-nodes-57ceaf81122cf5c01cb8400508c198c2e92f1e588c0c0d946d56cab6e1b1dc65.webp&quot;)"><div class="w" style="z-index: 1">
+  <h2>Route payments around the clock</h2>
+  <p style="color: rgba(255, 255, 255, 0.55)">Always-on hardware for LND or Core Lightning, Bitcoin backend included, paid in BTC. Channels stay up because the box never goes down.</p>
+  <div style="display:flex;gap:8px;justify-content:center">
+    <a href="#plans" class="bt bt-w" style="color: rgb(17, 17, 17); background-color: rgb(255, 255, 255); transition: 0.12s; transition-duration: 0.12s">View recommended servers</a>
+    <a href="/node-hosting" class="bt bt-g" data-pseudo-states="░color:rgb(255, 255, 255)" style="color: rgba(255, 255, 255, 0.6); transition: 0.12s; transition-duration: 0.12s">All node types</a>
+  </div>
+</div></section>
+
+</main>
+<footer class="ft" style="background-color: rgb(247, 248, 250); border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)"><div class="w">
+  <div class="ft-g">
+    <div class="ft-brand">
+      <div class="logo"><img src="assets/anonport_com/AnonPort-102aa1f44e3386f245557cad3f13c2a17490018b788fdf5353c9c4f66ef534c5.webp" alt="AnonPort" width="120" height="32"></div>
+      <p class="ft-desc" style="color: rgb(93, 102, 111)">Offshore VPS &amp; dedicated servers in 7 offshore jurisdictions. No KYC, no logs, crypto only. Privacy by architecture.</p>
+      <div class="cry" style="margin-top:14px" title="8 crypto coins accepted: BTC, XMR, ETH, USDT, SOL, LTC, TRX"><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">BTC</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">XMR</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">ETH</span><span style="color: rgb(93, 102, 111); background-color: rgb(255, 255, 255); border-color: rgb(236, 236, 236)">USDT</span><span class="cry-more" style="color: rgb(93, 102, 111); border-color: rgb(236, 236, 236)">+5</span></div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Services</p>
+      <div class="ft-lk">
+        <a href="/vps" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">VPS</a>
+        <a href="/dedicated" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Dedicated</a>
+        <a href="/rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Windows RDP</a>
+        <a href="/gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">GPU AI Hosting <span style="display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:#76b900;color:#132a00;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/node-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Node Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/censorship-resistant-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anti-Censorship Hosting <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+        <a href="/domains" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Domain Names <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+                <a href="/com-domain" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">.com $4.99</a>
+        <a href="/locations" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">All Locations</a>
+        <a href="/jurisdiction-selector" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Find Best Jurisdiction</a>
+        <a href="/alternatives" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Alternatives</a>
+        <a href="/guides" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Guides</a>
+        <a href="/use-cases" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Use cases</a>
+        <a href="/faq" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">FAQ</a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Solutions</p>
+      <div class="ft-lk">
+        <a href="/no-kyc-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No KYC Hosting</a>
+        <a href="/dmca-ignored-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">DMCA Ignored</a>
+        <a href="/bitcoin-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Bitcoin Hosting</a>
+        <a href="/anonymous-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Anonymous Hosting</a>
+        <a href="/offshore-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Offshore Hosting</a>
+        <a href="/monero-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Monero Hosting</a>
+        <a href="/no-kyc-rdp" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC RDP</a>
+        <a href="/no-kyc-gpu" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">No-KYC GPU</a>
+        <a href="/uncensored-ai-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Uncensored AI Hosting</a>
+        <a href="/crypto-gpu-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Crypto GPU Hosting</a>
+        <a href="/ai-agent-hosting" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">AI Agent Hosting</a>
+        <a href="/agents" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Agent API <span style="background-color: rgb(26, 86, 219); display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--ac);color:#fff;letter-spacing:.04em;margin-left:3px;vertical-align:middle">NEW</span></a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-h" style="color: rgb(104, 112, 122)">Company</p>
+      <div class="ft-lk">
+        <a href="/about" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">About</a>
+        <a href="/contact" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Contact</a>
+        <a href="/status" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Status</a>
+        <a href="/canary" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Warrant Canary</a>
+        <a href="/press" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Press Kit</a>
+        <a href="/tos" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Terms of Service</a>
+        <a href="/privacy" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ft-bt" style="border-color: rgb(236, 236, 236) rgb(17, 17, 17) rgb(17, 17, 17)">
+        <p class="ft-updated" style="font-size:12px;color:var(--tx4);margin:0 0 6px">Last updated: <time datetime="2026-10-18" style="color:var(--tx2,#444);font-weight:500">October 18, 2026</time></p>
+    <p style="color: rgb(104, 112, 122)">© 2026 AnonPort — No registered entity. No personal data stored. No logs. No KYC.</p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Jurisdictions:</span>
+      <a href="/servers/iceland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Iceland</a> ·
+      <a href="/servers/panama" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Panama</a> ·
+      <a href="/servers/moldova" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Moldova</a> ·
+      <a href="/servers/romania" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Romania</a> ·
+      <a href="/servers/switzerland" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Switzerland</a> ·
+      <a href="/servers/netherlands" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Netherlands</a> ·
+      <a href="/servers/russia" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Russia</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Use cases:</span>
+      <a href="/use-cases/tor-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Tor</a> ·
+      <a href="/use-cases/vpn-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">VPN</a> ·
+      <a href="/use-cases/mail-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Mail</a> ·
+      <a href="/use-cases/game-server-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Game</a> ·
+      <a href="/use-cases/crypto-node-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Crypto nodes</a> ·
+      <a href="/use-cases/seedbox-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Seedbox</a>
+    </p>
+    <p class="ft-sm" style="color: rgb(104, 112, 122)">
+      <span>Compare:</span>
+      <a href="/guides/best-offshore-hosting-providers" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Best offshore hosts 2026</a> ·
+      <a href="/alternative-to-njalla" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Njalla</a> ·
+      <a href="/alternative-to-flokinet" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">FlokiNET</a> ·
+      <a href="/alternative-to-1984-hosting" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">1984</a> ·
+      <a href="/alternative-to-orangewebsite" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OrangeWebsite</a> ·
+      <a href="/alternative-to-buyvm" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">BuyVM</a> ·
+      <a href="/alternative-to-hetzner" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">Hetzner</a> ·
+      <a href="/alternative-to-ovh" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">OVH</a> ·
+      <a href="/alternative-to-aws" data-pseudo-states="░color:var(--tx2)" style="transition: 0.12s; transition-duration: 0.12s">AWS</a>
+    </p>
+  </div>
+</div></footer>
+<nav class="bnav" aria-label="Services">
+  <a href="/" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg>
+    <span>Home</span>
+  </a>
+  <a href="/vps" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="3" y="4" width="18" height="7" rx="1.5"></rect><rect x="3" y="13" width="18" height="7" rx="1.5"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>
+    <span>VPS</span>
+  </a>
+  <a href="/gpu" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><rect x="5" y="5" width="14" height="14" rx="2"></rect><rect x="9.5" y="9.5" width="5" height="5" rx="1"></rect><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path></svg>
+    <span>GPU</span>
+  </a>
+  <a href="/domains" class data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a13.5 13.5 0 0 1 0 18M12 3a13.5 13.5 0 0 0 0 18"></path></svg>
+    <span>Domains</span>
+  </a>
+    <a href="#" data-pseudo-states="░color:var(--tx)" style="color: rgb(93, 102, 111); transition: 0.12s; transition-duration: 0.12s">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow: hidden"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+    <span>Account</span>
+  </a>
+</nav>
+
+
+
+
+
+
+</body><div id="immersive-translate-browser-popup" style="--bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; all: initial"><div id="mount" style="position: absolute; top: 6406.69px; right: 3175px; bottom: -5135.69px; left: 0px; inset: 6406.69px 3175px -5135.69px 0px; width: 250px; min-width: 250px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; transform-origin: 125px 0px; perspective-origin: 125px 0px; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; display: block;"><div hidden id="immersive-translate-popup-overlay" class="immersive-translate-popup-overlay" style="position: fixed; top: 0px; left: 0px; inset: 0px auto auto 0px; width: 100%; height: 100%; box-sizing: border-box; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgba(0, 0, 0, 0.5) none repeat scroll 0% 0% / auto padding-box border-box; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; z-index: 2147483647; background-color: rgba(0, 0, 0, 0.5);"><div class="immersive-translate-popup-wrapper" style="inset: 50% auto auto 50%; width: auto; height: auto; border-radius: 20px; box-sizing: border-box; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, Ubuntu, Cantarell, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 17px; line-height: 25.5px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; background-color: rgb(255, 255, 255); box-shadow: rgba(14, 18, 22, 0.08) 2px 10px 24px 0px; transform-origin: 50% 50%; perspective-origin: 50% 50%; --bg: #fff; --bg2: #f7f8fa; --bg3: #f0f1f4; --tx: #111; --tx2: #555; --tx3: #5d666f; --tx4: #68707a; --bd: #e0e0e0; --bd2: #ececec; --ac: #1a56db; --ac2: #1244b0; --ac-bg: #edf1fc; --gn: #0a7a41; --gn-bg: #eaf6ef; --w: 1240px; --hh: 52px; --r: 5px; --f: 'Plus Jakarta Sans',system-ui,sans-serif; position: fixed; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);"></div></div></div></div></html>
