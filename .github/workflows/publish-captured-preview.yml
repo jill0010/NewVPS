@@ -1,0 +1,57 @@
+name: Publish captured preview to GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build-captured-preview.py'
+      - 'scripts/inventory-captured-routes.py'
+      - 'reports/captured-route-inventory.csv'
+      - '.github/workflows/publish-captured-preview.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: captured-pages-preview
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build archived preview
+        run: |
+          python3 scripts/inventory-captured-routes.py
+          python3 scripts/build-captured-preview.py
+      - name: Rewrite absolute paths for GitHub Pages project subdirectory
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          root = Path('dist-captured')
+          base = '/NewVPS'
+          for file in root.rglob('index.html'):
+              html = file.read_text(encoding='utf-8')
+              # Prefix root-relative URLs in HTML attributes and CSS url() references.
+              html = re.sub(r'((?:href|src|action|poster)=["\\x27])/(?!/)', lambda m: m.group(1) + base + '/', html)
+              html = re.sub(r'(url\\(\\s*["\\x27]?)/(?!/)', lambda m: m.group(1) + base + '/', html)
+              # Captured assets are sometimes embedded as escaped strings.
+              html = html.replace('/_captures/', base + '/_captures/')
+              html = html.replace(base + base + '/_captures/', base + '/_captures/')
+              file.write_text(html, encoding='utf-8')
+          (root / '.nojekyll').touch()
+          PY
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-captured
+      - id: deployment
+        uses: actions/deploy-pages@v4
