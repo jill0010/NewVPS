@@ -45,12 +45,12 @@ jobs:
               print('MISSING', route)
           if missing:
               raise SystemExit(1)
+          extensions = r'(?:svg|png|jpe?g|webp|gif|css|js|woff2?|ttf|ico)'
+          asset_pattern = re.compile(r'/_captures/[A-Za-z0-9_./-]+\\.' + extensions + r'(?=[^A-Za-z0-9_.-]|$)')
           for page in pages:
               text = page.read_text(encoding='utf-8')
-              for match in re.findall(r'/_captures/[^\\s"\\x27)<>]+', text):
-                  # HTML entity-escaped quotes (&quot;) and ampersands are not filename characters.
-                  asset = html.unescape(match).split('?', 1)[0].split('#', 1)[0]
-                  asset = asset.rstrip('";,')
+              for match in asset_pattern.finditer(text):
+                  asset = match.group(0)
                   local = root / asset.lstrip('/')
                   if not local.is_file():
                       raise SystemExit(f'Missing local asset {asset} referenced by {page}')
