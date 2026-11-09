@@ -55,6 +55,6 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.NEWVPS_SUPABASE_ACCESS_TOKEN }}
         run: |
-          npx --yes supabase@latest functions deploy account-page --project-ref gvsnbmejydgzqzzjyykt --no-verify-jwt
+          npx --yes supabase@latest functions deploy account-page --remote=gvsnbmejydgzqzzjyykt --no-verify-jwt --yes
       - name: Show independent account URL
         run: echo "https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/account-page"
