@@ -176,46 +176,7 @@ def main():
     var custom=document.getElementById('topup-custom-input');
     var buttons=[...form.querySelectorAll('[data-amt]')];
     var msg=document.getElementById('topup-msg');
-    function money(n){return '
-    # Missing targets are reported without inventing pages or masking real 404s.
-    known = set(written)
-    missing_links = {}
-    for route in known:
-        page = OUT.joinpath(*safe_route(route), "index.html")
-        parser = LinkCollector()
-        parser.feed(page.read_text(encoding="utf-8", errors="replace"))
-        for href in parser.links:
-            parsed = urlsplit(href)
-            if parsed.scheme and parsed.scheme not in ("http", "https"):
-                continue
-            if parsed.netloc and parsed.netloc.lower() not in ("anonport.com", "www.anonport.com"):
-                continue
-            if not href.startswith("/") and not parsed.netloc:
-                continue
-            target = unquote(parsed.path).rstrip("/") or "/"
-            if target.startswith("/_captures/") or target.startswith("/assets/"):
-                continue
-            if "." in target.rsplit("/", 1)[-1]:
-                continue
-            if target not in known:
-                missing_links.setdefault(target, set()).add(route)
-    report = ROOT / "reports" / "captured-preview-missing-links.csv"
-    report.parent.mkdir(exist_ok=True)
-    with report.open("w", encoding="utf-8", newline="") as output:
-        writer = csv.writer(output)
-        writer.writerow(("missing_route", "linked_from", "referring_pages"))
-        for target, sources in sorted(missing_links.items()):
-            writer.writerow((target, len(sources), " | ".join(sorted(sources)[:12])))
-    # Publish the same audit beside the static preview for convenient review.
-    shutil.copy2(report, OUT / "missing-routes.csv")
-    print(f"Navigation audit: {len(missing_links)} unresolved internal routes -> {report}")
-    print(f"Built {len(written)} static preview routes in {OUT}")
-    print("This is a static archive preview. Login, registration, checkout and payments are NOT functional.")
-    print("Do not deploy to production without validating interactive functionality.")
-
-if __name__ == "__main__":
-    main()
-+Number(n).toLocaleString('en-US',{maximumFractionDigits:2})}
+    function money(n){return '$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:2})}
     function render(value){
       var n=Number(value);if(!Number.isFinite(n)||n<30||n>2000){if(msg)msg.textContent='Enter an amount between $30 and $2,000.';return}
       if(msg)msg.textContent='';if(amount)amount.value=n;
@@ -231,7 +192,7 @@ if __name__ == "__main__":
     render(100);
     form.addEventListener('submit',function(e){e.preventDefault();if(msg)msg.textContent='Payment processing is not connected yet. No charge has been made.'});
     function tab(){var key=new URLSearchParams(location.search).get('tab')||'overview';
-      document.querySelectorAll('[data-pane]').forEach(el=>{el.style.display=el.dataset.pane===key?'':'none'});
+      document.querySelectorAll('[data-pane]').forEach(el=>{var active=el.dataset.pane===key;el.style.display=active?'':'none';el.classList.toggle('on',active)});\n      document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('on',el.dataset.tab===key));
     }
     document.querySelectorAll('[data-tab]').forEach(a=>a.addEventListener('click',function(e){var key=a.dataset.tab;if(!key)return;e.preventDefault();history.pushState({},'',location.pathname+'?tab='+encodeURIComponent(key));tab()}));
     addEventListener('popstate',tab);tab();
@@ -242,6 +203,13 @@ if __name__ == "__main__":
         html = html.replace("</body>", bridge + "\\n</body>", 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Enabled archived account top-up amount selection and preview; payment remains disabled")
+    # Provide the archived /topup URL as an alias of the original account top-up pane.
+    # The actual form and styling remain those captured in the original account page.
+    if dashboard.is_file():
+        alias = OUT / "topup" / "index.html"
+        alias.parent.mkdir(parents=True, exist_ok=True)
+        alias.write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/NewVPS/account/?tab=topup"><script>location.replace("/NewVPS/account/?tab=topup"+location.hash)</script><title>Top up</title><a href="/NewVPS/account/?tab=topup">Continue to Add credit</a></html>', encoding="utf-8")
+        written["/topup"] = "alias of archived /account?tab=topup"
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
