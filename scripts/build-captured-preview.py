@@ -139,7 +139,10 @@ def main():
         destination = OUT / "archived-order" / capture_id / "index.html"
         destination.parent.mkdir(parents=True, exist_ok=True)
         html = source.read_text(encoding="utf-8", errors="replace")
-        html = html.replace("assets/", "/_captures/" + capture_id + "/assets/")
+        # Apply the same boundary-aware rewrite as normal captured pages.
+        # A global replace would corrupt already-absolute paths or script text.
+        html = re.sub(r'(?<![\\w/])assets/', "/_captures/" + capture_id + "/assets/", html)
+        html = re.sub(r'\\sdata-immersive-translate-[\\w-]+="[^"]*"', '', html)
         destination.write_text(html, encoding="utf-8")
         asset_source = source.parent / "assets"
         if asset_source.is_dir():
