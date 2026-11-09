@@ -68,11 +68,23 @@ def main():
             continue
         capture_id = source.parent.name
         # Namespace assets by capture to prevent CSS, flag and background collisions.
-        prefix = "/_captures/" + capture_id + "/assets/"
+        prefix = "/_captures/shared/assets/"
         asset_source = source.parent / "assets"
         asset_dest = OUT / "_captures" / capture_id / "assets"
+        # All captured assets share immutable hashed filenames. Deploy each
+        # unique filename once; original captures in extracted/ remain intact.
+        shared_dest = OUT / "_captures" / "shared" / "assets"
         if asset_source.is_dir():
-            shutil.copytree(asset_source, asset_dest, dirs_exist_ok=True)
+            for asset in asset_source.rglob("*"):
+                if not asset.is_file():
+                    continue
+                rel = asset.relative_to(asset_source)
+                dest = shared_dest / rel
+                if not dest.exists():
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(asset, dest)
+                elif asset.stat().st_size != dest.stat().st_size or asset.read_bytes() != dest.read_bytes():
+                    raise SystemExit(f"Conflicting captured asset name: {rel}")
         html = source.read_text(encoding="utf-8", errors="replace")
         # Rewrite only captured relative asset references, including inline CSS URLs.
         html = re.sub(r'(?<![\w/])assets/', prefix, html)
@@ -84,49 +96,8 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
-    # Publish an additional byte-for-byte copy of each captured HTML and its
-    # original asset directory. Unlike routed previews, these are not rewritten.
-    # This is the authoritative comparison baseline for archive restoration.
-    raw_count = 0
-    seen_raw = set()
-    for entry in entries:
-        source = (ROOT / entry["capture"]).resolve()
-        if not source.is_relative_to((ROOT / "extracted").resolve()) or not source.is_file():
-            continue
-        capture_id = source.parent.name
-        if capture_id in seen_raw:
-            continue
-        seen_raw.add(capture_id)
-        raw_dir = OUT / "original-captures" / capture_id
-        raw_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, raw_dir / "index.html")
-        assets = source.parent / "assets"
-        if assets.is_dir():
-            shutil.copytree(assets, raw_dir / "assets", dirs_exist_ok=True)
-        raw_count += 1
-    print(f"Preserved {raw_count} byte-identical original HTML captures under /original-captures/")
-    # Preserve order captures even when their canonical URL duplicates the VPS catalog.
-    order_count = 0
-    for entry in entries:
-        if "order-pages" not in entry["capture"].lower():
-            continue
-        source = (ROOT / entry["capture"]).resolve()
-        if not source.is_relative_to((ROOT / "extracted").resolve()) or not source.is_file():
-            continue
-        capture_id = source.parent.name
-        destination = OUT / "archived-order" / capture_id / "index.html"
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        html = source.read_text(encoding="utf-8", errors="replace")
-        # Apply the same boundary-aware rewrite as normal captured pages.
-        # A global replace would corrupt already-absolute paths or script text.
-        html = re.sub(r'(?<![\\w/])assets/', "/_captures/" + capture_id + "/assets/", html)
-        html = re.sub(r'\\sdata-immersive-translate-[\\w-]+="[^"]*"', '', html)
-        destination.write_text(html, encoding="utf-8")
-        asset_source = source.parent / "assets"
-        if asset_source.is_dir():
-            shutil.copytree(asset_source, OUT / "_captures" / capture_id / "assets", dirs_exist_ok=True)
-        order_count += 1
-    print(f"Preserved {order_count} original order snapshots under /archived-order/")
+    # All original captures and order snapshots remain untouched in extracted/.
+    # Avoid copying their redundant duplicates into the live site bundle.
     # Restore /order from an actual archived order capture, not from a
     # catalog page whose canonical URL happens to be /vps.
     # Query-specific checkout states remain static snapshots only.
@@ -151,7 +122,7 @@ def main():
         source = ROOT / entry["capture"]
         capture_id = source.parent.name
         html = source.read_text(encoding="utf-8", errors="replace")
-        html = re.sub(r'(?<![\\w/])assets/', "/_captures/" + capture_id + "/assets/", html)
+        html = re.sub(r'(?<![\\w/])assets/', "/_captures/shared/assets/", html)
         destination = OUT.joinpath(*safe_route(route), "index.html")
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
