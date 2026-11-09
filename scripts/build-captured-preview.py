@@ -164,6 +164,35 @@ def main():
         registration_target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(registration_preview, registration_target)
         written["/register"] = registration_preview.relative_to(ROOT).as_posix()
+    # Bind the archived homepage login controls to the working local account page.
+    # Do not edit the original captured HTML or its visual assets.
+    homepage = OUT / "index.html"
+    if homepage.is_file():
+        html = homepage.read_text(encoding="utf-8")
+        login_bridge = r'''<script id="newvps-account-bridge">
+(function(){
+  function openAccount(event){
+    event.preventDefault();event.stopImmediatePropagation();
+    if(document.getElementById('newvps-account-overlay'))return;
+    var overlay=document.createElement('div');overlay.id='newvps-account-overlay';
+    overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center';
+    var frame=document.createElement('iframe');frame.src='/NewVPS/register/';frame.title='NewVPS account login';
+    frame.style.cssText='width:min(100%,520px);height:min(100%,740px);border:0;background:transparent';
+    var close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close login');
+    close.style.cssText='position:absolute;right:16px;top:12px;border:0;background:white;border-radius:6px;padding:6px 12px;font-size:22px;cursor:pointer';
+    close.onclick=function(){overlay.remove()};overlay.onclick=function(e){if(e.target===overlay)overlay.remove()};
+    overlay.appendChild(frame);overlay.appendChild(close);document.body.appendChild(overlay);
+  }
+  document.addEventListener('click',function(e){
+    var el=e.target.closest('a,button');if(!el)return;
+    var label=(el.textContent||'').trim().toLowerCase();
+    if(label==='login'||label==='log in'||label==='sign in'||label==='登录')openAccount(e);
+  },true);
+})();
+</script>'''
+        html = html.replace("</body>", login_bridge + "\\n</body>", 1)
+        homepage.write_text(html, encoding="utf-8")
+        print("Connected archived homepage login controls to local account dialog")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
