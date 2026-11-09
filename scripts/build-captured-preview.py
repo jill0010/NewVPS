@@ -81,6 +81,33 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
+    # Expose a route-specific archive directory for order captures without
+    # replacing the normal /vps and /zh/vps catalog pages.
+    order_route_links = {}
+    for entry in entries:
+        if "order-pages" not in entry["capture"].lower():
+            continue
+        route = entry["route"]
+        capture_id = Path(entry["capture"]).parent.name
+        order_route_links.setdefault(route, []).append((capture_id, entry.get("title") or capture_id))
+    for route, items in order_route_links.items():
+        parts = safe_route(route)
+        if parts is None:
+            continue
+        directory = OUT / "archived-order-by-route"
+        directory = directory.joinpath(*parts)
+        directory.mkdir(parents=True, exist_ok=True)
+        links = ''.join('<li><a href="/archived-order/' + escape(cid, quote=True) + '/">'
+                        + escape(title) + '</a></li>' for cid, title in items)
+        directory.joinpath("index.html").write_text(
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>Archived order snapshots</title>'
+            '<style>body{background:#0b1220;color:#e9eff8;font:16px system-ui}'
+            'main{max-width:800px;margin:10vh auto;padding:24px}a{color:#85c3ff}</style>'
+            '</head><body><main><h1>Order snapshots for ' + escape(route) + '</h1>'
+            '<p>Original static captures; no checkout or payment is enabled.</p>'
+            '<ul>' + links + '</ul></main></body></html>', encoding="utf-8")
     # The archived dataset does not contain the site's root homepage.
     # Provide an explicit preview entry instead of returning a root 404.
     # Do not pretend this fallback is a restored original homepage.
