@@ -46,6 +46,13 @@ def main():
             lambda m: 'url(' + m.group(1) + f'/_captures/{capture}/assets/',
             html, flags=re.IGNORECASE
         )
+        # Captured style attributes HTML-escape quotes inside CSS url(&quot;assets/...&quot;).
+        # Keep original files immutable; only rewrite preview copies.
+        html = re.sub(
+            r'url\\(\\s*&quot;assets/',
+            lambda m: f'url(&quot;/_captures/{capture}/assets/',
+            html, flags=re.IGNORECASE
+        )
         if base:
             # GitHub project Pages are served below /NewVPS, not at domain root.
             # Rewrite local navigation and asset URL attributes only.
