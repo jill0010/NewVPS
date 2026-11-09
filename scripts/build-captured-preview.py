@@ -118,6 +118,8 @@ def main():
         writer.writerow(("missing_route", "linked_from", "referring_pages"))
         for target, sources in sorted(missing_links.items()):
             writer.writerow((target, len(sources), " | ".join(sorted(sources)[:12])))
+    # Publish the same audit beside the static preview for convenient review.
+    shutil.copy2(report, OUT / "missing-routes.csv")
     print(f"Navigation audit: {len(missing_links)} unresolved internal routes -> {report}")
     print(f"Built {len(written)} static preview routes in {OUT}")
     print("This is a static archive preview. Login, registration, checkout and payments are NOT functional.")
