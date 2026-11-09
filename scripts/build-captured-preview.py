@@ -45,6 +45,17 @@ def main():
     OUT.mkdir()
     with INVENTORY.open(encoding="utf-8", newline="") as f:
         entries = list(csv.DictReader(f))
+    # Prefer the matching page collection over order-flow snapshots when
+    # multiple captures claim the same canonical URL.
+    # A checkout snapshot can carry /vps as canonical metadata.
+    def capture_priority(entry):
+        route = entry["route"]
+        capture = entry["capture"].lower()
+        if route == "/vps":
+            return (1 if "order-pages" in capture else 0, capture)
+        return (0 if "order-pages" not in capture else 1, capture)
+
+    entries.sort(key=capture_priority)
     written = {}
     for entry in entries:
         route = entry["route"]
