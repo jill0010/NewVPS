@@ -84,6 +84,27 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
+    # Publish an additional byte-for-byte copy of each captured HTML and its
+    # original asset directory. Unlike routed previews, these are not rewritten.
+    # This is the authoritative comparison baseline for archive restoration.
+    raw_count = 0
+    seen_raw = set()
+    for entry in entries:
+        source = (ROOT / entry["capture"]).resolve()
+        if not source.is_relative_to((ROOT / "extracted").resolve()) or not source.is_file():
+            continue
+        capture_id = source.parent.name
+        if capture_id in seen_raw:
+            continue
+        seen_raw.add(capture_id)
+        raw_dir = OUT / "original-captures" / capture_id
+        raw_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, raw_dir / "index.html")
+        assets = source.parent / "assets"
+        if assets.is_dir():
+            shutil.copytree(assets, raw_dir / "assets", dirs_exist_ok=True)
+        raw_count += 1
+    print(f"Preserved {raw_count} byte-identical original HTML captures under /original-captures/")
     # Preserve order captures even when their canonical URL duplicates the VPS catalog.
     order_count = 0
     for entry in entries:
