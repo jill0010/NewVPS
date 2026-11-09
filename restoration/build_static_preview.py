@@ -194,6 +194,33 @@ def main():
                 unresolved_links.append({"source": route, "href": href})
     unresolved_links = sorted(unresolved_links, key=lambda x: (x["source"], x["href"]))
 
+    # Keep links usable without inventing missing source pages. Missing captures
+    # get an explicit unavailable-source notice, not a fake restored page.
+    missing_capture_routes = sorted({
+        urlsplit(item["href"]).path[len(base):] if base and
+        urlsplit(item["href"]).path.startswith(base + "/")
+        else urlsplit(item["href"]).path
+        for item in unresolved_links
+        if urlsplit(item["href"]).path.startswith("/")
+    })
+    for missing_route in missing_capture_routes:
+        if not missing_route or missing_route == "/" or ".." in Path(missing_route).parts:
+            continue
+        dest = OUT / missing_route.lstrip("/") / "index.html"
+        if dest.exists() or (OUT / missing_route.lstrip("/")).is_file():
+            continue
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        home = (base + "/") if base else "/"
+        dest.write_text(
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="robots" content="noindex"><title>Source capture unavailable</title>'
+            '</head><body><main><h1>Original page capture unavailable</h1>'
+            '<p>This route was linked by the supplied archive, but its original '
+            'HTML was not included. No replacement content has been invented.</p>'
+            '<p><a href="' + home + '">Return to captured homepage</a></p>'
+            '</main></body></html>', encoding="utf-8"
+        )
+
     # Some snapshots retain original /assets/img/*.webp references while the
     # identical image was captured in another page under its hashed name.
     # Restore only these verified originals; never synthesize replacement art.
@@ -236,6 +263,7 @@ def main():
         "captures": len(data["pages"]),
         "localized_fallback_redirects": missing_localized,
         "unresolved_navigation_links": unresolved_links,
+        "missing_capture_notice_routes": missing_capture_routes,
         "published_routes": len(seen),
         "conflicts": conflicts,
         "root_asset_gaps": sorted(root_asset_gaps),
