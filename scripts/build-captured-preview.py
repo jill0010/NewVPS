@@ -176,7 +176,7 @@ def main():
     if(document.getElementById('newvps-account-overlay'))return;
     var overlay=document.createElement('div');overlay.id='newvps-account-overlay';
     overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center';
-    var frame=document.createElement('iframe');frame.src='/NewVPS/register/';frame.title='NewVPS account login';
+    var frame=document.createElement('iframe');frame.src='/NewVPS/register/?embed=1';frame.title='NewVPS account login';
     frame.style.cssText='width:min(100%,520px);height:min(100%,740px);border:0;background:transparent';
     var close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close login');
     close.style.cssText='position:absolute;right:16px;top:12px;border:0;background:white;border-radius:6px;padding:6px 12px;font-size:22px;cursor:pointer';
@@ -190,7 +190,7 @@ def main():
   },true);
 })();
 </script>'''
-        html = html.replace("</body>", login_bridge + "\\n</body>", 1)
+        html = html.replace("</body>", login_bridge + "\n</body>", 1)
         homepage.write_text(html, encoding="utf-8")
         print("Connected archived homepage login controls to local account dialog")
     # Audit internal navigation against the routes actually generated.
