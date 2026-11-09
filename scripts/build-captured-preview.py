@@ -157,6 +157,13 @@ def main():
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
         print(f"Restored archived checkout snapshot at {route} from {entry['capture']}")
+    # Screenshot-based registration preview is separate from original captures.
+    registration_preview = ROOT / "preview-pages" / "register" / "index.html"
+    if registration_preview.is_file():
+        registration_target = OUT / "register" / "index.html"
+        registration_target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(registration_preview, registration_target)
+        written["/register"] = registration_preview.relative_to(ROOT).as_posix()
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
