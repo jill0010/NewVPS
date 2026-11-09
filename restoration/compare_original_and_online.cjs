@@ -112,13 +112,14 @@ const { pathToFileURL } = require('url');
         result.ok=true;
       }catch(e){result.ok=false;result.error=String(e).slice(0,300);}
       results.push(result);
-      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,textDiff:result.textDiff,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,textBlockDifferences:result.textBlockDifferences,resourceFailures:result.height_difference>10?result.resourceMismatch?.resourceFailures:undefined,error:result.error}));
+      console.log('BASELINE '+JSON.stringify({route:result.route,viewport:result.viewport,ok:result.ok,height_difference:result.height_difference,width_difference:result.width_difference,title_matches:result.title_matches,text_matches:result.text_matches,textDiff:result.textDiff,offlineMetrics:result.offlineMetrics,onlineMetrics:result.onlineMetrics,textBlockDifferences:result.textBlockDifferences,resourceFailures:result.resourceMismatch?.resourceFailures,error:result.error}));
       await context.close();
     }
   }
   await browser.close();
-  const summary={routes:items.length,views:results.length,errors:results.filter(x=>!x.ok).length,title_mismatches:results.filter(x=>x.ok&&!x.title_matches).length,text_mismatches:results.filter(x=>x.ok&&!x.text_matches).length,height_mismatches_over_10px:results.filter(x=>x.ok&&x.height_difference>10).length,width_mismatches_over_2px:results.filter(x=>x.ok&&x.width_difference>2).length};
+  const missingAssets=results.flatMap(r=>(r.resourceMismatch?.resourceFailures?.deployed||[]).filter(f=>f.status===404&&f.url.includes('/NewVPS/')).map(f=>({route:r.route,viewport:r.viewport,url:f.url})));
+  const summary={missing_assets_404:missingAssets.length,missing_asset_examples:missingAssets.slice(0,20),routes:items.length,views:results.length,errors:results.filter(x=>!x.ok).length,title_mismatches:results.filter(x=>x.ok&&!x.title_matches).length,text_mismatches:results.filter(x=>x.ok&&!x.text_matches).length,height_mismatches_over_10px:results.filter(x=>x.ok&&x.height_difference>10).length,width_mismatches_over_2px:results.filter(x=>x.ok&&x.width_difference>2).length};
   fs.writeFileSync(path.join(out,'comparison.json'),JSON.stringify({summary,results},null,2));
   console.log('BASELINE_SUMMARY '+JSON.stringify(summary));
-  if(summary.errors)process.exitCode=1;
+  if(summary.errors||summary.missing_assets_404)process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1});
