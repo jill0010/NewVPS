@@ -1,0 +1,60 @@
+name: Publish NewVPS account UI (independent)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: newvps-account-ui
+  cancel-in-progress: false
+
+jobs:
+  account-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required Supabase deploy credential
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.NEWVPS_SUPABASE_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::error::Set repository secret NEWVPS_SUPABASE_ACCESS_TOKEN for the independent NewVPS project"
+            exit 1
+          fi
+      - name: Build lightweight account page function
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          source = Path("preview-pages/register/index.html")
+          html = source.read_text(encoding="utf-8")
+          # Keep the background preview optional; it is not bundled with the account UI.
+          html = html.replace('src="/NewVPS/"', 'src="https://jill0010.github.io/NewVPS/"')
+          html = html.replace("location.href='/NewVPS/'", "location.href='https://jill0010.github.io/NewVPS/'")
+          output = Path("supabase/functions/account-page")
+          output.mkdir(parents=True, exist_ok=True)
+          code = (
+            "const html = " + json.dumps(html, ensure_ascii=False) + ";\n"
+            'Deno.serve((req) => {\n'
+            '  if (req.method !== "GET" && req.method !== "HEAD") return new Response("Method not allowed", {status: 405});\n'
+            '  return new Response(req.method === "HEAD" ? null : html, {headers: {\n'
+            '    "Content-Type": "text/html; charset=utf-8",\n'
+            '    "Cache-Control": "no-store",\n'
+            '    "X-Content-Type-Options": "nosniff",\n'
+            '    "Referrer-Policy": "no-referrer",\n'
+            '    "X-Frame-Options": "DENY"\n'
+            '  }});\n'
+            '});\n'
+          )
+          (output / "index.ts").write_text(code, encoding="utf-8")
+          print(f"Account UI HTML: {len(html.encode('utf-8')):,} bytes; independent of archive build")
+          PY
+      - name: Deploy account UI only to NewVPS Supabase
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.NEWVPS_SUPABASE_ACCESS_TOKEN }}
+        run: |
+          npx --yes supabase@latest functions deploy account-page --project-ref gvsnbmejydgzqzzjyykt --no-verify-jwt
+      - name: Show independent account URL
+        run: echo "https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/account-page"
