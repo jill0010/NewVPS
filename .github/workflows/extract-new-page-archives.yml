@@ -1,4 +1,4 @@
-name: Extract four newly captured page archives
+name: Extract newly captured page archives
 
 on:
   workflow_dispatch:
@@ -10,6 +10,7 @@ on:
       - '技术指南页面.rar'
       - '产品与国家详情页面.rar'
       - '其他页面.rar'
+      - '订单页面.rar'
 
 permissions:
   contents: write
@@ -23,11 +24,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y 7zip
-      - name: Validate all four archives before extraction
+      - name: Validate all archives before extraction
         shell: bash
         run: |
           set -euo pipefail
-          for archive in '竞争对手对比页面.rar' '技术指南页面.rar' '产品与国家详情页面.rar' '其他页面.rar'; do
+          for archive in '竞争对手对比页面.rar' '技术指南页面.rar' '产品与国家详情页面.rar' '其他页面.rar' '订单页面.rar'; do
             echo "::group::Validate $archive"
             test -f "$archive"
             7z t "$archive"
@@ -37,8 +38,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          names=('竞争对手对比页面' '技术指南页面' '产品与国家详情页面' '其他页面')
-          folders=('competitor-comparisons' 'technical-guides' 'product-location-details' 'other-pages')
+          names=('竞争对手对比页面' '技术指南页面' '产品与国家详情页面' '其他页面' '订单页面')
+          folders=('competitor-comparisons' 'technical-guides' 'product-location-details' 'other-pages' 'order-pages')
           for i in "${!names[@]}"; do
             destination="extracted/new-captures/${folders[$i]}"
             mkdir -p "$destination"
@@ -63,6 +64,6 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No new extracted files.'
           else
-            git commit -m 'Extract four validated new page archives without editing originals'
+            git commit -m 'Extract validated page archives without editing originals'
             git push origin HEAD:main
           fi
