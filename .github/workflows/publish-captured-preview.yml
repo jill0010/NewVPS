@@ -68,12 +68,26 @@ jobs:
                       for quote in ('"', "'"):
                           content = content.replace(f'{attr}={quote}{origin}',
                                                     f'{attr}={quote}{base}/')
-              for attr in ('href', 'src', 'action', 'poster'):
+              for attr in ('href', 'src', 'action', 'poster', 'data-src', 'data-href', 'data-poster'):
                   for quote in ('"', "'"):
                       needle = f'{attr}={quote}/'
                       content = content.replace(needle, f'{attr}={quote}{base}/')
                       content = content.replace(f'{attr}={quote}{base}{base}/',
                                                 f'{attr}={quote}{base}/')
+              # Responsive and lazy-loaded images also need the project prefix.
+              for attr in ('srcset', 'imagesrcset', 'data-srcset'):
+                  for quote in ('"', "'"):
+                      pattern = re.compile(r'(' + re.escape(attr + '=' + quote) + r')([^' + re.escape(quote) + r']*)' + re.escape(quote))
+                      def rewrite_sources(match):
+                          candidates = match.group(2).split(',')
+                          updated = []
+                          for candidate in candidates:
+                              parts = candidate.strip().split(None, 1)
+                              if parts and parts[0].startswith('/') and not parts[0].startswith(base + '/'):
+                                  parts[0] = base + parts[0]
+                              updated.append(' '.join(parts))
+                          return match.group(1) + ', '.join(updated) + quote
+                      content = pattern.sub(rewrite_sources, content)
               for token in ('url(/', 'url("/', "url('/"):
                   content = content.replace(token, token[:-1] + base + '/')
               content = content.replace('/_captures/', base + '/_captures/')
