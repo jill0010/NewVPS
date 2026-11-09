@@ -39,18 +39,16 @@ jobs:
           root = Path('dist-captured')
           base = '/NewVPS'
           from urllib.parse import urlsplit
-          from html import unescape
+          from html.parser import HTMLParser
           route_count = 0
           for file in root.rglob('index.html'):
               content = file.read_text(encoding='utf-8')
-              # Keep archived source metadata, but send internal navigation to this preview.
               for origin in ('https://anonport.com/', 'http://anonport.com/',
                              'https://www.anonport.com/', 'http://www.anonport.com/'):
                   for attr in ('href', 'action'):
                       for quote in ('"', "'"):
                           content = content.replace(f'{attr}={quote}{origin}',
                                                     f'{attr}={quote}{base}/')
-              # Rewrite root-relative links exactly once; never rewrite protocol-relative URLs.
               for attr in ('href', 'src', 'action', 'poster'):
                   for quote in ('"', "'"):
                       needle = f'{attr}={quote}/'
