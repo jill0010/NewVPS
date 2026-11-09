@@ -99,6 +99,25 @@ def main():
                 '</main></body></html>', encoding="utf-8"
             )
             print(f"Root preview entry generated, pointing to archived {fallback}")
+    # Preserve order captures even when their canonical URL duplicates the VPS catalog.
+    order_count = 0
+    for entry in entries:
+        if "order-pages" not in entry["capture"].lower():
+            continue
+        source = (ROOT / entry["capture"]).resolve()
+        if not source.is_relative_to((ROOT / "extracted").resolve()) or not source.is_file():
+            continue
+        capture_id = source.parent.name
+        destination = OUT / "archived-order" / capture_id / "index.html"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        html = source.read_text(encoding="utf-8", errors="replace")
+        html = html.replace("assets/", "/_captures/" + capture_id + "/assets/")
+        destination.write_text(html, encoding="utf-8")
+        asset_source = source.parent / "assets"
+        if asset_source.is_dir():
+            shutil.copytree(asset_source, OUT / "_captures" / capture_id / "assets", dirs_exist_ok=True)
+        order_count += 1
+    print(f"Preserved {order_count} original order snapshots under /archived-order/")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
