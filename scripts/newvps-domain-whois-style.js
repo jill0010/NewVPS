@@ -19,6 +19,7 @@ function init(){
    if(track){
      track.style.setProperty('background-color',enabled?'':'#e5e7eb','important');
      track.style.setProperty('border-color',enabled?'':'#d1d5db','important');
+     track.style.setProperty('box-shadow',enabled?'':'none','important');
    }
  }
  toggle.addEventListener('change',sync);
