@@ -105,6 +105,33 @@ function ready(){
          node.title='Visual preview only — availability not checked';
        }
      });
+     // Align action buttons to the right edge of every result card.
+     // Apply only to generated result cards; leave archived markup untouched.
+     card.style.display='flex';
+     card.style.alignItems='center';
+     card.style.gap='8px';
+     card.style.minWidth='0';
+     const action=card.querySelector('.dom-card-buy');
+     if(action){
+       action.style.marginLeft='auto';
+       action.style.flex='0 0 76px';
+       action.style.width='76px';
+       action.style.minWidth='76px';
+       action.style.boxSizing='border-box';
+       action.style.display='inline-flex';
+       action.style.justifyContent='center';
+       action.style.alignItems='center';
+       action.style.whiteSpace='nowrap';
+     }
+     const priceElement=card.querySelector('.dom-card-price');
+     if(priceElement){
+       priceElement.style.marginLeft='auto';
+       priceElement.style.whiteSpace='nowrap';
+     }
+     const domainElement=card.querySelector('.dom-card-domain');
+     if(domainElement){domainElement.style.flex='0 1 auto';domainElement.style.minWidth='0';}
+     const metaElement=card.querySelector('.dom-card-meta');
+     if(metaElement){metaElement.style.flex='1 1 auto';metaElement.style.minWidth='0';}
      grid.appendChild(card);
    });
    if(title)title.textContent=availableCount+' available · '+totalCards+' checked (demo)';
