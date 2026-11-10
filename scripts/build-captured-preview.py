@@ -456,6 +456,10 @@ def main():
             )
             if domain_flow_js.is_file():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+            # This archive overwrites the earlier domain page, so re-inject
+            # the global language selector after restoring its original HTML.
+            if 'newvps-language-selector.js' not in html:
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-language-selector.js"></script>\\n</body>', 1)
             page = OUT / "domains" / "index.html"
             page.parent.mkdir(parents=True, exist_ok=True)
             page.write_text(html, encoding="utf-8")
