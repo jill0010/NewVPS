@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const PRICE_TABLE={
-'4.99':15.98,'7.99':11.98,'8.99':11.98,'9.99':14.99,
+'4.99':15.98,'7.99':11.98,'8.99':11.98,'9.99':14.98,
 '11.99':15.98,'12.99':17.98,'13.99':19.98,'14.99':20.98,
 '17.99':24.98,'19.99':32.98,'24.99':39.98,'69.99':84.98,'84.99':109.98
 };
@@ -21,7 +21,7 @@ function init(){
  const findPeriodCards=()=>{
    const labels=leafText(/^(?:1|2|3|5)\s*years?$/i);
    return periods.map(n=>{
-     const label=labels.find(e=>new RegExp('^'+n+'\\s*years?,'i').test(e.textContent.trim()));
+     const label=labels.find(e=>new RegExp('^'+n+'\\s*years?.test(e.textContent.trim()));
      if(!label)return null;
      let node=label;
      for(let i=0;i<4&&node.parentElement;i++,node=node.parentElement){
@@ -106,7 +106,8 @@ function init(){
  });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();,'i').test(e.textContent.trim()));
+})()
+,'i').test(e.textContent.trim()));
      if(!label)return null;
      let node=label;
      for(let i=0;i<4&&node.parentElement;i++,node=node.parentElement){
@@ -191,4 +192,4 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();
+})()
