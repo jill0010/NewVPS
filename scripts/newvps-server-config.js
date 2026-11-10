@@ -2,6 +2,20 @@
 (function(){
 'use strict';
 function init(){
+  // Archived OS icons use capture-relative paths that break on nested routes.
+  // Resolve the exact original asset filename from the shared capture directory.
+  document.querySelectorAll('.cfg-card.cfg-os img').forEach(function(img){
+    const raw=img.getAttribute('src')||'';
+    const marker='anonport_com/';
+    const at=raw.lastIndexOf(marker);
+    if(at<0)return;
+    const filename=raw.slice(at+marker.length).split(/[?#]/)[0];
+    if(!/^[a-zA-Z0-9._-]+\\.(svg|png|webp)$/.test(filename))return;
+    const correct='/NewVPS/_captures/shared/assets/anonport_com/'+filename;
+    if(img.getAttribute('src')!==correct)img.setAttribute('src',correct);
+    img.loading='eager';
+    img.addEventListener('error',function(){console.warn('Missing archived OS icon:',correct)},{once:true});
+  });
   const tabs=[...document.querySelectorAll('.os-tab')];
   const panels=[...document.querySelectorAll('.os-panel')];
   const ips=document.querySelector('select[name="extra_ips"]');
