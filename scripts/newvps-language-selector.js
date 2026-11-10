@@ -7,6 +7,27 @@
   let current=localStorage.getItem(KEY)||'en';
   if(!languages.includes(current))current='en';
   const base='/NewVPS/';
+  // Immediate local fallback for essential navigation and checkout labels.
+  const words={
+    ru:{'Home':'Главная','Login':'Войти','Log in':'Войти','Dashboard':'Панель управления','Account':'Аккаунт','Overview':'Обзор','Top up':'Пополнить','Topup balance':'Пополнить баланс','Add credit':'Пополнить счёт','Orders':'Заказы','Services':'Услуги','Support':'Поддержка','Logout':'Выйти','Log out':'Выйти','Language':'Язык','Select language':'Выбрать язык','Order notification':'Уведомление о заказе','订单通知':'Уведомление о заказе','暂无通知。':'Пока нет уведомлений.','Copy amount':'Копировать сумму','Copy address':'Копировать адрес','Back to top up':'Назад к пополнению','What you\'re paying':'Сумма платежа','What you receive':'Вы получите','Reference rate':'Курс','Total':'Итого','Pay with':'Оплатить','SEND EXACTLY':'ОТПРАВЬТЕ ТОЧНО','TO ADDRESS':'НА АДРЕС','Create order':'Создать заказ','Choose amount':'Выбрать сумму','Custom amount':'Другая сумма','Bitcoin':'Биткоин','English':'Английский','Simplified Chinese':'Упрощённый китайский','Russian':'Русский'},
+    'zh-CN':{'Home':'首页','Login':'登录','Log in':'登录','Dashboard':'控制面板','Account':'账户','Overview':'概览','Top up':'充值','Topup balance':'充值余额','Add credit':'充值余额','Orders':'订单','Services':'服务','Support':'支持','Logout':'退出登录','Log out':'退出登录','Language':'语言','Select language':'选择语言','Order notification':'订单通知','订单通知':'订单通知','暂无通知。':'暂无通知。','Copy amount':'复制金额','Copy address':'复制地址','Back to top up':'返回充值','What you\'re paying':'支付金额','What you receive':'到账金额','Reference rate':'参考汇率','Total':'总计','Pay with':'支付方式','SEND EXACTLY':'请准确支付','TO ADDRESS':'收款地址','Create order':'创建订单','Choose amount':'选择金额','Custom amount':'自定义金额','Bitcoin':'比特币','English':'英语','Simplified Chinese':'简体中文','Russian':'俄语'}
+  };
+  const originalText=new WeakMap();
+  function localTranslate(root){
+    if(current==='en')return;
+    const dict=words[current]||{};
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+      if(!node.parentElement||node.parentElement.closest('script,style,textarea,code,pre,.lang-menu,#newvps-google-translate,.notranslate'))continue;
+      const value=node.nodeValue,trim=value.trim();
+      if(!trim||trim.length>150)continue;
+      if(!originalText.has(node))originalText.set(node,value);
+      const translated=dict[trim];
+      if(translated)node.nodeValue=value.replace(trim,translated);
+    }
+  }
+
   // Google Translate is loaded on demand, never for the default English page.
   function installTranslator(){
     if(document.getElementById('newvps-google-translate'))return;
@@ -114,6 +135,9 @@
       }
     },true);
     if(current!=='en'){
+      localTranslate(document.body);
+      const observer=new MutationObserver(function(){localTranslate(document.body)});
+      observer.observe(document.body,{childList:true,subtree:true});
       document.cookie='googtrans=/en/'+current+';path=/;SameSite=Lax';
       installTranslator();
     }
