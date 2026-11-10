@@ -1,0 +1,24 @@
+name: Configure NewVPS Telegram Reply Webhook
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Register secure Telegram reply webhook
+        env:
+          MONITOR_SECRET: ${{ secrets.NEWVPS_MONITOR_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "$MONITOR_SECRET"
+          curl --fail-with-body --show-error --max-time 45 \
+            -X POST \
+            -H 'Content-Type: application/json' \
+            -H "x-monitor-secret: $MONITOR_SECRET" \
+            --data '{"action":"setup"}' \
+            'https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/quote-notice'
