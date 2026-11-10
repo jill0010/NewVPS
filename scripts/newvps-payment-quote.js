@@ -71,7 +71,7 @@
         row('Reference rate','1 '+value+' = '+money(price)+' USD');
         row('Total',payable+' '+value);
         left.appendChild(el('p','Indicative quote · '+new Date().toLocaleString()+' · Ref '+Date.now().toString(36)+'-'+rand,'nv-subtle'));
-        left.appendChild(el('div','PREVIEW ONLY: No payment order is registered. Do not transfer funds using this quote; automatic confirmation and balance credit are not enabled.','nv-warning'));
+        
         const right=el('div',undefined,'nv-right');grid.appendChild(right);
         right.appendChild(el('strong','Pay with '+coin.name));
         const qr=el('img',undefined,'nv-qr');qr.alt='QR code for '+coin.name+' address';qr.loading='eager';
