@@ -307,6 +307,17 @@ def main():
                 html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored login links and dashboard logout on archived pages")
+    # Restore the original language dropdown on all captured pages.
+    # Existing archive provides English, Russian and Simplified Chinese links.
+    language_source = ROOT / "scripts/newvps-language-selector.js"
+    if language_source.is_file():
+        shutil.copy2(language_source, OUT / "newvps-language-selector.js")
+        for page in OUT.rglob("index.html"):
+            html = page.read_text(encoding="utf-8")
+            if "</body>" in html and 'newvps-language-selector.js' not in html:
+                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
+                page.write_text(html, encoding="utf-8")
+        print("Restored English, Russian and Simplified Chinese language selector")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
     if dashboard.is_file():
