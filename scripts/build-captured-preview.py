@@ -361,6 +361,15 @@ def main():
                     html = html.replace("</body>", '<script defer src="/NewVPS/newvps-server-config.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored captured server configuration interactions")
+    domain_script = ROOT / "scripts/newvps-domain-search.js"
+    if domain_script.is_file():
+        shutil.copy2(domain_script, OUT / "newvps-domain-search.js")
+        for page in OUT.rglob("index.html"):
+            html = page.read_text(encoding="utf-8")
+            if 'id="domSearchForm"' in html and 'newvps-domain-search.js' not in html:
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-search.js"></script>\\n</body>', 1)
+                page.write_text(html, encoding="utf-8")
+        print("Restored captured domain search controls")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
     if dashboard.is_file():
