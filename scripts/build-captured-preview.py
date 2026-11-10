@@ -325,16 +325,19 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if 'class="os-tab' in html:
-                # Rewrite every captured OS icon URL in the generated page,
-                # without depending on JavaScript or the label's exact markup.
-                def fix_os_icon(match):
-                    tag = match.group(0)
-                    return re.sub(
-                        r'src="[^"]*anonport_com/([^"/]+)"',
-                        lambda asset: 'src="/NewVPS/_captures/shared/assets/anonport_com/' + asset.group(1) + '"',
-                        tag,
-                    )
-                html = re.sub(r'<img\\b[^>]*>', fix_os_icon, html)
+                # Use the exact asset filenames present in the original archive.
+                # No regex word-boundary escapes: previous patterns silently matched nothing.
+                os_icon_count = [0]
+                def rewrite_os_asset(match):
+                    os_icon_count[0] += 1
+                    return 'src="/NewVPS/_captures/shared/assets/anonport_com/' + match.group(1) + '"'
+                html = re.sub(
+                    r'src="(?:[^"]*/)?anonport_com/([^"/]+[.](?:svg|png|webp))"',
+                    rewrite_os_asset,
+                    html,
+                )
+                if os_icon_count[0] == 0:
+                    raise RuntimeError(f"No original OS image references matched: {page}")
                 if 'newvps-server-config.js' not in html:
                     html = html.replace("</body>", '<script defer src="/NewVPS/newvps-server-config.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
