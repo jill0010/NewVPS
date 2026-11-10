@@ -21,7 +21,7 @@ function init(){
  const findPeriodCards=()=>{
    const labels=leafText(/^(?:1|2|3|5)\s*years?$/i);
    return periods.map(n=>{
-     const label=labels.find(e=>new RegExp('^'+n+'\\s*years?
+     const label=labels.find(e=>e.textContent.trim().toLowerCase()===n+' year'||e.textContent.trim().toLowerCase()===n+' years');
      if(!label)return null;
      let node=label;
      for(let i=0;i<4&&node.parentElement;i++,node=node.parentElement){
