@@ -6,8 +6,19 @@ function ready(){
  const grid=document.getElementById('domGrid');
  const head=document.getElementById('domResultsHd');
  if(!form||!input||!grid||!head)return;
- const cards=[...grid.querySelectorAll(':scope > .dom-card')];
+ const cards=[...grid.querySelectorAll('.dom-card')];
  const originals=cards.map(card=>card.cloneNode(true));
+ const fallbackTlds=['com','net','org','io','me','co','xyz','app','dev','ai','fr','de','is','li','ch','pw','nl','uk','info','biz','tech','pro','site','online','cc','tv'];
+ if(!originals.length){
+   fallbackTlds.forEach(function(tld){
+     const card=document.createElement('div');card.className='dom-card';card.dataset.tld=tld;
+     const label=document.createElement('strong');label.className='dom-card-domain';label.textContent='example.'+tld;
+     const meta=document.createElement('div');meta.className='dom-card-meta';meta.textContent='● available · preview';
+     const price=document.createElement('strong');price.className='dom-card-price';price.textContent='$14.99';
+     const buy=document.createElement('a');buy.className='dom-card-buy';buy.textContent='Buy →';
+     card.append(label,meta,price,buy);originals.push(card);
+   });
+ }
  const title=document.getElementById('domResultsTitle');
  const over=document.getElementById('domResultsOv');
  const more=document.getElementById('domLoadMore');
@@ -42,7 +53,7 @@ function ready(){
    if(over)over.textContent=name.toUpperCase();
    // The capture is a visual demo, not live registrar availability.
    const totalCards=rowsByClick[Math.min(moreClicks,7)]*3;
-   if(!originals.length)return;
+   if(!originals.length){if(title)title.textContent='No domain templates available';return;}
    grid.replaceChildren();
    let availableCount=0;
    const demoTaken=new Set();
