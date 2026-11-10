@@ -25,8 +25,16 @@
     const style=el('style');
     style.textContent='#nv-payment{width:100%;font-family:inherit;color:#152238}#nv-payment .nv-shell{width:100%;background:white}#nv-payment .nv-heading{padding:0 0 18px;display:flex;justify-content:space-between;align-items:center}#nv-payment .nv-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:22px}#nv-payment .nv-left,#nv-payment .nv-right{min-width:0}#nv-payment .nv-right{border:1px solid #e8eaee;border-radius:8px;text-align:center;padding:18px}#nv-payment .nv-row{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid #e8eaee;padding:15px 0}#nv-payment .nv-row strong{text-align:right}#nv-payment .nv-subtle{font-size:12px;color:#697586}#nv-payment .nv-address{padding:12px;border:1px solid #e5e7eb;background:#f7f8fa;overflow-wrap:anywhere;text-align:left;font-family:monospace;font-size:12px;border-radius:5px}#nv-payment button{background:white;border:1px solid #dce1e8;border-radius:5px;padding:8px 12px;cursor:pointer}#nv-payment .nv-qr{width:192px;height:192px;max-width:100%;display:block;margin:18px auto}#nv-payment .nv-copy{display:flex;justify-content:center;gap:8px;margin:10px 0}#nv-payment .nv-status{padding:15px;border-top:1px solid #e8eaee;text-align:center;color:#697586;font-size:12px}@media(max-width:650px){#nv-payment .nv-grid{grid-template-columns:1fr}#nv-payment .nv-right{border-top:1px solid #e5e7eb}}';
     document.head.appendChild(style);
-    let serial=0;
-    function close(){serial++;document.getElementById('nv-payment')?.remove();form.closest('.tu-grid')?.querySelectorAll(':scope > *').forEach(x=>{if(x!==form)x.style.display=''});form.style.display='';}
+    let serial=0,noticeTimer=null;
+    const noticeApi='https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/quote-notice';
+    async function noticeRequest(action,quote_ref,extra={}){
+      const session=sessionStorage.getItem('newvps_session');
+      if(!session)return null;
+      const response=await fetch(noticeApi,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},body:JSON.stringify({action,quote_ref,...extra}),cache:'no-store'});
+      if(!response.ok)throw new Error('Notice API '+response.status);
+      return response.json();
+    }
+    function close(){if(noticeTimer){clearInterval(noticeTimer);noticeTimer=null}serial++;document.getElementById('nv-payment')?.remove();form.closest('.tu-grid')?.querySelectorAll(':scope > *').forEach(x=>{if(x!==form)x.style.display=''});form.style.display='';}
     async function show(){
       const value=document.getElementById('cs-topup-val')?.value;
       const coin=currencies[value];
@@ -73,7 +81,18 @@
         row('What you receive',money(usd)+' account credit (not yet credited)');
         row('Reference rate','1 '+value+' = '+money(price)+' USD');
         row('Total',payable+' '+value);
-        left.appendChild(el('p','Indicative quote · '+new Date().toLocaleString()+' · Ref '+Date.now().toString(36)+'-'+rand,'nv-subtle'));
+        const quoteRef=Date.now().toString(36)+'-'+rand;
+        left.appendChild(el('p','Indicative quote · '+new Date().toLocaleString()+' · Ref '+quoteRef,'nv-subtle'));
+        const notice=el('section',undefined,'nv-order-notice');
+        notice.style.cssText='margin-top:16px;border:1px solid #e5e7eb;border-radius:8px;padding:16px;background:#fafbfc';
+        const noticeTitle=el('strong','订单通知');notice.appendChild(noticeTitle);
+        const noticeBody=el('p','暂无通知。');noticeBody.style.cssText='margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#697586';
+        notice.appendChild(noticeBody);left.appendChild(notice);
+        async function refreshNotice(){
+          try{const data=await noticeRequest('get',quoteRef);if(data&&request===serial){noticeBody.textContent=data.message||'暂无通知。';noticeBody.style.color=data.message?'#152238':'#697586'}}catch(e){console.warn('Order notice unavailable',e)}
+        }
+        noticeRequest('register',quoteRef,{usd,asset:value}).then(refreshNotice).catch(e=>console.warn('Quote notification registration unavailable',e));
+        noticeTimer=setInterval(refreshNotice,10000);
         
         const right=el('div',undefined,'nv-right');grid.appendChild(right);
         right.appendChild(el('strong','Pay with '+coin.name));
