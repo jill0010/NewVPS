@@ -26,7 +26,7 @@ function init(){
    while(el.parentElement&&el.parentElement!==document.body){
      el=el.parentElement;
      if(el.querySelectorAll('*').length>20)break;
-     if(/\\/yr/i.test(el.textContent||'')&&/\\$/.test(el.textContent||''))return el;
+     if(/\/yr/i.test(el.textContent||'')&&/\$/.test(el.textContent||''))return el;
    }
    return label.parentElement;
  });
