@@ -81,7 +81,13 @@
     installTranslator();
     // Reload is required for Google Translate to pick up a newly selected
     // googtrans cookie consistently, including when switching ru <-> zh-CN.
-    location.reload();
+    localTranslate(document.body);
+    document.querySelectorAll('.lang-sw').forEach(function(w){
+      const btn=w.querySelector('.lang-btn');
+      if(btn){const target=btn.querySelector('span:not(.fi)');if(target)target.textContent=lang==='ru'?'RU':'中文';}
+      w.querySelectorAll('.lang-opt').forEach(function(a){a.classList.toggle('on',a.dataset.newvpsLang===lang)});
+    });
+    setTimeout(function(){if(!applyLanguage())installTranslator()},100);
   }
   function init(){
     const style=document.createElement('style');
@@ -109,6 +115,7 @@
       menu.querySelectorAll('a.lang-opt').forEach(function(a){
         const href=a.getAttribute('href')||'';
         const lang=href.startsWith('/ru/')?'ru':href.startsWith('/zh/')?'zh-CN':'en';
+        a.dataset.newvpsLang=lang;
         a.href='#';
         a.addEventListener('click',function(e){e.preventDefault();toggle(false);choose(lang)});
         a.classList.toggle('on',lang===current);
@@ -120,6 +127,7 @@
     document.querySelectorAll('a.mob-lang-opt').forEach(function(a){
       const href=a.getAttribute('href')||'';
       const lang=href.startsWith('/ru/')?'ru':href.startsWith('/zh/')?'zh-CN':'en';
+      a.dataset.newvpsLang=lang;
       a.href='#';
       a.addEventListener('click',function(e){e.preventDefault();choose(lang)});
     });
