@@ -20,7 +20,8 @@
         pageLanguage:'en',includedLanguages:'ru,zh-CN',
         autoDisplay:false
       },'newvps-google-translate');
-      applyLanguage();
+      let attempts=0;
+      const retry=setInterval(function(){if(applyLanguage()||++attempts>60)clearInterval(retry)},250);
     };
     const script=document.createElement('script');
     script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
@@ -28,11 +29,18 @@
     script.onerror=function(){console.warn('Global translation service unavailable')};
     document.head.appendChild(script);
   }
+  let applying=false;
   function applyLanguage(){
     const select=document.querySelector('#newvps-google-translate select.goog-te-combo');
     if(!select)return false;
-    select.value=current==='en'?'':current;
-    select.dispatchEvent(new Event('change',{bubbles:true}));
+    const desired=current==='en'?'en':current;
+    if(select.value!==desired)select.value=desired;
+    if(select.value!==desired)return false;
+    if(!applying){
+      applying=true;
+      select.dispatchEvent(new Event('change',{bubbles:true}));
+      setTimeout(function(){applying=false},1200);
+    }
     return true;
   }
   function choose(lang){
@@ -46,13 +54,14 @@
       return;
     }
     current=lang;
+    document.documentElement.lang=lang;
+    document.querySelectorAll('.lang-sw').forEach(function(w){const c=w.querySelector('.lang-btn span:not(.fi)');if(c)c.textContent=lang==='ru'?'RU':'中文'});
     document.cookie='googtrans=/en/'+lang+';path=/';
     document.cookie='googtrans=/en/'+lang+';path=/;domain='+location.hostname;
     installTranslator();
-    if(!applyLanguage()){
-      let attempts=0;
-      const timer=setInterval(function(){if(applyLanguage()||++attempts>40)clearInterval(timer)},250);
-    }
+    // Reload is required for Google Translate to pick up a newly selected
+    // googtrans cookie consistently, including when switching ru <-> zh-CN.
+    location.reload();
   }
   function init(){
     const style=document.createElement('style');
@@ -105,7 +114,10 @@
         location.assign(base+route.replace(/^(ru|zh)\//,'')+url.search+url.hash);
       }
     },true);
-    if(current!=='en')installTranslator();
+    if(current!=='en'){
+      document.cookie='googtrans=/en/'+current+';path=/';
+      installTranslator();
+    }
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
