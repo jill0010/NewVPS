@@ -39,6 +39,8 @@
        (target.tagName==='BUTTON'&&target.textContent.trim().toLowerCase()==='sign out'&&location.pathname.includes('/account/'))){
       logout(e);return;
     }
+    // Never hijack a form's Login submit or the account dialog's own controls.
+    if(target.closest('form, #newvps-account-overlay, .dialog, #panel'))return;
     const label=(target.textContent||'').trim().toLowerCase();
     const href=(target.getAttribute('href')||'').trim().toLowerCase();
     if(['login','log in','sign in','登录'].includes(label) ||
