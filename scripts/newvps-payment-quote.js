@@ -37,30 +37,36 @@
     }
     function noticeStrings(){return noticeLabels[noticeLanguage()]}
     const translatedNotices=new Map();
-    // Translate display-only prose; keep payment identifiers and numeric lines unchanged.
     async function translateNotice(message,lang){
       if(lang==='zh-CN'||!message.trim())return message;
-      const key=lang+'\\u0000'+message;
+      const key=lang+'\u0000'+message;
       if(translatedNotices.has(key))return translatedNotices.get(key);
-      const lines=message.split('\\n');
+      const lines=message.split('\n');
       const result=await Promise.all(lines.map(async function(line){
-        if(!/[\\u3400-\\u9fff]/.test(line))return line;
-        // Never send or translate lines containing amounts, addresses or order references.
-        if(/(?:[0-9]|0x[a-fA-F0-9]{12,}|[A-Za-z0-9_-]{30,})/.test(line))return line;
-        const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-CN&tl='+encodeURIComponent(lang)+'&dt=t&q='+encodeURIComponent(line);
+        if(!/[\u3400-\u9fff]/.test(line))return line;
+        // Preserve amounts, IDs, URLs and wallet addresses as-is.
+        const protectedParts=[];
+        const masked=line.replace(/(?:https?:\/\/\S+|(?:0x[a-fA-F0-9]{12,})|(?:[A-Za-z0-9_-]{35,})|(?:\d[\d,.]*\s*(?:USD|USDT|BTC|ETH|TON|TRX|XMR|LTC|SOL)))/g,function(part){
+          protectedParts.push(part);
+          return ' __NV'+(protectedParts.length-1)+'__ ';
+        });
+        const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-CN&tl='+encodeURIComponent(lang)+'&dt=t&q='+encodeURIComponent(masked);
         const controller=new AbortController();
         const timeout=setTimeout(()=>controller.abort(),6500);
         try{
           const response=await fetch(url,{signal:controller.signal});
           if(!response.ok)throw new Error('Translation HTTP '+response.status);
           const data=await response.json();
-          const translated=Array.isArray(data?.[0])?data[0].map(x=>x?.[0]||'').join(''):'';
-          return translated||line;
+          let translated=Array.isArray(data?.[0])?data[0].map(x=>x?.[0]||'').join(''):'';
+          if(!translated)return line;
+          translated=translated.replace(/__NV\s*(\d+)\s*__/gi,function(match,i){return protectedParts[Number(i)]??match});
+          if(protectedParts.some(x=>!translated.includes(x)))return line;
+          return translated;
         }catch(e){console.warn('Notice translation unavailable',e);return line}
         finally{clearTimeout(timeout)}
       }));
-      const translated=result.join('\\n');
-      translatedNotices.set(key,translated);
+      const translated=result.join('\n');
+      if(translated!==message)translatedNotices.set(key,translated);
       return translated;
     }
     let serial=0,noticeTimer=null;
@@ -129,7 +135,7 @@
         let noticeMessage='',translatedMessage='',translatedKey='',translationSerial=0;
         async function updateNoticeTranslation(){
           const language=noticeLanguage(),message=noticeMessage;
-          const key=language+'\\u0000'+message;
+          const key=language+'\u0000'+message;
           if(key===translatedKey)return;
           translatedKey=key;
           const version=++translationSerial;
