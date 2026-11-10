@@ -278,6 +278,20 @@ def main():
         html = html.replace("</body>", '<script defer src="/newvps-payment-quote.js"></script>\\n</body>', 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Attached crypto quote overlay to archived account top-up form")
+    # Attach account navigation to all archived HTML routes, including /vps/.
+    # Login is not limited to the homepage. The script also revokes the
+    # account session when the dashboard Log out button is clicked.
+    account_navigation = ROOT / "scripts/newvps-account-navigation.js"
+    if account_navigation.is_file():
+        shutil.copy2(account_navigation, OUT / "newvps-account-navigation.js")
+        for page in OUT.rglob("index.html"):
+            if page.parent == OUT / "topup":
+                continue
+            html = page.read_text(encoding="utf-8")
+            if "</body>" in html and 'newvps-account-navigation.js' not in html:
+                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
+                page.write_text(html, encoding="utf-8")
+        print("Restored login links and dashboard logout on archived pages")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
     if dashboard.is_file():
