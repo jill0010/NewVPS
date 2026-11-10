@@ -268,6 +268,16 @@ def main():
         html = html.replace("</body>", bridge + "\n</body>", 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Enabled archived account top-up amount selection and preview; payment remains disabled")
+    # Keep the original captured form; attach the isolated quote overlay after
+    # the existing amount/currency interaction bridge.
+    quote_source = ROOT / "scripts/newvps-payment-quote.js"
+    if dashboard.is_file() and quote_source.is_file():
+        quote_target = OUT / "newvps-payment-quote.js"
+        shutil.copy2(quote_source, quote_target)
+        html = dashboard.read_text(encoding="utf-8")
+        html = html.replace("</body>", '<script defer src="/newvps-payment-quote.js"></script>\\n</body>', 1)
+        dashboard.write_text(html, encoding="utf-8")
+        print("Attached crypto quote overlay to archived account top-up form")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
     if dashboard.is_file():
