@@ -421,7 +421,7 @@ def main():
             written["/" + route] = filename
             print(f"Restored original domain flow: /{route}/ from {filename}")
     # English domain search capture supersedes the earlier localized capture.
-    english_archive = ROOT / "域名英文界面.zip"
+    english_archive = ROOT / "新域名英文界面.zip"
     if english_archive.is_file():
         with zipfile.ZipFile(english_archive) as z:
             html_candidates = [n for n in z.namelist() if n.endswith("index.html") and not n.startswith("__MACOSX/")]
