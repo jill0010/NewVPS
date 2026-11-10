@@ -378,6 +378,9 @@ def main():
         "cloned-page-1794329995250.zip": "domain-order",
         "cloned-page-1794330020014.zip": "domain-pay",
     }
+    domain_flow_js = ROOT / "scripts/newvps-domain-capture-flow.js"
+    if domain_flow_js.is_file():
+        shutil.copy2(domain_flow_js, OUT / "newvps-domain-capture-flow.js")
     for filename, route in domain_captures.items():
         archive = ROOT / filename
         if not archive.is_file():
@@ -407,6 +410,8 @@ def main():
                 lambda m: m.group(1) + 'NewVPS/' + m.group(2),
                 html,
             )
+            if domain_flow_js.is_file():
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
             dest.write_text(html, encoding="utf-8")
             written["/" + route] = filename
             print(f"Restored original domain flow: /{route}/ from {filename}")
