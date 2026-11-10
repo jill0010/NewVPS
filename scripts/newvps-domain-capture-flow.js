@@ -13,6 +13,10 @@ function ready(){
  const more=document.getElementById('domLoadMore');
  const rowsByClick=[4,9,12,14,18,23,28,32];
  let moreClicks=0;
+ let searchTimer=null;
+ let searchSequence=0;
+ const searchDelayMs=1250;
+ const popularShortTlds=new Set(['com','net','org','io','co','app','dev','ai','me']);
  // The captured page contains a completed example search; start with an empty field.
  input.value='';
  input.defaultValue='';
@@ -47,7 +51,7 @@ function ready(){
      const tld=card.dataset.tld||'';
      let hash=2166136261;
      for(const char of name+'.'+tld){hash=Math.imul(hash^char.charCodeAt(0),16777619)}
-     if((hash>>>0)%7<2)demoTaken.add(index);
+     if((name.length<=5&&popularShortTlds.has(tld))||(hash>>>0)%7<2)demoTaken.add(index);
    });
    Array.from({length:totalCards},function(_,index){return originals[index%originals.length]}).forEach(function(original,index){
      const card=original.cloneNode(true);
@@ -91,7 +95,46 @@ function ready(){
    if(title)title.textContent=availableCount+' available · '+totalCards+' checked (demo)';
    if(more)more.hidden=moreClicks>=7;
  }
- form.addEventListener('submit',function(event){event.preventDefault();moreClicks=0;render()});
+ function showLoading(name){
+   head.hidden=false;
+   grid.hidden=false;
+   if(over)over.textContent=name.toUpperCase();
+   if(title)title.textContent='Searching '+name+'...';
+   if(more)more.hidden=true;
+   grid.replaceChildren();
+   for(let i=0;i<12;i++){
+     const card=document.createElement('div');
+     card.className='dom-card';
+     card.setAttribute('aria-hidden','true');
+     card.style.cssText='min-height:58px;background:#f8f9fb;border:1px dashed #e7eaf0;border-radius:8px;padding:12px;box-sizing:border-box';
+     const bar=document.createElement('div');
+     bar.style.cssText='height:10px;width:90%;background:#edf0f4;border-radius:4px;margin:2px 0 10px';
+     const bar2=document.createElement('div');
+     bar2.style.cssText='height:9px;width:55%;background:#edf0f4;border-radius:4px';
+     card.append(bar,bar2);
+     grid.append(card);
+   }
+ }
+ form.addEventListener('submit',function(event){
+   event.preventDefault();
+   const name=normalize(input.value);
+   if(!name){
+     input.setCustomValidity('Enter a valid domain name');
+     input.reportValidity();
+     return;
+   }
+   input.setCustomValidity('');
+   moreClicks=0;
+   clearTimeout(searchTimer);
+   const sequence=++searchSequence;
+   showLoading(name);
+   searchTimer=setTimeout(function(){
+     if(sequence!==searchSequence)return;
+     // Keep the submitted query stable even if the user types during loading.
+     input.value=name;
+     render();
+   },searchDelayMs);
+ });
  if(more)more.addEventListener('click',function(){if(moreClicks<7){moreClicks++;render()}});
  // Preserve the captured cards on initial load; only replace them after search.
 }
