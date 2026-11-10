@@ -11,8 +11,16 @@ function ready(){
  const title=document.getElementById('domResultsTitle');
  const over=document.getElementById('domResultsOv');
  const more=document.getElementById('domLoadMore');
- const initialCount=cards.filter(c=>!c.hidden).length||12;
- let showAll=false;
+ const rowsByClick=[4,9,12,14,18,23,28,32];
+ let moreClicks=0;
+ // The captured page contains a completed example search; start with an empty field.
+ input.value='';
+ input.defaultValue='';
+ input.removeAttribute('value');
+ grid.replaceChildren();
+ grid.hidden=true;
+ head.hidden=true;
+ if(more)more.hidden=true;
  function normalize(value){
    let name=value.trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/$/,'');
    name=name.replace(/\.[a-z]{2,}$/,'');
@@ -29,22 +37,23 @@ function ready(){
    head.hidden=false;grid.hidden=false;
    if(over)over.textContent=name.toUpperCase();
    // The capture is a visual demo, not live registrar availability.
-   if(title)title.textContent=(showAll?originals.length:Math.min(12,originals.length))+' domain extensions · Preview results';
+   const totalCards=rowsByClick[Math.min(moreClicks,7)]*3;
+   if(!originals.length)return;
    grid.replaceChildren();
    let availableCount=0;
    const demoTaken=new Set();
    // Deterministic visual-only states. Never present these as registrar results.
-   originals.forEach(function(card,index){
+   Array.from({length:totalCards},function(_,index){return originals[index%originals.length]}).forEach(function(card,index){
      const tld=card.dataset.tld||'';
      let hash=2166136261;
      for(const char of name+'.'+tld){hash=Math.imul(hash^char.charCodeAt(0),16777619)}
      if((hash>>>0)%7<2)demoTaken.add(index);
    });
-   originals.forEach(function(original,index){
+   Array.from({length:totalCards},function(_,index){return originals[index%originals.length]}).forEach(function(original,index){
      const card=original.cloneNode(true);
      const tld=card.dataset.tld;
      if(!tld)return;
-     card.hidden=!showAll&&index>=12;
+     card.hidden=false;
      const taken=demoTaken.has(index);
      card.classList.toggle('is-available',!taken);
      card.classList.toggle('is-taken',taken);
@@ -79,11 +88,11 @@ function ready(){
      });
      grid.appendChild(card);
    });
-   if(title)title.textContent=availableCount+' available · '+originals.length+' checked (demo)';
-   if(more)more.hidden=showAll||originals.length<=12;
+   if(title)title.textContent=availableCount+' available · '+totalCards+' checked (demo)';
+   if(more)more.hidden=moreClicks>=7;
  }
- form.addEventListener('submit',function(event){event.preventDefault();showAll=false;render()});
- if(more)more.addEventListener('click',function(){showAll=true;render()});
+ form.addEventListener('submit',function(event){event.preventDefault();moreClicks=0;render()});
+ if(more)more.addEventListener('click',function(){if(moreClicks<7){moreClicks++;render()}});
  // Preserve the captured cards on initial load; only replace them after search.
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready();
