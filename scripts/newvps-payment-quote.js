@@ -87,7 +87,7 @@
         right.appendChild(el('p','TO ADDRESS · '+coin.name,'nv-subtle'));
         right.appendChild(el('div',coin.address,'nv-address'));
         const copyAddress=el('button','Copy address');copyAddress.style.marginTop='10px';copyAddress.onclick=()=>navigator.clipboard.writeText(coin.address).then(()=>copyAddress.textContent='Copied').catch(()=>{});right.appendChild(copyAddress);
-        shell.appendChild(el('div','Payment monitoring not connected · No order created · No credit will be issued','nv-status'));
+        
       }catch(err){if(request===serial)progress.textContent='Could not obtain a live exchange rate. No payment amount was generated. Please try again.'}
     }
     form.addEventListener('submit',function(event){event.preventDefault();event.stopImmediatePropagation();show()},true);
