@@ -175,16 +175,20 @@ def main():
     var amount=document.getElementById('topup-amount');
     var custom=document.getElementById('topup-custom-input');
     var buttons=[...form.querySelectorAll('[data-amt]')];
-    // Update the published preview only; preserve archived capture files.
+    // Correct the preset's actual visible label and value without touching archives.
     buttons.forEach(function(b){
       if(Number(b.dataset.amt)!==30)return;
       b.dataset.amt='50';
-      b.querySelectorAll('.tu-amt-val,.tu-amt-total').forEach(function(node){
-        node.textContent=node.textContent.replace(/\\$\\s*30(?:\\.00)?\\b/g,'$50');
+      b.querySelectorAll('*').forEach(function(node){
+        if(node.children.length)return;
+        var old=(node.textContent||'').trim();
+        if(old==='$30'||old==='$30.00'||old==='30'||old==='30.00'){
+          node.textContent=old.replace('30','50');
+        }
       });
-      b.innerHTML=b.innerHTML.replace(/\\$\\s*30(?:\\.00)?\\b/g,'$50');
+      b.setAttribute('aria-label',(b.getAttribute('aria-label')||'').replace('30','50'));
     });
-    if(custom){custom.min='50';custom.max='2000';custom.placeholder=(custom.placeholder||'').replace(/30/g,'50');}
+    if(custom){custom.min='50';custom.max='2000';custom.placeholder=(custom.placeholder||'').replace('30','50');}
     if(amount){amount.min='50';amount.max='2000';}
     var msg=document.getElementById('topup-msg');
     function money(n){return '$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:2})}
