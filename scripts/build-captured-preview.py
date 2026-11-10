@@ -379,7 +379,7 @@ def main():
         "cloned-page-1794330020014.zip": "domain-pay",
     }
     for filename, route in domain_captures.items():
-        archive = ROOT / "domain-captures" / filename
+        archive = ROOT / filename
         if not archive.is_file():
             print(f"Domain archive pending: {archive.relative_to(ROOT)}")
             continue
@@ -401,7 +401,7 @@ def main():
             dest = OUT / route / "index.html"
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_text(html, encoding="utf-8")
-            written["/" + route] = "domain-captures/" + filename
+            written["/" + route] = filename
             print(f"Restored original domain flow: /{route}/ from {filename}")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
