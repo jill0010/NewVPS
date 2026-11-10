@@ -99,7 +99,7 @@ function ready(){
        const candidates=[...(priceNode?.querySelectorAll('*')||[])].filter(el=>el.children.length===0);
        const visiblePrices=[...candidates,priceNode].filter(Boolean).filter(el=>!el.closest('s,del,strike,[style*="line-through"]'));
        const displayed=(visiblePrices.map(el=>el.textContent||'').join(' ')||'');
-       const matches=[...displayed.matchAll(/\\$\\s*(\\d+(?:\\.\\d{2})?)/g)];
+       const matches=[...displayed.matchAll(/\$\s*(\d+(?:\.\d{2})?)/g)];
        const price=matches.length?matches[matches.length-1][1]:null;
        if(!price){
          link.removeAttribute('href');
