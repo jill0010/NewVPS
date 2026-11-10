@@ -75,6 +75,8 @@ missing_route,linked_from,referring_pages
 /ru/dedicated/russia,1,/dedicated/russia
 /ru/dedicated/switzerland,1,/dedicated/switzerland
 /ru/dmca-ignored-hosting,3,/dmca-ignored-hosting | /ru/ | /ru/alternative-to-aws
+/ru/domain-order,1,/domain-order
+/ru/domain-pay,1,/domain-pay
 /ru/domains,4,/domains | /ru/ | /ru/alternative-to-aws | /zh/domains
 /ru/faq,3,/faq | /ru/ | /ru/alternative-to-aws
 /ru/gpu,4,/gpu | /ru/ | /ru/alternative-to-aws | /zh/gpu
@@ -248,6 +250,8 @@ missing_route,linked_from,referring_pages
 /zh/dedicated/russia,3,/dedicated/russia | /zh/dedicated | /zh/dedicated/moldova
 /zh/dedicated/switzerland,3,/dedicated/switzerland | /zh/dedicated | /zh/dedicated/moldova
 /zh/dmca-ignored-hosting,14,/dmca-ignored-hosting | /zh/ | /zh/account | /zh/alternative-to-aws | /zh/dedicated | /zh/dedicated/moldova | /zh/domains | /zh/gpu | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/order | /zh/rdp
+/zh/domain-order,1,/domain-order
+/zh/domain-pay,1,/domain-pay
 /zh/faq,14,/faq | /zh/ | /zh/account | /zh/alternative-to-aws | /zh/dedicated | /zh/dedicated/moldova | /zh/domains | /zh/gpu | /zh/gpu/romania | /zh/jurisdiction-selector | /zh/order | /zh/rdp
 /zh/gpu/iceland,3,/gpu/iceland | /zh/gpu | /zh/gpu/romania
 /zh/gpu/moldova,3,/gpu/moldova | /zh/gpu | /zh/gpu/romania
