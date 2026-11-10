@@ -31,11 +31,40 @@ function ready(){
    // The capture is a visual demo, not live registrar availability.
    if(title)title.textContent=(showAll?originals.length:Math.min(12,originals.length))+' domain extensions · Preview results';
    grid.replaceChildren();
+   let availableCount=0;
+   const demoTaken=new Set();
+   // Deterministic visual-only states. Never present these as registrar results.
+   originals.forEach(function(card,index){
+     const tld=card.dataset.tld||'';
+     let hash=2166136261;
+     for(const char of name+'.'+tld){hash=Math.imul(hash^char.charCodeAt(0),16777619)}
+     if((hash>>>0)%7<2)demoTaken.add(index);
+   });
    originals.forEach(function(original,index){
      const card=original.cloneNode(true);
      const tld=card.dataset.tld;
      if(!tld)return;
      card.hidden=!showAll&&index>=12;
+     const taken=demoTaken.has(index);
+     card.classList.toggle('is-available',!taken);
+     card.classList.toggle('is-taken',taken);
+     if(taken){
+       card.classList.remove('is-featured');
+       card.removeAttribute('style');
+       card.querySelectorAll('.dom-card-badge,.dom-card-price').forEach(el=>el.remove());
+       const meta=card.querySelector('.dom-card-meta');
+       if(meta)meta.textContent='● taken · demo status';
+       const buy=card.querySelector('.dom-card-buy');
+       if(buy){
+         const badge=document.createElement('span');
+         badge.className='dom-card-buy is-disabled';
+         badge.textContent='TAKEN';
+         badge.setAttribute('aria-disabled','true');
+         buy.replaceWith(badge);
+       }
+     }else{
+       availableCount++;
+     }
      card.querySelectorAll('.dom-card-domain').forEach(function(node){
        node.replaceChildren(document.createTextNode(name+'.'+tld));
      });
@@ -50,6 +79,7 @@ function ready(){
      });
      grid.appendChild(card);
    });
+   if(title)title.textContent=availableCount+' available · '+originals.length+' checked (demo)';
    if(more)more.hidden=showAll||originals.length<=12;
  }
  form.addEventListener('submit',function(event){event.preventDefault();showAll=false;render()});
