@@ -28,6 +28,25 @@
     }
   }
 
+  // Hide Google's floating translation launcher and top banner while
+  // retaining the underlying translation engine and our own language menu.
+  function hideTranslateChrome(){
+    if(document.getElementById('newvps-translate-chrome-style'))return;
+    const style=document.createElement('style');
+    style.id='newvps-translate-chrome-style';
+    style.textContent=[
+      '.goog-te-banner-frame,.goog-te-banner-frame.skiptranslate',
+      '.goog-te-balloon-frame,.goog-te-gadget-icon',
+      '#goog-gt-tt,.goog-tooltip,.goog-tooltip:hover',
+      '.VIpgJd-ZVi9od-ORHb-OEVmcd',
+      '.VIpgJd-ZVi9od-aZ2wEe-wOHMyf',
+      '.VIpgJd-ZVi9od-l4eHX-hSRGPd',
+      '.skiptranslate iframe[title*="Translate"]'
+    ].join(',')+'{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;}'+
+    'html,body{top:0!important;}';
+    document.head.appendChild(style);
+  }
+  hideTranslateChrome();
   // Google Translate is loaded on demand, never for the default English page.
   function installTranslator(){
     if(document.getElementById('newvps-google-translate'))return;
