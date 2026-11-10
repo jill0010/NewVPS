@@ -18,19 +18,18 @@ function init(){
  const periods=[1,2,3,5];
  const all=[...document.querySelectorAll('body *')];
  const leafText=(regex)=>all.filter(e=>e.children.length===0&&regex.test((e.textContent||'').trim()));
- const findPeriodCards=()=>{
-   const labels=leafText(/^(?:1|2|3|5)\s*years?$/i);
-   return periods.map(n=>{
-     const label=labels.find(e=>e.textContent.trim().toLowerCase()===n+' year'||e.textContent.trim().toLowerCase()===n+' years');
-     if(!label)return null;
-     let node=label;
-     for(let i=0;i<4&&node.parentElement;i++,node=node.parentElement){
-       const text=node.textContent||'';
-       if(text.includes('/yr')&&text.includes('$')&&text.length<250)return node;
-     }
-     return label.parentElement;
-   });
- };
+ const findPeriodCards=()=>periods.map(n=>{
+   const label=[...document.querySelectorAll('body *')].find(el=>
+     el.children.length===0 && el.textContent.trim().toLowerCase()===n+(n===1?' year':' years'));
+   if(!label)return null;
+   let el=label;
+   while(el.parentElement&&el.parentElement!==document.body){
+     el=el.parentElement;
+     if(el.querySelectorAll('*').length>20)break;
+     if(/\\/yr/i.test(el.textContent||'')&&/\\$/.test(el.textContent||''))return el;
+   }
+   return label.parentElement;
+ });
  const cards=findPeriodCards();
  if(cards.some(c=>!c))console.warn('NewVPS: missing captured registration period card');
  function replaceMoney(el,value){
