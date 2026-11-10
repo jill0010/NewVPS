@@ -315,7 +315,7 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-language-selector.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-language-selector.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored English, Russian and Simplified Chinese language selector")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
