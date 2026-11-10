@@ -33,7 +33,7 @@
       const usd=Number(document.getElementById('topup-amount')?.value);
       const msg=document.getElementById('topup-msg');
       if(!coin){if(msg)msg.textContent='Select a cryptocurrency first.';return}
-      if(!Number.isFinite(usd)||usd<30||usd>2000){if(msg)msg.textContent='Choose an amount between $30 and $2,000.';return}
+      if(!Number.isFinite(usd)||usd<50||usd>2000){if(msg)msg.textContent='Choose an amount between $50 and $2,000.';return}
       if(msg)msg.textContent='';
       close();
       const request=++serial;
