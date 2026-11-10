@@ -114,7 +114,8 @@
       document.addEventListener('keydown',function(e){if(e.key==='Escape')toggle(false)});
       menu.querySelectorAll('a.lang-opt').forEach(function(a){
         const href=a.getAttribute('href')||'';
-        const lang=href.startsWith('/ru/')?'ru':href.startsWith('/zh/')?'zh-CN':'en';
+        const path=href.replace(/^\/NewVPS(?=\/)/,'').split(/[?#]/)[0];
+        const lang=/^\/ru(?:\/|$)/.test(path)?'ru':/^\/zh(?:\/|$)/.test(path)?'zh-CN':'en';
         a.dataset.newvpsLang=lang;
         a.href='#';
         a.addEventListener('click',function(e){e.preventDefault();toggle(false);choose(lang)});
@@ -126,7 +127,8 @@
     });
     document.querySelectorAll('a.mob-lang-opt').forEach(function(a){
       const href=a.getAttribute('href')||'';
-      const lang=href.startsWith('/ru/')?'ru':href.startsWith('/zh/')?'zh-CN':'en';
+      const path=href.replace(/^\/NewVPS(?=\/)/,'').split(/[?#]/)[0];
+        const lang=/^\/ru(?:\/|$)/.test(path)?'ru':/^\/zh(?:\/|$)/.test(path)?'zh-CN':'en';
       a.dataset.newvpsLang=lang;
       a.href='#';
       a.addEventListener('click',function(e){e.preventDefault();choose(lang)});
