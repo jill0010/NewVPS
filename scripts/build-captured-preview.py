@@ -378,6 +378,9 @@ def main():
         "cloned-page-1794329995250.zip": "domain-order",
         "cloned-page-1794330020014.zip": "domain-pay",
     }
+    whois_style_js = ROOT / "scripts/newvps-domain-whois-style.js"
+    if whois_style_js.is_file():
+        shutil.copy2(whois_style_js, OUT / "newvps-domain-whois-style.js")
     domain_pricing_js = ROOT / "scripts/newvps-domain-pricing.js"
     if domain_pricing_js.is_file():
         shutil.copy2(domain_pricing_js, OUT / "newvps-domain-pricing.js")
@@ -415,6 +418,8 @@ def main():
             )
             if domain_flow_js.is_file():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+            if route == "domain-order" and whois_style_js.is_file():
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-whois-style.js"></script>\\n</body>', 1)
             if route == "domain-order" and domain_pricing_js.is_file():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-pricing.js"></script>\\n</body>', 1)
             dest.write_text(html, encoding="utf-8")
