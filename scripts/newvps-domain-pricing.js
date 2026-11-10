@@ -54,44 +54,82 @@ function init(){
      card.classList.toggle('on',active);
      card.classList.toggle('selected',active);
      card.setAttribute('aria-pressed',String(active));
-     card.style.borderColor=active?'#3159e9':'';
-     card.style.backgroundColor=active?'#edf1fc':'';
+     card.style.setProperty('border',active?'2px solid #3159e9':'1px solid #e5e7eb','important');
+     card.style.setProperty('box-shadow','none','important');
+     card.style.setProperty('outline','none','important');
+     card.style.setProperty('background-color',active?'#edf1fc':'#fff','important');
    });
    const total=price*years;
    // Match the original order-summary rows by label, then update the amount
    // in the same row rather than relying on nested markup or stale values.
-   function summaryRow(labelPattern){
-     const label=all.find(e=>e.children.length===0&&labelPattern.test((e.textContent||'').trim()));
-     if(!label)return null;
+   function leaf(regex,root=document){
+     return [...root.querySelectorAll('*')].find(e=>e.children.length===0&&regex.test((e.textContent||'').trim()));
+   }
+   function setRowAmount(labelPattern){
+     const label=leaf(labelPattern);
+     if(!label)return;
      let row=label.parentElement;
-     for(let depth=0;depth<4&&row;depth++,row=row.parentElement){
-       if(row.querySelectorAll('*').length>20)break;
-       if([...row.querySelectorAll('*')].some(e=>e.children.length===0&&/^\$[\d,.]+$/.test((e.textContent||'').trim())))return row;
+     for(let i=0;i<5&&row;i++,row=row.parentElement){
+       const amounts=[...row.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\$[\d,.]+$/.test(e.textContent.trim()));
+       if(amounts.length&&row.textContent.length<180){
+         replaceMoney(amounts[amounts.length-1],total);
+         return;
+       }
      }
-     return label.parentElement;
    }
-   function updateRowAmount(pattern){
-     const row=summaryRow(pattern);
-     if(!row)return;
-     const values=[...row.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\$[\d,.]+$/.test(e.textContent.trim()));
-     if(values.length)replaceMoney(values[values.length-1],total);
+   const periodLabel=leaf(/^Period$/i);
+   if(periodLabel){
+     let row=periodLabel.parentElement;
+     for(let i=0;i<4&&row;i++,row=row.parentElement){
+       const value=leaf(/^(?:1|2|3|5)\s*years?$/i,row);
+       if(value&&value!==periodLabel){value.textContent=years+' '+(years===1?'year':'years');break;}
+     }
    }
-   const period=all.find(e=>e.children.length===0&&/^\s*Period\s*$/i.test(e.textContent||''))?.parentElement;
-   if(period){
-     const value=[...period.querySelectorAll('*')].find(e=>e.children.length===0&&/^\s*(?:1|2|3|5)\s*years?\s*$/i.test(e.textContent||''));
-     if(value)value.textContent=years+' '+(years===1?'year':'years');
-   }
-   const priceLabel=all.find(e=>e.children.length===0&&/^\s*Price\s*\(\s*\d+x\s*\)\s*$/i.test(e.textContent||''));
+   const priceLabel=leaf(/^Price\s*\(\s*\d+x\s*\)$/i);
    if(priceLabel)priceLabel.textContent='Price ('+years+'x)';
-   updateRowAmount(/^Price\s*\(\s*\d+x\s*\)$/i);
-   updateRowAmount(/^Total today$/i);
-   const topup=leafText(/You'll need to top up/i)[0];
-   if(topup)topup.textContent=topup.textContent.replace(/\$[\d,.]+/,money(total));
+   setRowAmount(/^Price\s*\(\s*\d+x\s*\)$/i);
+   setRowAmount(/^Total today$/i);
+   // The top-up sentence may be split into nested text nodes; update the
+   // currency in its entire sentence without touching the balance above.
+   const topupLabel=[...document.querySelectorAll('*')].find(e=>
+     e.children.length===0&&/You'll need to top up/i.test(e.textContent||''));
+   if(topupLabel){
+     let sentence=topupLabel;
+     for(let i=0;i<3&&sentence.parentElement;i++){
+       if(/\$[\d,.]+/.test(sentence.textContent||''))break;
+       sentence=sentence.parentElement;
+     }
+     const walker=document.createTreeWalker(sentence,NodeFilter.SHOW_TEXT);
+     let node;
+     while((node=walker.nextNode())){
+       if(/\$[\d,.]+/.test(node.textContent||'')){
+         node.textContent=node.textContent.replace(/\$[\d,.]+/,money(total));
+         break;
+       }
+     }
+   }
+
    // Domain header, summary, and the captured price banner.
    const domainNodes=leafText(/anonymousmous|anonymshsh/i);
    domainNodes.forEach(e=>{e.textContent=e.textContent.replace(/anonymousmous\.com|anonymshsh\.com/gi,domain)});
-   const banner=all.find(e=>e.children.length===0&&/^\$4\.99$/.test(e.textContent.trim()));
-   if(banner&& !cards.some(c=>c?.contains(banner)))banner.textContent=money(price);
+   // Update the header's original/sale prices independently of the period.
+   const headerCandidates=[...document.querySelectorAll('*')].filter(e=>
+     e.children.length===0&&/^\$[\d,.]+$/.test((e.textContent||'').trim())&&
+     !cards.some(c=>c&&c.contains(e)));
+   const summaryHeading=leaf(/^Order summary$/i);
+   const headerPrices=headerCandidates.filter(e=>
+     !summaryHeading||!summaryHeading.parentElement?.parentElement?.contains(e));
+   // The captured banner is the first compact two-price block above the cards.
+   const header=headerPrices.filter(e=>{
+     const rect=e.getBoundingClientRect();
+     const firstCard=cards.find(Boolean);
+     return firstCard&&rect.top<firstCard.getBoundingClientRect().top;
+   });
+   if(header.length>=2){
+     replaceMoney(header[0],old);
+     replaceMoney(header[1],price);
+   }
+
  }
  cards.forEach((card,i)=>{
    if(!card)return;
