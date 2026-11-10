@@ -334,9 +334,15 @@ def main():
                     src_match = re.search(r'src="[^"]*anonport_com/([^"/]+[.]svg)"', tag)
                     if not src_match:
                         return tag
-                    original = OUT / "_captures" / "shared" / "assets" / "anonport_com" / src_match.group(1)
+                    filename = src_match.group(1)
+                    original = OUT / "_captures" / "shared" / "assets" / "anonport_com" / filename
                     if not original.is_file():
-                        raise RuntimeError(f"Missing original OS icon: {original}")
+                        # Some captures are not selected by route deduplication;
+                        # use their original archived icon without altering the archive.
+                        candidates = list((ROOT / "extracted" / "new-captures" / "order-pages").rglob("assets/anonport_com/" + filename))
+                        if not candidates:
+                            raise RuntimeError(f"Missing original OS icon in all archives: {filename}")
+                        original = candidates[0]
                     data = base64.b64encode(original.read_bytes()).decode("ascii")
                     embedded[0] += 1
                     return tag[:src_match.start()] + 'src="data:image/svg+xml;base64,' + data + '"' + tag[src_match.end():]
