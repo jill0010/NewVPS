@@ -23,10 +23,10 @@
     const form=document.getElementById('topup-form');
     if(!form)return;
     const style=el('style');
-    style.textContent='#nv-payment{position:fixed;inset:0;z-index:2147483000;background:#101827a8;display:flex;align-items:center;justify-content:center;padding:16px}#nv-payment .nv-shell{background:white;border:1px solid #e5e7eb;border-radius:8px;max-height:94vh;overflow:auto;width:min(100%,980px);font-family:inherit;color:#152238}#nv-payment .nv-heading{padding:20px 24px;border-bottom:1px solid #e8eaee;display:flex;justify-content:space-between;align-items:center}#nv-payment .nv-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr)}#nv-payment .nv-left,#nv-payment .nv-right{padding:24px}#nv-payment .nv-right{border-left:1px solid #e8eaee;text-align:center}#nv-payment .nv-row{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid #e8eaee;padding:15px 0}#nv-payment .nv-row strong{text-align:right}#nv-payment .nv-subtle{font-size:12px;color:#697586}#nv-payment .nv-address{padding:12px;border:1px solid #e5e7eb;background:#f7f8fa;overflow-wrap:anywhere;text-align:left;font-family:monospace;font-size:12px;border-radius:5px}#nv-payment button{background:white;border:1px solid #dce1e8;border-radius:5px;padding:8px 12px;cursor:pointer}#nv-payment .nv-qr{width:192px;height:192px;max-width:100%;display:block;margin:18px auto}#nv-payment .nv-warning{margin-top:20px;padding:12px;border:1px solid #f5dda5;border-radius:5px;background:#fffaeb;color:#875e00}#nv-payment .nv-copy{display:flex;justify-content:center;gap:8px;margin:10px 0}#nv-payment .nv-status{padding:15px;border-top:1px solid #e8eaee;text-align:center;color:#697586;font-size:12px}@media(max-width:650px){#nv-payment .nv-grid{grid-template-columns:1fr}#nv-payment .nv-right{border-left:0;border-top:1px solid #e8eaee}}';
+    style.textContent='#nv-payment{width:100%;font-family:inherit;color:#152238}#nv-payment .nv-shell{width:100%;background:white}#nv-payment .nv-heading{padding:0 0 18px;display:flex;justify-content:space-between;align-items:center}#nv-payment .nv-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:22px}#nv-payment .nv-left,#nv-payment .nv-right{min-width:0}#nv-payment .nv-right{border:1px solid #e8eaee;border-radius:8px;text-align:center;padding:18px}#nv-payment .nv-row{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid #e8eaee;padding:15px 0}#nv-payment .nv-row strong{text-align:right}#nv-payment .nv-subtle{font-size:12px;color:#697586}#nv-payment .nv-address{padding:12px;border:1px solid #e5e7eb;background:#f7f8fa;overflow-wrap:anywhere;text-align:left;font-family:monospace;font-size:12px;border-radius:5px}#nv-payment button{background:white;border:1px solid #dce1e8;border-radius:5px;padding:8px 12px;cursor:pointer}#nv-payment .nv-qr{width:192px;height:192px;max-width:100%;display:block;margin:18px auto}#nv-payment .nv-copy{display:flex;justify-content:center;gap:8px;margin:10px 0}#nv-payment .nv-status{padding:15px;border-top:1px solid #e8eaee;text-align:center;color:#697586;font-size:12px}@media(max-width:650px){#nv-payment .nv-grid{grid-template-columns:1fr}#nv-payment .nv-right{border-top:1px solid #e5e7eb}}';
     document.head.appendChild(style);
     let serial=0;
-    function close(){serial++;document.getElementById('nv-payment')?.remove()}
+    function close(){serial++;document.getElementById('nv-payment')?.remove();form.closest('.tu-grid')?.querySelectorAll(':scope > *').forEach(x=>{if(x!==form)x.style.display=''});form.style.display='';}
     async function show(){
       const value=document.getElementById('cs-topup-val')?.value;
       const coin=currencies[value];
@@ -40,10 +40,13 @@
       const overlay=el('div',undefined);overlay.id='nv-payment';
       const shell=el('div',undefined,'nv-shell');overlay.appendChild(shell);
       const heading=el('div',undefined,'nv-heading');heading.appendChild(el('strong','Topup balance'));
-      const x=el('button','Close');x.type='button';x.onclick=close;heading.appendChild(x);shell.appendChild(heading);
+      const x=el('button','← Back to top up');x.type='button';x.onclick=close;heading.appendChild(x);shell.appendChild(heading);
       const progress=el('div','Fetching current USD exchange rate…');progress.style.padding='28px';shell.appendChild(progress);
-      document.body.appendChild(overlay);
-      overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+      const area=form.closest('.tu-grid') || form.parentElement;
+      Array.from(area.children).forEach(child=>{if(child!==form)child.style.display='none'});
+      form.style.display='none';
+      area.appendChild(overlay);
+      area.style.display='block';
       try{
         const controller=new AbortController();
         const timeout=setTimeout(()=>controller.abort(),10000);
@@ -88,7 +91,7 @@
       }catch(err){if(request===serial)progress.textContent='Could not obtain a live exchange rate. No payment amount was generated. Please try again.'}
     }
     form.addEventListener('submit',function(event){event.preventDefault();event.stopImmediatePropagation();show()},true);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+    
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
