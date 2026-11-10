@@ -36,6 +36,33 @@
       return noticeLabels[lang]?lang:'en';
     }
     function noticeStrings(){return noticeLabels[noticeLanguage()]}
+    const translatedNotices=new Map();
+    // Translate display-only prose; keep payment identifiers and numeric lines unchanged.
+    async function translateNotice(message,lang){
+      if(lang==='zh-CN'||!message.trim())return message;
+      const key=lang+'\\u0000'+message;
+      if(translatedNotices.has(key))return translatedNotices.get(key);
+      const lines=message.split('\\n');
+      const result=await Promise.all(lines.map(async function(line){
+        if(!/[\\u3400-\\u9fff]/.test(line))return line;
+        // Never send or translate lines containing amounts, addresses or order references.
+        if(/(?:[0-9]|0x[a-fA-F0-9]{12,}|[A-Za-z0-9_-]{30,})/.test(line))return line;
+        const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-CN&tl='+encodeURIComponent(lang)+'&dt=t&q='+encodeURIComponent(line);
+        const controller=new AbortController();
+        const timeout=setTimeout(()=>controller.abort(),6500);
+        try{
+          const response=await fetch(url,{signal:controller.signal});
+          if(!response.ok)throw new Error('Translation HTTP '+response.status);
+          const data=await response.json();
+          const translated=Array.isArray(data?.[0])?data[0].map(x=>x?.[0]||'').join(''):'';
+          return translated||line;
+        }catch(e){console.warn('Notice translation unavailable',e);return line}
+        finally{clearTimeout(timeout)}
+      }));
+      const translated=result.join('\\n');
+      translatedNotices.set(key,translated);
+      return translated;
+    }
     let serial=0,noticeTimer=null;
     const noticeApi='https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/quote-notice';
     async function noticeRequest(action,quote_ref,extra={}){
@@ -99,19 +126,34 @@
         const noticeTitle=el('strong',noticeStrings().title);notice.appendChild(noticeTitle);
         const noticeBody=el('p',noticeStrings().empty);noticeBody.style.cssText='margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#697586';
         notice.appendChild(noticeBody);left.appendChild(notice);
-        let noticeMessage='';
+        let noticeMessage='',translatedMessage='',translatedKey='',translationSerial=0;
+        async function updateNoticeTranslation(){
+          const language=noticeLanguage(),message=noticeMessage;
+          const key=language+'\\u0000'+message;
+          if(key===translatedKey)return;
+          translatedKey=key;
+          const version=++translationSerial;
+          translatedMessage=language==='zh-CN'?message:message;
+          renderNotice();
+          if(!message||language==='zh-CN')return;
+          const result=await translateNotice(message,language);
+          if(version!==translationSerial||request!==serial||!notice.isConnected)return;
+          translatedMessage=result;
+          renderNotice();
+        }
         function renderNotice(){
           const labels=noticeStrings();
           noticeTitle.textContent=labels.title;
-          noticeBody.textContent=noticeMessage||labels.empty;
+          noticeBody.textContent=translatedMessage||noticeMessage||labels.empty;
           noticeBody.style.color=noticeMessage?'#dc2626':'#697586';
         }
         const noticeLanguageTimer=setInterval(function(){
           if(!notice.isConnected){clearInterval(noticeLanguageTimer);return}
+          updateNoticeTranslation();
           renderNotice();
         },500);
         async function refreshNotice(){
-          try{const data=await noticeRequest('get',quoteRef);if(data&&request===serial){noticeMessage=data.message||'';renderNotice()}}catch(e){console.warn('Order notice unavailable',e)}
+          try{const data=await noticeRequest('get',quoteRef);if(data&&request===serial){noticeMessage=data.message||'';updateNoticeTranslation()}}catch(e){console.warn('Order notice unavailable',e)}
         }
         noticeRequest('register',quoteRef,{usd,asset:value}).then(refreshNotice).catch(e=>console.warn('Quote notification registration unavailable',e));
         noticeTimer=setInterval(refreshNotice,10000);
