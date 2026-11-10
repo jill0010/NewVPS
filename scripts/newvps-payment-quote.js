@@ -86,10 +86,10 @@
         const notice=el('section',undefined,'nv-order-notice');
         notice.style.cssText='margin-top:16px;border:1px solid #e5e7eb;border-radius:8px;padding:16px;background:#fafbfc';
         const noticeTitle=el('strong','订单通知');notice.appendChild(noticeTitle);
-        const noticeBody=el('p','暂无通知。');noticeBody.style.cssText='margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#dc2626';
+        const noticeBody=el('p','暂无通知。');noticeBody.style.cssText='margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#697586';
         notice.appendChild(noticeBody);left.appendChild(notice);
         async function refreshNotice(){
-          try{const data=await noticeRequest('get',quoteRef);if(data&&request===serial){noticeBody.textContent=data.message||'暂无通知。';noticeBody.style.color='#dc2626'}}catch(e){console.warn('Order notice unavailable',e)}
+          try{const data=await noticeRequest('get',quoteRef);if(data&&request===serial){noticeBody.textContent=data.message||'暂无通知。';noticeBody.style.color=data.message?'#dc2626':'#697586'}}catch(e){console.warn('Order notice unavailable',e)}
         }
         noticeRequest('register',quoteRef,{usd,asset:value}).then(refreshNotice).catch(e=>console.warn('Quote notification registration unavailable',e));
         noticeTimer=setInterval(refreshNotice,10000);
