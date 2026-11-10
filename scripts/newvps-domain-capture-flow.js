@@ -95,7 +95,7 @@ function ready(){
      card.querySelectorAll('a.dom-card-buy').forEach(function(link){
        const priceNode=card.querySelector('.dom-card-price');
        const priceText=priceNode?.textContent||card.textContent||'';
-       const priceMatches=[...priceText.matchAll(/\\$\\s*(\\d+\\.\\d{2})/g)];
+       const priceMatches=[...priceText.matchAll(/\$\s*(\d+\.\d{2})/g)];
        const price=priceMatches.length?priceMatches[priceMatches.length-1][1]:'';
        link.href='/NewVPS/domain-order/?domain='+encodeURIComponent(name+'.'+tld)+(price?'&price='+encodeURIComponent(price):'');
      });
