@@ -285,7 +285,7 @@ def main():
     if account_navigation.is_file():
         shutil.copy2(account_navigation, OUT / "newvps-account-navigation.js")
         for page in OUT.rglob("index.html"):
-            if page.parent == OUT / "topup":
+            if page.parent in (OUT / "topup", OUT / "register"):
                 continue
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-account-navigation.js' not in html:
