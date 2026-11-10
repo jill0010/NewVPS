@@ -325,20 +325,18 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if 'class="os-tab' in html:
-                # Fix the archived OS icon URLs in the generated HTML itself,
-                # independent of JavaScript execution or browser cache.
-                html = re.sub(
-                    r'(<label\\b[^>]*class="[^"]*\\bcfg-os\\b[^"]*"[^>]*>\\s*<input\\b[^>]*>\\s*<img\\b[^>]*\\bsrc=")([^"]+)(")',
-                    lambda m: m.group(1) + (
-                        "/NewVPS/_captures/shared/assets/anonport_com/" +
-                        m.group(2).split("anonport_com/")[-1]
-                        if "anonport_com/" in m.group(2) else m.group(2)
-                    ) + m.group(3),
-                    html,
-                    flags=re.IGNORECASE,
-                )
-            if 'class="os-tab' in html and 'newvps-server-config.js' not in html:
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-server-config.js"></script>\\n</body>', 1)
+                # Rewrite every captured OS icon URL in the generated page,
+                # without depending on JavaScript or the label's exact markup.
+                def fix_os_icon(match):
+                    tag = match.group(0)
+                    return re.sub(
+                        r'src="[^"]*anonport_com/([^"/]+)"',
+                        lambda asset: 'src="/NewVPS/_captures/shared/assets/anonport_com/' + asset.group(1) + '"',
+                        tag,
+                    )
+                html = re.sub(r'<img\\b[^>]*>', fix_os_icon, html)
+                if 'newvps-server-config.js' not in html:
+                    html = html.replace("</body>", '<script defer src="/NewVPS/newvps-server-config.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored captured server configuration interactions")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
