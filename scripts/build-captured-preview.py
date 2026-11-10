@@ -10,6 +10,7 @@ from html.parser import HTMLParser
 from html import escape
 from urllib.parse import urlsplit, unquote
 import csv
+import base64
 import re
 import shutil
 
@@ -325,19 +326,31 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if 'class="os-tab' in html:
-                # Use the exact asset filenames present in the original archive.
-                # No regex word-boundary escapes: previous patterns silently matched nothing.
-                os_icon_count = [0]
-                def rewrite_os_asset(match):
-                    os_icon_count[0] += 1
-                    return 'src="/NewVPS/_captures/shared/assets/anonport_com/' + match.group(1) + '"'
+                # Embed the original OS SVG bytes directly in the image source.
+                # This avoids GitHub Pages URL rewriting and route-prefix issues.
+                embedded = [0]
+                def embed_os_image(img_match):
+                    tag = img_match.group(0)
+                    src_match = re.search(r'src="[^"]*anonport_com/([^"/]+[.]svg)"', tag)
+                    if not src_match:
+                        return tag
+                    original = OUT / "_captures" / "shared" / "assets" / "anonport_com" / src_match.group(1)
+                    if not original.is_file():
+                        raise RuntimeError(f"Missing original OS icon: {original}")
+                    data = base64.b64encode(original.read_bytes()).decode("ascii")
+                    embedded[0] += 1
+                    return tag[:src_match.start()] + 'src="data:image/svg+xml;base64,' + data + '"' + tag[src_match.end():]
+                def embed_os_label(label_match):
+                    return re.sub(r'<img[^>]*>', embed_os_image, label_match.group(0))
                 html = re.sub(
-                    r'src="(?:[^"]*/)?anonport_com/([^"/]+[.](?:svg|png|webp))"',
-                    rewrite_os_asset,
+                    r'<label[^>]*class="[^"]*cfg-os[^"]*"[^>]*>.*?</label>',
+                    embed_os_label,
                     html,
+                    flags=re.DOTALL,
                 )
-                if os_icon_count[0] == 0:
-                    raise RuntimeError(f"No original OS image references matched: {page}")
+                if embedded[0] == 0:
+                    raise RuntimeError(f"No OS icons embedded in captured configuration page: {page}")
+                print(f"Embedded {embedded[0]} original OS icons in {page.relative_to(OUT)}")
                 if 'newvps-server-config.js' not in html:
                     html = html.replace("</body>", '<script defer src="/NewVPS/newvps-server-config.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
