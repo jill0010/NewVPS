@@ -77,7 +77,7 @@ function ready(){
        card.removeAttribute('style');
        card.querySelectorAll('.dom-card-badge,.dom-card-price').forEach(el=>el.remove());
        const meta=card.querySelector('.dom-card-meta');
-       if(meta)meta.textContent='● taken · demo status';
+       if(meta)meta.textContent='● taken';
        const buy=card.querySelector('.dom-card-buy');
        if(buy){
          const badge=document.createElement('span');
