@@ -35,17 +35,16 @@ function init(){
  if(cards.some(c=>!c))console.warn('NewVPS: missing captured registration period card');
  function replaceMoney(el,value){
    if(!el)return;
-   const text=el.textContent||'';
-   const node=[...el.childNodes].find(n=>n.nodeType===3&&/\$/.test(n.textContent||''));
-   if(node)node.textContent=node.textContent.replace(/\$\s*[\d,.]+/,money(value));
+   const node=[...el.childNodes].find(n=>n.nodeType===3&&/\\$/.test(n.textContent||''));
+   if(node)node.textContent=node.textContent.replace(/\\$\\s*[\\d,.]+/,money(value));
    else el.textContent=money(value);
  }
  function setPriceTexts(card,n){
    if(!card)return;
-   const amounts=[...card.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\$[\d,.]+$/.test(e.textContent.trim()));
+   const amounts=[...card.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\\$[\\d,.]+$/.test(e.textContent.trim()));
    if(amounts[0])replaceMoney(amounts[0],old*n);
    if(amounts[1])replaceMoney(amounts[1],price*n);
-   const perYear=[...card.querySelectorAll('*')].filter(e=>e.children.length===0&&/\/yr/.test(e.textContent||''));
+   const perYear=[...card.querySelectorAll('*')].filter(e=>e.children.length===0&&/\\/yr/.test(e.textContent||''));
    perYear.forEach(e=>e.textContent=money(price)+'/yr');
  }
  function update(){
