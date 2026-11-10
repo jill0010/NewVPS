@@ -420,6 +420,47 @@ def main():
             dest.write_text(html, encoding="utf-8")
             written["/" + route] = filename
             print(f"Restored original domain flow: /{route}/ from {filename}")
+    # English domain search capture supersedes the earlier localized capture.
+    english_archive = ROOT / "域名英文界面.zip"
+    if english_archive.is_file():
+        with zipfile.ZipFile(english_archive) as z:
+            html_candidates = [n for n in z.namelist() if n.endswith("index.html") and not n.startswith("__MACOSX/")]
+            if len(html_candidates) != 1:
+                raise RuntimeError(f"Expected one English domain page in {english_archive.name}, got {html_candidates}")
+            html_name = html_candidates[0]
+            html = z.read(html_name).decode("utf-8", errors="replace")
+            if 'domSearchForm' not in html:
+                raise RuntimeError("English archive does not contain the original domain search form")
+            base = Path(html_name).parent
+            asset_root = "/NewVPS/_captures/domain-english/"
+            for member in z.infolist():
+                if member.is_dir():
+                    continue
+                rel = Path(member.filename)
+                if ".." in rel.parts or rel.is_absolute():
+                    raise RuntimeError(f"Unsafe English archive entry: {member.filename}")
+                try:
+                    asset_rel = rel.relative_to(base)
+                except ValueError:
+                    continue
+                if not asset_rel.parts or asset_rel.parts[0] != "assets":
+                    continue
+                target = OUT / "_captures" / "domain-english" / asset_rel
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(z.read(member))
+            html = re.sub(r'(?<![\\w/])assets/', asset_root + "assets/", html)
+            html = re.sub(
+                r'(\\b(?:href|action)="/)(?!NewVPS/|_captures/|/)([^"]*)"',
+                lambda m: m.group(1) + 'NewVPS/' + m.group(2),
+                html,
+            )
+            if domain_flow_js.is_file():
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+            page = OUT / "domains" / "index.html"
+            page.parent.mkdir(parents=True, exist_ok=True)
+            page.write_text(html, encoding="utf-8")
+            written["/domains"] = english_archive.name
+            print("Restored English domain search from user-provided archive")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
     if dashboard.is_file():
