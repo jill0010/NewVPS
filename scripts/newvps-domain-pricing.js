@@ -112,23 +112,18 @@ function init(){
    // Domain header, summary, and the captured price banner.
    const domainNodes=leafText(/anonymousmous|anonymshsh/i);
    domainNodes.forEach(e=>{e.textContent=e.textContent.replace(/anonymousmous\.com|anonymshsh\.com/gi,domain)});
-   // Update the header's original/sale prices independently of the period.
-   const headerCandidates=[...document.querySelectorAll('*')].filter(e=>
-     e.children.length===0&&/^\$[\d,.]+$/.test((e.textContent||'').trim())&&
+   // The header contains a crossed-out annual price and a blue annual
+   // price followed by "/yr"; it must never use the selected multi-year total.
+   const firstCard=cards.find(Boolean);
+   const cardTop=firstCard?firstCard.getBoundingClientRect().top:Infinity;
+   const headerLeaves=[...document.querySelectorAll('*')].filter(e=>
+     e.children.length===0&&e.getBoundingClientRect().top<cardTop&&
      !cards.some(c=>c&&c.contains(e)));
-   const summaryHeading=leaf(/^Order summary$/i);
-   const headerPrices=headerCandidates.filter(e=>
-     !summaryHeading||!summaryHeading.parentElement?.parentElement?.contains(e));
-   // The captured banner is the first compact two-price block above the cards.
-   const header=headerPrices.filter(e=>{
-     const rect=e.getBoundingClientRect();
-     const firstCard=cards.find(Boolean);
-     return firstCard&&rect.top<firstCard.getBoundingClientRect().top;
-   });
-   if(header.length>=2){
-     replaceMoney(header[0],old);
-     replaceMoney(header[1],price);
-   }
+   const headerOld=headerLeaves.find(e=>/^\$[\d,.]+$/.test((e.textContent||'').trim())&&
+     (e.closest('s,del,strike')||getComputedStyle(e).textDecorationLine.includes('line-through')));
+   const headerAnnual=headerLeaves.find(e=>/^\$[\d,.]+\s*\/yr$/i.test((e.textContent||'').trim()));
+   if(headerOld)replaceMoney(headerOld,old);
+   if(headerAnnual)headerAnnual.textContent=money(price)+'/yr';
 
  }
  cards.forEach((card,i)=>{
