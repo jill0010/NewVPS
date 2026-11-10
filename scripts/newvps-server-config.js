@@ -10,7 +10,7 @@ function init(){
     const at=raw.lastIndexOf(marker);
     if(at<0)return;
     const filename=raw.slice(at+marker.length).split(/[?#]/)[0];
-    if(!/^[a-zA-Z0-9._-]+\\.(svg|png|webp)$/.test(filename))return;
+    if(!/^[a-zA-Z0-9._-]+\.(svg|png|webp)$/.test(filename))return;
     const correct='/NewVPS/_captures/shared/assets/anonport_com/'+filename;
     if(img.getAttribute('src')!==correct)img.setAttribute('src',correct);
     img.loading='eager';
