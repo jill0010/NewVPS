@@ -400,6 +400,13 @@ def main():
             html = re.sub(r'(?<![\\w/])assets/', asset_prefix, html)
             dest = OUT / route / "index.html"
             dest.parent.mkdir(parents=True, exist_ok=True)
+            # Keep the captured DOM and cards; repair only internal navigation
+            # to the GitHub Pages project prefix.
+            html = re.sub(
+                r'(\\b(?:href|action)="/)(?!NewVPS/|_captures/|/)([^"]*)"',
+                lambda m: m.group(1) + 'NewVPS/' + m.group(2),
+                html,
+            )
             dest.write_text(html, encoding="utf-8")
             written["/" + route] = filename
             print(f"Restored original domain flow: /{route}/ from {filename}")
