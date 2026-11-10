@@ -12,7 +12,7 @@
     if(document.getElementById('newvps-google-translate'))return;
     const host=document.createElement('div');
     host.id='newvps-google-translate';
-    host.style.cssText='position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden';
+    host.style.cssText='position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0.01;overflow:hidden;pointer-events:none;z-index:-1';
     document.body.appendChild(host);
     window.googleTranslateElementInit=function(){
       if(!window.google?.translate?.TranslateElement)return;
@@ -33,7 +33,7 @@
   function applyLanguage(){
     const select=document.querySelector('#newvps-google-translate select.goog-te-combo');
     if(!select)return false;
-    const desired=current==='en'?'en':current;
+    const desired=current==='en'?'':current;
     if(select.value!==desired)select.value=desired;
     if(select.value!==desired)return false;
     if(!applying){
@@ -56,8 +56,7 @@
     current=lang;
     document.documentElement.lang=lang;
     document.querySelectorAll('.lang-sw').forEach(function(w){const c=w.querySelector('.lang-btn span:not(.fi)');if(c)c.textContent=lang==='ru'?'RU':'中文'});
-    document.cookie='googtrans=/en/'+lang+';path=/';
-    document.cookie='googtrans=/en/'+lang+';path=/;domain='+location.hostname;
+    document.cookie='googtrans=/en/'+lang+';path=/;SameSite=Lax';
     installTranslator();
     // Reload is required for Google Translate to pick up a newly selected
     // googtrans cookie consistently, including when switching ru <-> zh-CN.
@@ -115,7 +114,7 @@
       }
     },true);
     if(current!=='en'){
-      document.cookie='googtrans=/en/'+current+';path=/';
+      document.cookie='googtrans=/en/'+current+';path=/;SameSite=Lax';
       installTranslator();
     }
   }
