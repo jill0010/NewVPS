@@ -13,6 +13,7 @@ import csv
 import base64
 import re
 import shutil
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "reports/captured-route-inventory.csv"
@@ -370,6 +371,38 @@ def main():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-search.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored captured domain search controls")
+    # User-provided domain flow archives are authoritative for these three routes.
+    # Upload the three original ZIPs to domain-captures/ without extracting or editing them.
+    domain_captures = {
+        "cloned-page-1794329970472.zip": "domains",
+        "cloned-page-1794329995250.zip": "domain-order",
+        "cloned-page-1794330020014.zip": "domain-pay",
+    }
+    for filename, route in domain_captures.items():
+        archive = ROOT / "domain-captures" / filename
+        if not archive.is_file():
+            print(f"Domain archive pending: {archive.relative_to(ROOT)}")
+            continue
+        with zipfile.ZipFile(archive) as z:
+            if "index.html" not in z.namelist():
+                raise RuntimeError(f"Missing index.html in {filename}")
+            html = z.read("index.html").decode("utf-8", errors="replace")
+            for member in z.infolist():
+                if member.is_dir() or not member.filename.startswith("assets/"):
+                    continue
+                rel = Path(member.filename)
+                if ".." in rel.parts or rel.is_absolute():
+                    raise RuntimeError(f"Unsafe ZIP entry: {member.filename}")
+                dest = OUT / "_captures" / "domain-flow" / filename.removesuffix(".zip") / rel
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(z.read(member))
+            asset_prefix = "/NewVPS/_captures/domain-flow/" + filename.removesuffix(".zip") + "/assets/"
+            html = re.sub(r'(?<![\\w/])assets/', asset_prefix, html)
+            dest = OUT / route / "index.html"
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(html, encoding="utf-8")
+            written["/" + route] = "domain-captures/" + filename
+            print(f"Restored original domain flow: /{route}/ from {filename}")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
     if dashboard.is_file():
