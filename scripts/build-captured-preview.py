@@ -318,6 +318,16 @@ def main():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-language-selector.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored English, Russian and Simplified Chinese language selector")
+    # Restore captured server configuration controls on every matching page.
+    config_source = ROOT / "scripts/newvps-server-config.js"
+    if config_source.is_file():
+        shutil.copy2(config_source, OUT / "newvps-server-config.js")
+        for page in OUT.rglob("index.html"):
+            html = page.read_text(encoding="utf-8")
+            if 'class="os-tab' in html and 'newvps-server-config.js' not in html:
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-server-config.js"></script>\\n</body>', 1)
+                page.write_text(html, encoding="utf-8")
+        print("Restored captured server configuration interactions")
     # Provide the archived /topup URL as an alias of the original account top-up pane.
     # The actual form and styling remain those captured in the original account page.
     if dashboard.is_file():
