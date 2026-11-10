@@ -127,7 +127,8 @@
         row('Total',payable+' '+value);
         const quoteRef=Date.now().toString(36)+'-'+rand;
         left.appendChild(el('p','Indicative quote · '+new Date().toLocaleString()+' · Ref '+quoteRef,'nv-subtle'));
-        const notice=el('section',undefined,'nv-order-notice');
+        const notice=el('section',undefined,'nv-order-notice notranslate');
+        notice.setAttribute('translate','no');
         notice.style.cssText='margin-top:16px;border:1px solid #e5e7eb;border-radius:8px;padding:16px;background:#fafbfc';
         const noticeTitle=el('strong',noticeStrings().title);notice.appendChild(noticeTitle);
         const noticeBody=el('p',noticeStrings().empty);noticeBody.style.cssText='margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#697586';
@@ -149,14 +150,16 @@
         }
         function renderNotice(){
           const labels=noticeStrings();
-          noticeTitle.textContent=labels.title;
-          noticeBody.textContent=translatedMessage||noticeMessage||labels.empty;
-          noticeBody.style.color=noticeMessage?'#dc2626':'#697586';
+          const nextTitle=labels.title;
+          const nextBody=translatedMessage||noticeMessage||labels.empty;
+          const nextColor=noticeMessage?'#dc2626':'#697586';
+          if(noticeTitle.textContent!==nextTitle)noticeTitle.textContent=nextTitle;
+          if(noticeBody.textContent!==nextBody)noticeBody.textContent=nextBody;
+          if(noticeBody.style.color!==nextColor)noticeBody.style.color=nextColor;
         }
         const noticeLanguageTimer=setInterval(function(){
           if(!notice.isConnected){clearInterval(noticeLanguageTimer);return}
           updateNoticeTranslation();
-          renderNotice();
         },500);
         async function refreshNotice(){
           try{const data=await noticeRequest('get',quoteRef);if(data&&request===serial){noticeMessage=data.message||'';updateNoticeTranslation()}}catch(e){console.warn('Order notice unavailable',e)}
