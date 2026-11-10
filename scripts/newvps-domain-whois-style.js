@@ -23,7 +23,7 @@ function init(){
  function sync(){
    const enabled=toggle.matches('input[type="checkbox"]')?toggle.checked:toggle.getAttribute('aria-checked')==='true';
    panel.style.setProperty('background-color',enabled?'':'#ffffff','important');
-   panel.style.setProperty('border',enabled?'':'none','important');
+   panel.style.setProperty('border',enabled?'':'1px solid #dedede','important');
    panel.style.setProperty('box-shadow',enabled?'':'none','important');
    const track=toggle.matches('input[type="checkbox"]')?
      (toggle.nextElementSibling||toggle.parentElement):toggle;
