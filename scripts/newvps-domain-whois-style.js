@@ -14,6 +14,12 @@ function init(){
    panel.style.setProperty('background-color',enabled?'':'#ffffff','important');
    panel.style.setProperty('border',enabled?'':'none','important');
    panel.style.setProperty('box-shadow',enabled?'':'none','important');
+   const track=toggle.matches('input[type="checkbox"]')?
+     (toggle.nextElementSibling||toggle.parentElement):toggle;
+   if(track){
+     track.style.setProperty('background-color',enabled?'':'#e5e7eb','important');
+     track.style.setProperty('border-color',enabled?'':'#d1d5db','important');
+   }
  }
  toggle.addEventListener('change',sync);
  toggle.addEventListener('click',()=>setTimeout(sync,0));
