@@ -2,6 +2,12 @@ name: Publish captured preview to GitHub Pages
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'extracted/**'
+      - '.github/workflows/publish-captured-preview.yml'
 
 permissions:
   contents: write
