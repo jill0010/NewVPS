@@ -93,11 +93,28 @@ function ready(){
        node.replaceChildren(document.createTextNode(name+'.'+tld));
      });
      card.querySelectorAll('a.dom-card-buy').forEach(function(link){
+       const domain=name+'.'+tld;
        const priceNode=card.querySelector('.dom-card-price');
-       const priceText=priceNode?.textContent||card.textContent||'';
-       const priceMatches=[...priceText.matchAll(/\$\s*(\d+\.\d{2})/g)];
-       const price=priceMatches.length?priceMatches[priceMatches.length-1][1]:'';
-       link.href='/NewVPS/domain-order/?domain='+encodeURIComponent(name+'.'+tld)+(price?'&price='+encodeURIComponent(price):'');
+       // Read this card's displayed sale price, never a global or default price.
+       const candidates=[...(priceNode?.querySelectorAll('*')||[])].filter(el=>el.children.length===0);
+       const visiblePrices=[...candidates,priceNode].filter(Boolean).filter(el=>!el.closest('s,del,strike,[style*="line-through"]'));
+       const displayed=(visiblePrices.map(el=>el.textContent||'').join(' ')||'');
+       const matches=[...displayed.matchAll(/\\$\\s*(\\d+(?:\\.\\d{2})?)/g)];
+       const price=matches.length?matches[matches.length-1][1]:null;
+       if(!price){
+         link.removeAttribute('href');
+         link.setAttribute('aria-disabled','true');
+         link.title='No sale price in this captured card';
+         return;
+       }
+       const destination=()=>'/NewVPS/domain-order/?domain='+encodeURIComponent(domain)+'&price='+encodeURIComponent(Number(price).toFixed(2));
+       link.href=destination();
+       link.dataset.domain=domain;
+       link.dataset.price=Number(price).toFixed(2);
+       link.addEventListener('click',function(event){
+         event.preventDefault();
+         location.assign(destination());
+       });
      });
      card.querySelectorAll('.dom-card-meta').forEach(function(node){
        const label=node.textContent||'';
