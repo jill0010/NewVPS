@@ -66,24 +66,24 @@ function init(){
      let row=label.parentElement;
      for(let depth=0;depth<4&&row;depth++,row=row.parentElement){
        if(row.querySelectorAll('*').length>20)break;
-       if([...row.querySelectorAll('*')].some(e=>e.children.length===0&&/^\\$[\\d,.]+$/.test((e.textContent||'').trim())))return row;
+       if([...row.querySelectorAll('*')].some(e=>e.children.length===0&&/^\$[\d,.]+$/.test((e.textContent||'').trim())))return row;
      }
      return label.parentElement;
    }
    function updateRowAmount(pattern){
      const row=summaryRow(pattern);
      if(!row)return;
-     const values=[...row.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\\$[\\d,.]+$/.test(e.textContent.trim()));
+     const values=[...row.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\$[\d,.]+$/.test(e.textContent.trim()));
      if(values.length)replaceMoney(values[values.length-1],total);
    }
-   const period=all.find(e=>e.children.length===0&&/^\\s*Period\\s*$/i.test(e.textContent||''))?.parentElement;
+   const period=all.find(e=>e.children.length===0&&/^\s*Period\s*$/i.test(e.textContent||''))?.parentElement;
    if(period){
-     const value=[...period.querySelectorAll('*')].find(e=>e.children.length===0&&/^\\s*(?:1|2|3|5)\\s*years?\\s*$/i.test(e.textContent||''));
+     const value=[...period.querySelectorAll('*')].find(e=>e.children.length===0&&/^\s*(?:1|2|3|5)\s*years?\s*$/i.test(e.textContent||''));
      if(value)value.textContent=years+' '+(years===1?'year':'years');
    }
-   const priceLabel=all.find(e=>e.children.length===0&&/^\\s*Price\\s*\\(\\s*\\d+x\\s*\\)\\s*$/i.test(e.textContent||''));
+   const priceLabel=all.find(e=>e.children.length===0&&/^\s*Price\s*\(\s*\d+x\s*\)\s*$/i.test(e.textContent||''));
    if(priceLabel)priceLabel.textContent='Price ('+years+'x)';
-   updateRowAmount(/^Price\\s*\\(\\s*\\d+x\\s*\\)$/i);
+   updateRowAmount(/^Price\s*\(\s*\d+x\s*\)$/i);
    updateRowAmount(/^Total today$/i);
    const topup=leafText(/You'll need to top up/i)[0];
    if(topup)topup.textContent=topup.textContent.replace(/\$[\d,.]+/,money(total));
