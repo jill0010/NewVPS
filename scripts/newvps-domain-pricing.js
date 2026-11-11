@@ -89,41 +89,53 @@ function init(){
    if(priceLabel)priceLabel.textContent='Price ('+years+'x)';
    setRowAmount(/^Price\s*\(\s*\d+x\s*\)$/i);
    setRowAmount(/^Total today$/i);
-   // The top-up sentence may be split into nested text nodes; update the
-   // currency in its entire sentence without touching the balance above.
-   const topupLabel=[...document.querySelectorAll('*')].find(e=>
-     e.children.length===0&&/You'll need to top up/i.test(e.textContent||''));
-   if(topupLabel){
-     let sentence=topupLabel;
-     for(let i=0;i<3&&sentence.parentElement;i++){
-       if(/\$[\d,.]+/.test(sentence.textContent||''))break;
-       sentence=sentence.parentElement;
+   // Locate the original top-up message by its wording and replace only its
+   // amount, even when the captured HTML wraps the amount in a separate span.
+   const topupText=[...document.querySelectorAll('*')].find(el=>
+     el.children.length===0&&/you.ll need to top up/i.test(el.textContent||''));
+   if(topupText){
+     let scope=topupText;
+     for(let i=0;i<5&&scope.parentElement;i++){
+       if(/\$[\d,.]+/.test(scope.textContent||''))break;
+       scope=scope.parentElement;
      }
-     const walker=document.createTreeWalker(sentence,NodeFilter.SHOW_TEXT);
-     let node;
-     while((node=walker.nextNode())){
-       if(/\$[\d,.]+/.test(node.textContent||'')){
-         node.textContent=node.textContent.replace(/\$[\d,.]+/,money(total));
+     if((scope.textContent||'').length<300){
+       const walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT);
+       let node;
+       while((node=walker.nextNode())){
+         if(/\$[\d,.]+/.test(node.textContent||'')){
+           node.textContent=node.textContent.replace(/\$[\d,.]+/,money(total));
+           break;
+         }
+       }
+     }
+   }
+   // The captured header has a "change" link. Its enclosing compact
+   // banner contains the crossed-out old price and annual sale price.
+   const changeLink=[...document.querySelectorAll('a')].find(el=>
+     /^change$/i.test((el.textContent||'').trim()));
+   if(changeLink){
+     let banner=changeLink.parentElement;
+     for(let i=0;i<6&&banner;i++,banner=banner.parentElement){
+       if((banner.textContent||'').length>500)break;
+       if(!/\$[\d,.]+/.test(banner.textContent||''))continue;
+       const walker=document.createTreeWalker(banner,NodeFilter.SHOW_TEXT);
+       const priceNodes=[];
+       let node;
+       while((node=walker.nextNode())){
+         if(/\$[\d,.]+/.test(node.textContent||''))priceNodes.push(node);
+       }
+       if(priceNodes.length>=2){
+         priceNodes[0].textContent=priceNodes[0].textContent.replace(/\$[\d,.]+/,money(old));
+         priceNodes[1].textContent=priceNodes[1].textContent.replace(/\$[\d,.]+/,money(price));
          break;
        }
      }
    }
-
-   // Domain header, summary, and the captured price banner.
    const domainNodes=leafText(/anonymousmous|anonymshsh/i);
-   domainNodes.forEach(e=>{e.textContent=e.textContent.replace(/anonymousmous\.com|anonymshsh\.com/gi,domain)});
-   // The header contains a crossed-out annual price and a blue annual
-   // price followed by "/yr"; it must never use the selected multi-year total.
-   const firstCard=cards.find(Boolean);
-   const cardTop=firstCard?firstCard.getBoundingClientRect().top:Infinity;
-   const headerLeaves=[...document.querySelectorAll('*')].filter(e=>
-     e.children.length===0&&e.getBoundingClientRect().top<cardTop&&
-     !cards.some(c=>c&&c.contains(e)));
-   const headerOld=headerLeaves.find(e=>/^\$[\d,.]+$/.test((e.textContent||'').trim())&&
-     (e.closest('s,del,strike')||getComputedStyle(e).textDecorationLine.includes('line-through')));
-   const headerAnnual=headerLeaves.find(e=>/^\$[\d,.]+\s*\/yr$/i.test((e.textContent||'').trim()));
-   if(headerOld)replaceMoney(headerOld,old);
-   if(headerAnnual)headerAnnual.textContent=money(price)+'/yr';
+   domainNodes.forEach(e=>{
+     e.textContent=e.textContent.replace(/anonymousmous\.com|anonymshsh\.com/gi,domain);
+   });
 
  }
  cards.forEach((card,i)=>{
