@@ -497,6 +497,76 @@ def main():
         alias.parent.mkdir(parents=True, exist_ok=True)
         alias.write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/NewVPS/account/?tab=topup"><script>location.replace("/NewVPS/account/?tab=topup"+location.hash)</script><title>Top up</title><a href="/NewVPS/account/?tab=topup">Continue to Add credit</a></html>', encoding="utf-8")
         written["/topup"] = "alias of archived /account?tab=topup"
+    # Restore the captured mobile hamburger interaction without altering archive HTML.
+    # The original capture contains #mobBtn and #mobMenu but its source-site
+    # event handlers are not guaranteed to survive static archiving.
+    mobile_menu_js = r"""(function () {
+  'use strict';
+  function init() {
+    var btn = document.getElementById('mobBtn');
+    var menu = document.getElementById('mobMenu');
+    if (!btn || !menu || btn.dataset.anonyMobileFixed) return;
+    btn.dataset.anonyMobileFixed = '1';
+    btn.setAttribute('type', 'button');
+    btn.setAttribute('aria-controls', 'mobMenu');
+    btn.setAttribute('aria-expanded', 'false');
+    menu.hidden = true;
+    function setOpen(open) {
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.classList.toggle('on', open);
+      menu.classList.toggle('on', open);
+      menu.classList.toggle('open', open);
+      if (open) {
+        menu.style.setProperty('display', 'block', 'important');
+        menu.style.setProperty('visibility', 'visible', 'important');
+        menu.style.setProperty('opacity', '1', 'important');
+        menu.style.setProperty('transform', 'none', 'important');
+        menu.style.setProperty('pointer-events', 'auto', 'important');
+        menu.style.setProperty('max-height', 'calc(100dvh - 70px)', 'important');
+        menu.style.setProperty('overflow-y', 'auto', 'important');
+        menu.style.setProperty('position', 'fixed', 'important');
+        menu.style.setProperty('top', Math.round(btn.getBoundingClientRect().bottom + 8) + 'px', 'important');
+        menu.style.setProperty('left', '0', 'important');
+        menu.style.setProperty('right', '0', 'important');
+        menu.style.setProperty('z-index', '9999', 'important');
+      } else {
+        ['display','visibility','opacity','transform','pointer-events','max-height','overflow-y','position','top','left','right','z-index'].forEach(function (name) {
+          menu.style.removeProperty(name);
+        });
+      }
+    }
+    btn.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    }, true);
+    document.addEventListener('click', function (event) {
+      if (btn.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !btn.contains(event.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') setOpen(false);
+    });
+    menu.addEventListener('click', function (event) {
+      if (event.target.closest('a[href]')) setOpen(false);
+    });
+    window.addEventListener('resize', function () {
+      if (btn.getAttribute('aria-expanded') === 'true') {
+        if (window.innerWidth > 900) setOpen(false);
+        else menu.style.setProperty('top', Math.round(btn.getBoundingClientRect().bottom + 8) + 'px', 'important');
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();"""
+    (OUT / "newvps-mobile-menu.js").write_text(mobile_menu_js, encoding="utf-8")
+    for page in OUT.rglob("index.html"):
+        html = page.read_text(encoding="utf-8")
+        if 'id="mobBtn"' in html and 'id="mobMenu"' in html and 'newvps-mobile-menu.js' not in html:
+            html = html.replace("</body>", '<script defer src="/newvps-mobile-menu.js"></script>\\n</body>', 1)
+            page.write_text(html, encoding="utf-8")
+    print("Restored mobile hamburger menu toggle on captured pages")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
