@@ -79,7 +79,7 @@ def main():
         approved=completed.get(key,{})
         translations={}
         for lang in ('ru','zh-CN'):
-            candidate=approved.get(lang,previous.get(lang,seeds.get(value,{}).get(lang)))
+            candidate=approved.get(lang) or previous.get(lang) or seeds.get(value,{}).get(lang)
             translations[lang]=candidate if isinstance(candidate,str) and candidate.strip() and candidate.strip()!=value else None
         catalog[key]={'source':value,'protected_tokens':VARIABLE.findall(value),'routes':sorted(locations),**translations}
     OUT.mkdir(exist_ok=True)
