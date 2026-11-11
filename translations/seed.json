@@ -322,5 +322,489 @@
   "Previous": {
     "ru": "Назад",
     "zh-CN": "上一步"
+  },
+  "Anonymous Offshore VPS Hosting, No KYC": {
+    "ru": "Анонимный офшорный VPS-хостинг без KYC",
+    "zh-CN": "匿名离岸 VPS 主机，无需身份验证"
+  },
+  "Anonymous Offshore Dedicated Servers, No KYC": {
+    "ru": "Анонимные офшорные выделенные серверы без KYC",
+    "zh-CN": "匿名离岸独立服务器，无需身份验证"
+  },
+  "Anonymous Offshore Windows RDP, No KYC": {
+    "ru": "Анонимный офшорный Windows RDP без KYC",
+    "zh-CN": "匿名离岸 Windows 远程桌面，无需身份验证"
+  },
+  "Anonymous Offshore GPU AI Hosting, No KYC": {
+    "ru": "Анонимный офшорный GPU-хостинг для ИИ без KYC",
+    "zh-CN": "匿名离岸 GPU AI 主机，无需身份验证"
+  },
+  "Anonymous Domain Names": {
+    "ru": "Анонимные доменные имена",
+    "zh-CN": "匿名域名"
+  },
+  "View VPS Plans": {
+    "ru": "Посмотреть тарифы VPS",
+    "zh-CN": "查看 VPS 套餐"
+  },
+  "Search a domain": {
+    "ru": "Найти домен",
+    "zh-CN": "搜索域名"
+  },
+  "See all prices": {
+    "ru": "Посмотреть все цены",
+    "zh-CN": "查看全部价格"
+  },
+  "Search domain": {
+    "ru": "Найти домен",
+    "zh-CN": "搜索域名"
+  },
+  "Search domains": {
+    "ru": "Найти домены",
+    "zh-CN": "搜索域名"
+  },
+  "Configure Your VPS Server": {
+    "ru": "Настройте свой VPS-сервер",
+    "zh-CN": "配置您的 VPS 服务器"
+  },
+  "Configure Your Dedicated Server": {
+    "ru": "Настройте свой выделенный сервер",
+    "zh-CN": "配置您的独立服务器"
+  },
+  "Configure Your RDP Server": {
+    "ru": "Настройте свой RDP-сервер",
+    "zh-CN": "配置您的 RDP 服务器"
+  },
+  "Configure Your GPU Server": {
+    "ru": "Настройте свой GPU-сервер",
+    "zh-CN": "配置您的 GPU 服务器"
+  },
+  "Your order": {
+    "ru": "Ваш заказ",
+    "zh-CN": "您的订单"
+  },
+  "Order details": {
+    "ru": "Детали заказа",
+    "zh-CN": "订单详情"
+  },
+  "Order Summary": {
+    "ru": "Сводка заказа",
+    "zh-CN": "订单摘要"
+  },
+  "Payment": {
+    "ru": "Оплата",
+    "zh-CN": "付款"
+  },
+  "Payment method": {
+    "ru": "Способ оплаты",
+    "zh-CN": "付款方式"
+  },
+  "Pay now": {
+    "ru": "Оплатить сейчас",
+    "zh-CN": "立即支付"
+  },
+  "Balance": {
+    "ru": "Баланс",
+    "zh-CN": "余额"
+  },
+  "Account balance": {
+    "ru": "Баланс аккаунта",
+    "zh-CN": "账户余额"
+  },
+  "Create account": {
+    "ru": "Создать аккаунт",
+    "zh-CN": "创建账户"
+  },
+  "Welcome back": {
+    "ru": "С возвращением",
+    "zh-CN": "欢迎回来"
+  },
+  "Login to your account": {
+    "ru": "Войти в аккаунт",
+    "zh-CN": "登录您的账户"
+  },
+  "Access your server dashboard": {
+    "ru": "Открыть панель управления серверами",
+    "zh-CN": "进入服务器控制面板"
+  },
+  "Enter access token": {
+    "ru": "Введите токен доступа",
+    "zh-CN": "输入访问令牌"
+  },
+  "Invalid access token": {
+    "ru": "Недействительный токен доступа",
+    "zh-CN": "访问令牌无效"
+  },
+  "Copy token": {
+    "ru": "Копировать токен",
+    "zh-CN": "复制令牌"
+  },
+  "Token": {
+    "ru": "Токен",
+    "zh-CN": "令牌"
+  },
+  "Available domains": {
+    "ru": "Доступные домены",
+    "zh-CN": "可注册域名"
+  },
+  "Domain registration": {
+    "ru": "Регистрация домена",
+    "zh-CN": "域名注册"
+  },
+  "Registration": {
+    "ru": "Регистрация",
+    "zh-CN": "注册"
+  },
+  "Register domain": {
+    "ru": "Зарегистрировать домен",
+    "zh-CN": "注册域名"
+  },
+  "Free WHOIS privacy": {
+    "ru": "Бесплатная защита WHOIS",
+    "zh-CN": "免费 WHOIS 隐私保护"
+  },
+  "Full DNS control": {
+    "ru": "Полное управление DNS",
+    "zh-CN": "完整 DNS 控制"
+  },
+  "No KYC": {
+    "ru": "Без KYC",
+    "zh-CN": "无需身份验证"
+  },
+  "Crypto Only": {
+    "ru": "Только криптовалюта",
+    "zh-CN": "仅支持加密货币"
+  },
+  "No Logs": {
+    "ru": "Без журналов",
+    "zh-CN": "不记录日志"
+  },
+  "DMCA Ignored": {
+    "ru": "Игнорирование DMCA",
+    "zh-CN": "不响应 DMCA"
+  },
+  "Unlimited": {
+    "ru": "Без ограничений",
+    "zh-CN": "无限制"
+  },
+  "Bandwidth": {
+    "ru": "Пропускная способность",
+    "zh-CN": "带宽"
+  },
+  "Storage": {
+    "ru": "Хранилище",
+    "zh-CN": "存储空间"
+  },
+  "RAM": {
+    "ru": "ОЗУ",
+    "zh-CN": "内存"
+  },
+  "CPU": {
+    "ru": "Процессор",
+    "zh-CN": "处理器"
+  },
+  "Uplink": {
+    "ru": "Канал связи",
+    "zh-CN": "网络接口带宽"
+  },
+  "Processor": {
+    "ru": "Процессор",
+    "zh-CN": "处理器"
+  },
+  "Network": {
+    "ru": "Сеть",
+    "zh-CN": "网络"
+  },
+  "Monthly": {
+    "ru": "Ежемесячно",
+    "zh-CN": "按月"
+  },
+  "Annually": {
+    "ru": "Ежегодно",
+    "zh-CN": "按年"
+  },
+  "Total today": {
+    "ru": "Итого сегодня",
+    "zh-CN": "今日合计"
+  },
+  "Price (1×)": {
+    "ru": "Цена (1×)",
+    "zh-CN": "价格 (1×)"
+  },
+  "Confirm": {
+    "ru": "Подтвердить",
+    "zh-CN": "确认"
+  },
+  "Submit": {
+    "ru": "Отправить",
+    "zh-CN": "提交"
+  },
+  "Back": {
+    "ru": "Назад",
+    "zh-CN": "返回"
+  },
+  "Go back": {
+    "ru": "Назад",
+    "zh-CN": "返回"
+  },
+  "Get started": {
+    "ru": "Начать",
+    "zh-CN": "开始使用"
+  },
+  "Learn more": {
+    "ru": "Подробнее",
+    "zh-CN": "了解更多"
+  },
+  "Read more": {
+    "ru": "Читать далее",
+    "zh-CN": "阅读更多"
+  },
+  "View all": {
+    "ru": "Посмотреть все",
+    "zh-CN": "查看全部"
+  },
+  "All plans": {
+    "ru": "Все тарифы",
+    "zh-CN": "全部套餐"
+  },
+  "Locations": {
+    "ru": "Расположения",
+    "zh-CN": "服务地区"
+  },
+  "Guides": {
+    "ru": "Руководства",
+    "zh-CN": "指南"
+  },
+  "Compare": {
+    "ru": "Сравнить",
+    "zh-CN": "比较"
+  },
+  "Features": {
+    "ru": "Возможности",
+    "zh-CN": "功能"
+  },
+  "Specifications": {
+    "ru": "Характеристики",
+    "zh-CN": "配置参数"
+  },
+  "Server location": {
+    "ru": "Расположение сервера",
+    "zh-CN": "服务器位置"
+  },
+  "Choose location": {
+    "ru": "Выбрать расположение",
+    "zh-CN": "选择地区"
+  },
+  "Operating system": {
+    "ru": "Операционная система",
+    "zh-CN": "操作系统"
+  },
+  "Configure your server": {
+    "ru": "Настроить сервер",
+    "zh-CN": "配置您的服务器"
+  },
+  "Checkout securely": {
+    "ru": "Безопасное оформление заказа",
+    "zh-CN": "安全结账"
+  },
+  "Continue to payment": {
+    "ru": "Перейти к оплате",
+    "zh-CN": "继续付款"
+  },
+  "Domain name": {
+    "ru": "Доменное имя",
+    "zh-CN": "域名"
+  },
+  "Expiration date": {
+    "ru": "Дата окончания",
+    "zh-CN": "到期日期"
+  },
+  "Renewal": {
+    "ru": "Продление",
+    "zh-CN": "续费"
+  },
+  "Renew": {
+    "ru": "Продлить",
+    "zh-CN": "续费"
+  },
+  "Renewal price": {
+    "ru": "Цена продления",
+    "zh-CN": "续费价格"
+  },
+  "Year": {
+    "ru": "Год",
+    "zh-CN": "年"
+  },
+  "Years": {
+    "ru": "Годы",
+    "zh-CN": "年"
+  },
+  "Month": {
+    "ru": "Месяц",
+    "zh-CN": "月"
+  },
+  "Months": {
+    "ru": "Месяцы",
+    "zh-CN": "个月"
+  },
+  "Discount": {
+    "ru": "Скидка",
+    "zh-CN": "折扣"
+  },
+  "Save": {
+    "ru": "Сохранить",
+    "zh-CN": "保存"
+  },
+  "Annual": {
+    "ru": "Годовой",
+    "zh-CN": "年度"
+  },
+  "Payment details": {
+    "ru": "Детали оплаты",
+    "zh-CN": "付款详情"
+  },
+  "Your balance": {
+    "ru": "Ваш баланс",
+    "zh-CN": "您的余额"
+  },
+  "Confirm payment": {
+    "ru": "Подтвердить оплату",
+    "zh-CN": "确认付款"
+  },
+  "Top up with crypto": {
+    "ru": "Пополнить криптовалютой",
+    "zh-CN": "使用加密货币充值"
+  },
+  "Top up once with crypto, then register any domain in one click.": {
+    "ru": "Пополните баланс криптовалютой один раз и регистрируйте домены в один клик.",
+    "zh-CN": "使用加密货币充值一次，之后即可一键注册任意域名。"
+  },
+  "Free WHOIS privacy on every TLD that supports it.": {
+    "ru": "Бесплатная защита WHOIS для всех поддерживающих её доменных зон.",
+    "zh-CN": "所有支持 WHOIS 隐私保护的域名后缀均可免费使用。"
+  },
+  "Crypto Payments": {
+    "ru": "Оплата криптовалютой",
+    "zh-CN": "加密货币支付"
+  },
+  "Anonymous Hosting": {
+    "ru": "Анонимный хостинг",
+    "zh-CN": "匿名主机"
+  },
+  "Instant Setup": {
+    "ru": "Мгновенная настройка",
+    "zh-CN": "即时部署"
+  },
+  "Full Root Access": {
+    "ru": "Полный root-доступ",
+    "zh-CN": "完整 Root 权限"
+  },
+  "Contact Support": {
+    "ru": "Связаться с поддержкой",
+    "zh-CN": "联系支持"
+  },
+  "Help Center": {
+    "ru": "Центр помощи",
+    "zh-CN": "帮助中心"
+  },
+  "Order now": {
+    "ru": "Заказать сейчас",
+    "zh-CN": "立即订购"
+  },
+  "Buy now": {
+    "ru": "Купить сейчас",
+    "zh-CN": "立即购买"
+  },
+  "Select": {
+    "ru": "Выбрать",
+    "zh-CN": "选择"
+  },
+  "Selected": {
+    "ru": "Выбрано",
+    "zh-CN": "已选择"
+  },
+  "Availability": {
+    "ru": "Доступность",
+    "zh-CN": "可用情况"
+  },
+  "Not available": {
+    "ru": "Недоступно",
+    "zh-CN": "不可用"
+  },
+  "Unavailable": {
+    "ru": "Недоступно",
+    "zh-CN": "不可用"
+  },
+  "Loading": {
+    "ru": "Загрузка",
+    "zh-CN": "正在加载"
+  },
+  "Search results": {
+    "ru": "Результаты поиска",
+    "zh-CN": "搜索结果"
+  },
+  "Explore": {
+    "ru": "Подробнее",
+    "zh-CN": "探索"
+  },
+  "Customer support": {
+    "ru": "Поддержка клиентов",
+    "zh-CN": "客户支持"
+  },
+  "Documentation": {
+    "ru": "Документация",
+    "zh-CN": "文档"
+  },
+  "Blog": {
+    "ru": "Блог",
+    "zh-CN": "博客"
+  },
+  "Status": {
+    "ru": "Статус",
+    "zh-CN": "状态"
+  },
+  "Active": {
+    "ru": "Активно",
+    "zh-CN": "启用中"
+  },
+  "Pending": {
+    "ru": "В ожидании",
+    "zh-CN": "待处理"
+  },
+  "Completed": {
+    "ru": "Завершено",
+    "zh-CN": "已完成"
+  },
+  "Failed": {
+    "ru": "Ошибка",
+    "zh-CN": "失败"
+  },
+  "Cancel order": {
+    "ru": "Отменить заказ",
+    "zh-CN": "取消订单"
+  },
+  "View order": {
+    "ru": "Посмотреть заказ",
+    "zh-CN": "查看订单"
+  },
+  "My account": {
+    "ru": "Мой аккаунт",
+    "zh-CN": "我的账户"
+  },
+  "My orders": {
+    "ru": "Мои заказы",
+    "zh-CN": "我的订单"
+  },
+  "My services": {
+    "ru": "Мои услуги",
+    "zh-CN": "我的服务"
+  },
+  "Log in to continue": {
+    "ru": "Войдите, чтобы продолжить",
+    "zh-CN": "登录后继续"
+  },
+  "Continue as guest": {
+    "ru": "Продолжить как гость",
+    "zh-CN": "以访客身份继续"
   }
 }
