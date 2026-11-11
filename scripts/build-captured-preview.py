@@ -128,35 +128,6 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         # The only archived order snapshot is VPS IS-L. Never expose its
         # $23 VPS checkout as if it were a Dedicated, RDP, GPU or other VPS plan.
-        order_guard = r"""<script id="newvps-order-snapshot-guard">
-(function(){
-  var q=new URLSearchParams(location.search);
-  var type=(q.get('type')||'vps').toLowerCase();
-  var plan=(q.get('plan')||'IS-L').toUpperCase();
-  var locationCode=(q.get('location')||'iceland').toLowerCase();
-  if(type==='vps'&&plan==='IS-L'&&locationCode==='iceland')return;
-  function protect(){
-    var notice=document.createElement('div');
-    notice.setAttribute('role','alert');
-    notice.style.cssText='position:sticky;top:0;z-index:2147483647;padding:18px 22px;background:#fff3cd;border-bottom:2px solid #c98200;color:#4b3200;font:600 15px/1.5 system-ui,sans-serif;text-align:center';
-    notice.textContent='Order configuration unavailable: this archived checkout only supports VPS IS-L (Iceland). The selected '+type.toUpperCase()+' '+plan+' cannot be priced or purchased here until its original order configuration is restored.';
-    document.body.prepend(notice);
-    document.querySelectorAll('button,input[type=submit],a').forEach(function(el){
-      var label=((el.textContent||'')+' '+(el.value||'')).toLowerCase();
-      if(el.id==='payBtn'||/pay with credit|place order|confirm order|checkout|buy now/.test(label)){
-        el.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();},true);
-        el.setAttribute('aria-disabled','true');
-        if('disabled' in el)el.disabled=true;
-        el.style.opacity='0.45';
-        el.style.pointerEvents='none';
-      }
-    });
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',protect);
-  else protect();
-})();
-</script>"""
-        html = html.replace("</body>", order_guard + "\\n</body>", 1)
         html = html.replace("</body>", '<script defer src="/newvps-original-order-catalog.js"></script>\\n</body>', 1)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
