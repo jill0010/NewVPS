@@ -9,6 +9,7 @@ on:
       - '.github/workflows/offline-translation-inventory.yml'
       - 'scripts/validate-static-translations.py'
       - 'scripts/build-static-locales.py'
+      - 'translations/**'
 
 permissions:
   contents: read
