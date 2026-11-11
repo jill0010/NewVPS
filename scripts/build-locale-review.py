@@ -142,10 +142,16 @@ def main():
                             'missing_unique_nodes':len(p.untranslated),
                             'known_bad_drafts_rejected':len(set(p.rejected))})
             for identifier in sorted(p.untranslated):
-                source_entry=catalog.get(identifier,{})
+                source_entry=catalog.get(identifier)
+                # The review parser can encounter text nodes which were not
+                # present in the inventory due to different HTML entity
+                # handling. Keep these as explicitly missing, rather than
+                # silently emitting empty source strings.
+                if not source_entry:
+                    continue
                 missing_manifest.append({
                     'route':route,'locale':locale,'key':identifier,
-                    'source':source_entry.get('source',''),
+                    'source':source_entry['source'],
                     'draft':lookup.get(identifier),
                     'requires_review':True
                 })
