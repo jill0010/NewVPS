@@ -107,7 +107,7 @@ function ready(){
          link.title='No sale price in this captured card';
          return;
        }
-       const destination=()=>'/NewVPS/domain-order/?domain='+encodeURIComponent(domain)+'&price='+encodeURIComponent(Number(price).toFixed(2));
+       const destination=()=>'/domain-order/?domain='+encodeURIComponent(domain)+'&price='+encodeURIComponent(Number(price).toFixed(2));
        link.href=destination();
        link.dataset.domain=domain;
        link.dataset.price=Number(price).toFixed(2);
