@@ -129,7 +129,10 @@ def main():
         (CAT/'draft-translations.json').write_text(json.dumps(draft,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         (CAT/'draft-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         print('Draft report:',json.dumps({k:v for k,v in report.items() if k!='failed'},ensure_ascii=False),flush=True)
-    if not draft:raise SystemExit('No offline translations generated')
+    if not draft:
+        print('NO NEW DRAFTS: translation engine could not improve remaining strings.')
+        print('All failures are recorded in draft-report.json for manual correction.')
+        return
     print('SUCCESS: saved offline NMT draft, review required before static publication')
 
 if __name__=='__main__':main()
