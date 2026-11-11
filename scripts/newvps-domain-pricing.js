@@ -209,17 +209,18 @@ function init(){
    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}});
  });
  update();
- // The archived checkout form POSTs to a static page, which returns HTTP 405.
- // Convert checkout navigation to GET and preserve selected registration years.
- const checkoutUrl=()=>'/NewVPS/domain-pay/?domain='+encodeURIComponent(domain)+
+ // Checkout is the original domain-pay capture. Use a GET navigation, not
+ // the archived form's POST (unsupported on a static Cloudflare Pages site).
+ const prefix=location.pathname.startsWith('/NewVPS/')?'/NewVPS':'';
+ const checkoutUrl=()=>prefix+'/domain-pay/?domain='+encodeURIComponent(domain)+
    '&price='+encodeURIComponent(price.toFixed(2))+'&years='+encodeURIComponent(years);
- const checkoutPattern=/continue\\s+to\\s+checkout|继续结账|继续付款|перейти\\s+к\\s+оплате/i;
+ const checkoutPattern=/continue\s+to\s+checkout|继续结账|继续付款|перейти\s+к\s+оплате/i;
  const isCheckoutControl=el=>!!el&&checkoutPattern.test((el.textContent||el.value||'').trim());
  const controls=[...document.querySelectorAll('a,button,input[type="submit"],[role="button"]')]
    .filter(isCheckoutControl);
  controls.forEach(control=>{
    if(control.tagName==='A')control.href=checkoutUrl();
-   if(control.form){control.form.method='get';control.form.action='/NewVPS/domain-pay/';}
+   if(control.form){control.form.method='get';control.form.action=prefix+'/domain-pay/';}
  });
  document.addEventListener('click',function(event){
    const control=event.target.closest('a,button,input[type="submit"],[role="button"]');
