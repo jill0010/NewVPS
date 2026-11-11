@@ -63,19 +63,25 @@ def setup_models():
 
 def main():
     parser=argparse.ArgumentParser()
+    parser.add_argument('--existing',default='translations/drafts/core-batch-001.json',
+                        help='Previously persisted draft JSON; only missing languages are regenerated')
     parser.add_argument('--limit',type=int,default=900,
                         help='Number of unique core-page strings to draft this run')
     args=parser.parse_args()
     source_path=CAT/'strings.json'
     if not source_path.is_file():raise SystemExit('No extracted inventory')
     catalog=json.loads(source_path.read_text(encoding='utf-8'))
+    existing_path=ROOT/args.existing
+    existing=json.loads(existing_path.read_text(encoding='utf-8')) if existing_path.is_file() else {}
+    print('Loaded persisted draft entries:',len(existing),flush=True)
     seeds=[]
     for identifier,entry in catalog.items():
         if not CORE_ROUTES.intersection(entry['routes']):continue
         source=entry['source']
         if not LATIN.search(source) or INVARIANT.fullmatch(source) or NO_TRANSLATE.match(source):continue
         if source.startswith(('http:','https:')) or len(source)>2000:continue
-        if all(entry.get(locale) for locale in ('ru','zh-CN')):continue
+        if all(entry.get(locale) or existing.get(identifier,{}).get(locale)
+               for locale in ('ru','zh-CN')):continue
         priority=min((0 if r in ('/domain-order/','/domain-pay/','/register/','/account/','/order/')
                       else 1 if r in ('/domains/','/vps/','/dedicated/','/gpu/') else 2)
                      for r in entry['routes'] if r in CORE_ROUTES)
@@ -94,7 +100,7 @@ def main():
             source=entry['source']
             result={}
             for locale,argos_code in (('ru','ru'),('zh-CN','zh')):
-                if entry.get(locale):continue
+                if entry.get(locale) or existing.get(identifier,{}).get(locale):continue
                 try:
                     value=translate_preserving_tokens(source,'en',argos_code)
                     if not value or value==source or token_counts(source)!=token_counts(value):
