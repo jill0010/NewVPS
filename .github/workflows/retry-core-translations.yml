@@ -26,6 +26,8 @@ jobs:
           python3 scripts/inventory-captured-routes.py
           python3 scripts/build-captured-preview.py
           python3 scripts/extract-static-translations.py
+      - name: Verify translation script Python syntax before installing models
+        run: python3 -m py_compile scripts/generate-offline-translation-drafts.py
       - name: Install offline translation models
         run: python3 -m pip install argostranslate
       - name: Translate missing core text using both prior saved batches
