@@ -91,8 +91,15 @@ function init(){
    setRowAmount(/^Total today$/i);
    // Locate the original top-up message by its wording and replace only its
    // amount, even when the captured HTML wraps the amount in a separate span.
-   const topupText=[...document.querySelectorAll('*')].find(el=>
-     el.children.length===0&&/you.ll need to top up/i.test(el.textContent||''));
+   const textWalker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+   let topupNode=null,scanNode;
+   while((scanNode=textWalker.nextNode())){
+     if(/you.ll need to top up/i.test(scanNode.textContent||'')){
+       topupNode=scanNode;
+       break;
+     }
+   }
+   const topupText=topupNode?.parentElement||null;
    if(topupText){
      let scope=topupText;
      for(let i=0;i<5&&scope.parentElement;i++){
