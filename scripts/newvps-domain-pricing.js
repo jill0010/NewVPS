@@ -113,11 +113,34 @@ function init(){
    }
    updateSummaryField(/^Period$/i,/^(?:1|2|3|5)\s*years?$/i,
      years+' '+(years===1?'year':'years'));
-   updateSummaryField(/^Price\s*\(\s*\d+\s*[x×]\s*\)$/i,/^\$[\d,.]+$/,
-     money(total));
-   const priceLabel=[...document.querySelectorAll('*')].find(el=>
-     el.children.length===0&&/^Price\s*\(\s*\d+\s*[x×]\s*\)$/i.test((el.textContent||'').trim()));
-   if(priceLabel)priceLabel.textContent='Price ('+years+'×)';
+   // Bind the multiplier and price to the same Price summary row.
+   // Text may be split across nested captured HTML elements.
+   const priceNodes=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+   let priceNode=null,scan;
+   while((scan=priceNodes.nextNode())){
+     if(/Price\s*\(\s*\d+\s*[x×]\s*\)/i.test(scan.nodeValue||'') &&
+        !cards.some(card=>card&&card.contains(scan.parentElement))){
+       priceNode=scan;break;
+     }
+   }
+   if(priceNode){
+     priceNode.nodeValue=priceNode.nodeValue.replace(
+       /Price\s*\(\s*\d+\s*[x×]\s*\)/i,'Price ('+years+'×)');
+     let row=priceNode.parentElement;
+     for(let depth=0;depth<8&&row;depth++,row=row.parentElement){
+       if((row.textContent||'').length>350)break;
+       const walker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
+       let node,seenLabel=false;
+       while((node=walker.nextNode())){
+         if(node===priceNode){seenLabel=true;continue;}
+         if(seenLabel&&/\$\s*[\d,.]+/.test(node.nodeValue||'')){
+           node.nodeValue=node.nodeValue.replace(/\$\s*[\d,.]+/,money(total));
+           row=null;break;
+         }
+       }
+       if(!row)break;
+     }
+   }
    setRowAmount(/^Total today$/i);
    // Locate the original top-up message by its wording and replace only its
    // amount, even when the captured HTML wraps the amount in a separate span.
