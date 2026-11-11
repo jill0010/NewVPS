@@ -326,7 +326,7 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-language-selector.js' not in html:
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-language-selector.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored English, Russian and Simplified Chinese language selector")
     # Restore captured server configuration controls on every matching page.
@@ -368,7 +368,7 @@ def main():
                     raise RuntimeError(f"No OS icons embedded in captured configuration page: {page}")
                 print(f"Embedded {embedded[0]} original OS icons in {page.relative_to(OUT)}")
                 if 'newvps-server-config.js' not in html:
-                    html = html.replace("</body>", '<script defer src="/NewVPS/newvps-server-config.js"></script>\\n</body>', 1)
+                    html = html.replace("</body>", '<script defer src="/newvps-server-config.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored captured server configuration interactions")
     domain_script = ROOT / "scripts/newvps-domain-search.js"
@@ -377,7 +377,7 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if 'id="domSearchForm"' in html and 'newvps-domain-search.js' not in html:
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-search.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-search.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored captured domain search controls")
     # User-provided domain flow archives are authoritative for these three routes.
@@ -417,7 +417,7 @@ def main():
                 dest = OUT / "_captures" / "domain-flow" / filename.removesuffix(".zip") / rel
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.write_bytes(z.read(member))
-            asset_prefix = "/NewVPS/_captures/domain-flow/" + filename.removesuffix(".zip") + "/assets/"
+            asset_prefix = "/_captures/domain-flow/" + filename.removesuffix(".zip") + "/assets/"
             html = re.sub(r'(?<![\\w/])assets/', asset_prefix, html)
             dest = OUT / route / "index.html"
             dest.parent.mkdir(parents=True, exist_ok=True)
@@ -431,17 +431,17 @@ def main():
             # Domain captures are restored after the global language injection pass.
             # Explicitly include the same selector on these late-restored pages.
             if language_source.is_file() and 'newvps-language-selector.js' not in html:
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-language-selector.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
             if domain_flow_js.is_file():
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
             if route == "domain-order" and whois_style_js.is_file():
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-whois-style.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-whois-style.js"></script>\\n</body>', 1)
             if route == "domain-order" and domain_pricing_js.is_file():
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-pricing.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-pricing.js"></script>\\n</body>', 1)
             if brand_source.is_file():
                 html = html.replace("</body>", '<script defer src="/newvps-brand-wordmark.js"></script>\\n</body>', 1)
             if route == "domain-pay" and domain_checkout_js.is_file():
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-checkout.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-checkout.js"></script>\\n</body>', 1)
             dest.write_text(html, encoding="utf-8")
             written["/" + route] = filename
             print(f"Restored original domain flow: /{route}/ from {filename}")
@@ -457,7 +457,7 @@ def main():
             if 'domSearchForm' not in html:
                 raise RuntimeError("English archive does not contain the original domain search form")
             base = Path(html_name).parent
-            asset_root = "/NewVPS/_captures/domain-english/"
+            asset_root = "/_captures/domain-english/"
             for member in z.infolist():
                 if member.is_dir():
                     continue
@@ -480,11 +480,11 @@ def main():
                 html,
             )
             if domain_flow_js.is_file():
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
             # This archive overwrites the earlier domain page, so re-inject
             # the global language selector after restoring its original HTML.
             if 'newvps-language-selector.js' not in html:
-                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-language-selector.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
             page = OUT / "domains" / "index.html"
             page.parent.mkdir(parents=True, exist_ok=True)
             page.write_text(html, encoding="utf-8")
@@ -495,7 +495,7 @@ def main():
     if dashboard.is_file():
         alias = OUT / "topup" / "index.html"
         alias.parent.mkdir(parents=True, exist_ok=True)
-        alias.write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/NewVPS/account/?tab=topup"><script>location.replace("/NewVPS/account/?tab=topup"+location.hash)</script><title>Top up</title><a href="/NewVPS/account/?tab=topup">Continue to Add credit</a></html>', encoding="utf-8")
+        alias.write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/account/?tab=topup"><script>location.replace("/account/?tab=topup"+location.hash)</script><title>Top up</title><a href="/account/?tab=topup">Continue to Add credit</a></html>', encoding="utf-8")
         written["/topup"] = "alias of archived /account?tab=topup"
     # Restore the captured mobile hamburger interaction without altering archive HTML.
     # The original capture contains #mobBtn and #mobMenu but its source-site
