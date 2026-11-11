@@ -1,0 +1,67 @@
+name: Retry Missing Core RU-ZH Translations
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/retry-core-translations.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: newvps-core-translation-retry
+  cancel-in-progress: false
+
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and inventory all original archived pages
+        run: |
+          python3 scripts/inventory-captured-routes.py
+          python3 scripts/build-captured-preview.py
+          python3 scripts/extract-static-translations.py
+      - name: Install offline translation models
+        run: python3 -m pip install argostranslate
+      - name: Translate missing core text using both prior saved batches
+        run: |
+          python3 scripts/generate-offline-translation-drafts.py --limit 1500 \
+            --existing translations/drafts/core-batch-001.json \
+            --existing translations/drafts/core-batch-002.json
+      - name: Save third batch without approving machine translation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,shutil
+          src=Path('translation-catalog/draft-translations.json')
+          report=Path('translation-catalog/draft-report.json')
+          content=json.loads(src.read_text(encoding='utf-8'))
+          stats=json.loads(report.read_text(encoding='utf-8'))
+          assert content, 'No additional RU-ZH strings produced'
+          print('Third batch translated string entries:',len(content))
+          print('New language counts:',stats['completed'])
+          print('Remaining draft errors:',len(stats['failed']))
+          Path('translations/drafts').mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(src,'translations/drafts/core-batch-003.json')
+          shutil.copyfile(report,'translations/drafts/core-batch-003-report.json')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add translations/drafts/core-batch-003.json translations/drafts/core-batch-003-report.json
+          git commit -m 'Save third RU-ZH offline draft translation batch for core pages'
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Upload report for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-core-ru-zh-third-batch
+          path: |
+            translation-catalog/draft-translations.json
+            translation-catalog/draft-report.json
+          if-no-files-found: ignore
+          retention-days: 30
