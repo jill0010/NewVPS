@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/retry-core-translations.yml'
+      - 'scripts/generate-offline-translation-drafts.py'
 
 permissions:
   contents: write
@@ -41,8 +42,9 @@ jobs:
           report=Path('translation-catalog/draft-report.json')
           content=json.loads(src.read_text(encoding='utf-8'))
           stats=json.loads(report.read_text(encoding='utf-8'))
-          assert content, 'No additional RU-ZH strings produced'
           print('Third batch translated string entries:',len(content))
+          if not content:
+              print('No valid new drafts. Keep failure report and use manual correction, not repeated automated retries.')
           print('New language counts:',stats['completed'])
           print('Remaining draft errors:',len(stats['failed']))
           Path('translations/drafts').mkdir(parents=True,exist_ok=True)
@@ -52,9 +54,11 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add translations/drafts/core-batch-003.json translations/drafts/core-batch-003-report.json
-          git commit -m 'Save third RU-ZH offline draft translation batch for core pages'
-          git pull --rebase origin main
-          git push origin HEAD:main
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record unresolved core RU-ZH translations for manual correction'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
       - name: Upload report for review
         if: always()
         uses: actions/upload-artifact@v4
