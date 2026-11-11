@@ -32,6 +32,8 @@ jobs:
           strings=json.loads((root/'strings.json').read_text(encoding='utf-8'))
           routes=json.loads((root/'routes.json').read_text(encoding='utf-8'))
           assert coverage['routes']==len(routes)
+          assert coverage['excluded_routes']>=0
+          assert (root/'excluded-routes.json').is_file()
           assert coverage['unique_strings']==len(strings)
           assert coverage['routes']>=174, 'Unexpected missing archived pages'
           assert coverage['unique_strings']>100, 'Text extraction unexpectedly empty'
