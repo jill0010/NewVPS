@@ -812,8 +812,8 @@
     "zh-CN": "Более丰富的独立服务器套餐，最高支持 EPYC 9354 / 256 GB DDR5 ECC"
   },
   "Cheapest mainstream EU VPS — 4c/8G/200GB from €4.50/mo with unmetered bandwidth, but no crypto, full KYC required, and German GDPR jurisdiction with active takedown enforcement.": {
-    "ru": "Недорогой массовый VPS в ЕС — 4 ядра / 8 GB / 200 GB от €4.50/mo с неограниченным трафиком, но без оплаты криптовалютой; обязательная полная проверка KYC, немецкая юрисдикция GDPR и активное исполнение запросов на удаление контента.",
-    "zh-CN": "主流欧盟 VPS 的低价方案：4 核 / 8 GB / 200 GB，€4.50/mo 起，流量不计量，但不支持加密货币付款，要求完整 KYC，受德国 GDPR 管辖并积极执行内容下架要求。"
+    "ru": "Самый дешёвый массовый VPS в ЕС — конфигурация 4c/8G/200GB от €4.50/mo с трафиком без лимита, но без оплаты криптовалютой; требуется полная проверка KYC, действует немецкая юрисдикция GDPR и активное исполнение запросов на удаление контента.",
+    "zh-CN": "主流欧盟 VPS 的最低价方案：4c/8G/200GB，€4.50/mo 起，流量不计量，但不支持加密货币付款，要求完整 KYC，受德国 GDPR 管辖并积极执行内容下架要求。"
   },
   "Unmetered offshore bandwidth vs. UpCloud's 1 TB/mo Starter cap with 100 Mbps throttle on overage": {
     "ru": "Офшорный трафик без лимита в сравнении с тарифом UpCloud Starter: ограничение 1 TB/mo и снижение скорости до 100 Mbps при превышении",
