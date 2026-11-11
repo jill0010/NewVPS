@@ -1,0 +1,52 @@
+name: Offline Locale HTML Review Preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build-locale-review.py'
+      - '.github/workflows/offline-locale-review.yml'
+      - 'translations/drafts/**'
+      - 'translations/seed.json'
+
+permissions:
+  contents: read
+
+jobs:
+  review-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify review generator syntax
+        run: |
+          python3 -m py_compile scripts/build-locale-review.py scripts/extract-static-translations.py
+      - name: Rebuild source pages from user's original archives
+        run: |
+          python3 scripts/inventory-captured-routes.py
+          python3 scripts/build-captured-preview.py
+      - name: Collect translated text inventory
+        run: python3 scripts/extract-static-translations.py
+      - name: Produce isolated, non-deployable localized HTML for review
+        run: |
+          python3 scripts/build-locale-review.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('translation-review/review-report.json')
+          report=json.loads(p.read_text(encoding='utf-8'))
+          assert report['never_automatically_deploy'] is True
+          assert report['status']=='DRAFT_FOR_REVIEW_NOT_PUBLISHABLE'
+          assert len(report['language_route_details'])>=10
+          assert Path('translation-review.zip').is_file()
+          print(json.dumps(report['language_route_details'],ensure_ascii=False,indent=2))
+          PY
+      - name: Upload offline preview archive and missing-text report (not deployment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-locale-review-preview
+          path: |
+            translation-review.zip
+            translation-review/review-report.json
+          retention-days: 30
