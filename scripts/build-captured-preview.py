@@ -309,6 +309,15 @@ def main():
                 html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored login links and dashboard logout on archived pages")
+    # Apply the brand wordmark on every captured page without editing ZIP archives.
+    brand_source = ROOT / "scripts/newvps-brand-wordmark.js"
+    if brand_source.is_file():
+        shutil.copy2(brand_source, OUT / "newvps-brand-wordmark.js")
+        for page in OUT.rglob("index.html"):
+            html = page.read_text(encoding="utf-8")
+            if "</body>" in html and 'newvps-brand-wordmark.js' not in html:
+                html = html.replace("</body>", '<script defer src="/newvps-brand-wordmark.js"></script>\\n</body>', 1)
+                page.write_text(html, encoding="utf-8")
     # Restore the original language dropdown on all captured pages.
     # Existing archive provides English, Russian and Simplified Chinese links.
     language_source = ROOT / "scripts/newvps-language-selector.js"
@@ -429,6 +438,8 @@ def main():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-whois-style.js"></script>\\n</body>', 1)
             if route == "domain-order" and domain_pricing_js.is_file():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-pricing.js"></script>\\n</body>', 1)
+            if brand_source.is_file():
+                html = html.replace("</body>", '<script defer src="/newvps-brand-wordmark.js"></script>\\n</body>', 1)
             if route == "domain-pay" and domain_checkout_js.is_file():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-checkout.js"></script>\\n</body>', 1)
             dest.write_text(html, encoding="utf-8")
