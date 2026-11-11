@@ -20,6 +20,7 @@ OUT=ROOT/'dist-localized'
 CAT=ROOT/'translation-catalog'
 SKIP={'script','style','svg','noscript','code','pre','textarea'}
 ATTRS={'placeholder','title','aria-label','alt'}
+VOID={'area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'}
 WORDS=re.compile(r'[A-Za-z]{2,}')
 PROTECTED=re.compile(r'\$\s*[\d,.]+|\b\d+(?:\.\d+)?\s*(?:GB|TB|MB|GHz|USD|EUR|TON|Mbps|Gbps)\b|\b[a-z0-9-]+\.(?:com|net|org|io|co|dev|app|xyz|me)\b',re.I)
 PLACEHOLDERS=re.compile(r'\{[A-Za-z_][\w.]*\}|%[sd]|\$\{[^{}]+\}')
@@ -55,7 +56,7 @@ class Translator(HTMLParser):
         suffix=raw[len(raw.rstrip()):]
         return prefix+escape(target,quote=False)+suffix
     def handle_starttag(self,tag,attrs):
-        self.stack.append(tag)
+        if tag not in VOID:self.stack.append(tag)
         raw=self.get_starttag_text()
         if tag=='html':
             raw=re.sub(r'(?i)\blang=(["\']).*?\1',f'lang="{self.locale}"',raw,count=1)
@@ -76,7 +77,7 @@ class Translator(HTMLParser):
         self.parts.append(raw)
     def handle_startendtag(self,tag,attrs):
         self.handle_starttag(tag,attrs)
-        if self.stack:self.stack.pop()
+        if tag not in VOID and self.stack:self.stack.pop()
     def handle_endtag(self,tag):
         if tag in self.stack:
             i=len(self.stack)-1-self.stack[::-1].index(tag)
