@@ -1,0 +1,55 @@
+name: Build Offline RU-ZH Translation Drafts
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/generate-offline-translation-drafts.py'
+      - '.github/workflows/offline-translation-drafts.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build original captured pages
+        run: |
+          python3 scripts/inventory-captured-routes.py
+          python3 scripts/build-captured-preview.py
+          python3 scripts/extract-static-translations.py
+      - name: Install offline translation engine
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install argostranslate
+      - name: Generate Russian and Simplified Chinese drafts without modifying website
+        run: |
+          python3 scripts/generate-offline-translation-drafts.py --limit 900
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('translation-catalog')
+          report=json.loads((root/'draft-report.json').read_text(encoding='utf-8'))
+          draft=json.loads((root/'draft-translations.json').read_text(encoding='utf-8'))
+          assert len(draft)>0, 'No actual offline translation drafts generated'
+          assert report['completed']['ru']>0, 'Missing Russian translations'
+          assert report['completed']['zh-CN']>0, 'Missing Simplified Chinese translations'
+          print('Actual translated strings saved:',len(draft))
+          print('Translation counts:',report['completed'])
+          print('WARNING: machine-generated drafts require review before publication')
+          PY
+      - name: Upload actual RU-ZH translated drafts and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-ru-zh-drafts
+          path: |
+            translation-catalog/draft-translations.json
+            translation-catalog/draft-report.json
+            translation-catalog/coverage.json
+          if-no-files-found: warn
+          retention-days: 30
