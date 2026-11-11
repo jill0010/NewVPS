@@ -161,7 +161,7 @@ def main():
             'language_route_details':summary,
             'never_automatically_deploy':True,
             'important':'Draft previews contain untranslated English and machine translation errors; no locale switching enabled'}
-    (OUT/'missing-translations.json').write_text(json.dumps(missing_manifest,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')
+    (OUT/'missing-translations.json').write_text(json.dumps(missing_manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     (OUT/'review-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     zip_path=ROOT/'translation-review.zip'
     with zipfile.ZipFile(zip_path,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
