@@ -7,6 +7,7 @@ on:
     paths:
       - 'scripts/extract-static-translations.py'
       - '.github/workflows/offline-translation-inventory.yml'
+      - 'scripts/validate-static-translations.py'
 
 permissions:
   contents: read
@@ -42,6 +43,8 @@ jobs:
           print('PASS: inventory counts and integrity validated')
           print(json.dumps(coverage,ensure_ascii=False,indent=2))
           PY
+      - name: Validate protected values and incomplete translation status
+        run: python3 scripts/validate-static-translations.py
       - name: Upload translation catalogs and coverage report
         uses: actions/upload-artifact@v4
         with:
