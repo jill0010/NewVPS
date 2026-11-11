@@ -21,7 +21,7 @@ function ready(){
    const domain=link.dataset.domain||(card&&card.querySelector('.dom-card-domain')?.textContent||'').trim().toLowerCase();
    const rawPrice=link.dataset.price||(card&&card.querySelector('.dom-card-price')?.textContent||'');
    const matches=[...rawPrice.matchAll(/\\$\\s*([\\d,]+(?:\\.\\d{1,2})?)/g)];
-   const price=matches.length?Number(matches[matches.length-1][1].replace(/,/g,'')):NaN;
+   const price=link.dataset.price?Number(link.dataset.price):matches.length?Number(matches[matches.length-1][1].replace(/,/g,'')):NaN;
    if(!/^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$/.test(domain)||!Number.isFinite(price)||price<=0)return;
    event.preventDefault();
    event.stopImmediatePropagation();
