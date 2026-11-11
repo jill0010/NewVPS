@@ -128,10 +128,15 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         # The only archived order snapshot is VPS IS-L. Never expose its
         # $23 VPS checkout as if it were a Dedicated, RDP, GPU or other VPS plan.
-        # Keep the original captured order HTML unchanged; do not inject synthetic UI.
+        # Preserve the captured layout and bind its existing fields to the exact archived catalog plan.
+        if route == "/order":
+            html = html.replace("</body>", '<script defer src="/newvps-order-original-pricing.js"></script>\\n</body>', 1)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
         print(f"Restored archived checkout snapshot at {route} from {entry['capture']}")
+    original_pricing = ROOT / "scripts/newvps-order-original-pricing.js"
+    if original_pricing.is_file():
+        shutil.copy2(original_pricing, OUT / "newvps-order-original-pricing.js")
     original_order_catalog = ROOT / "scripts/newvps-original-order-catalog.js"
     if original_order_catalog.is_file():
         shutil.copy2(original_order_catalog, OUT / "newvps-original-order-catalog.js")
