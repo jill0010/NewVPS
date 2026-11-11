@@ -806,5 +806,101 @@
   "Continue as guest": {
     "ru": "Продолжить как гость",
     "zh-CN": "以访客身份继续"
+  },
+  "Broader dedicated plan ladder up to EPYC 9354 / 256 GB DDR5 ECC": {
+    "ru": "Более широкий выбор выделенных серверов вплоть до EPYC 9354 / 256 GB DDR5 ECC",
+    "zh-CN": "Более丰富的独立服务器套餐，最高支持 EPYC 9354 / 256 GB DDR5 ECC"
+  },
+  "Cheapest mainstream EU VPS — 4c/8G/200GB from €4.50/mo with unmetered bandwidth, but no crypto, full KYC required, and German GDPR jurisdiction with active takedown enforcement.": {
+    "ru": "Недорогой массовый VPS в ЕС — 4 ядра / 8 GB / 200 GB от €4.50/mo с неограниченным трафиком, но без оплаты криптовалютой; обязательная полная проверка KYC, немецкая юрисдикция GDPR и активное исполнение запросов на удаление контента.",
+    "zh-CN": "主流欧盟 VPS 的低价方案：4 核 / 8 GB / 200 GB，€4.50/mo 起，流量不计量，但不支持加密货币付款，要求完整 KYC，受德国 GDPR 管辖并积极执行内容下架要求。"
+  },
+  "Unmetered offshore bandwidth vs. UpCloud's 1 TB/mo Starter cap with 100 Mbps throttle on overage": {
+    "ru": "Офшорный трафик без лимита в сравнении с тарифом UpCloud Starter: ограничение 1 TB/mo и снижение скорости до 100 Mbps при превышении",
+    "zh-CN": "离岸服务器流量不计量；相比之下，UpCloud Starter 每月限额为 1 TB/mo，超额后限速至 100 Mbps"
+  },
+  "Entry VPS $7.50/mo with 2 vCPU / 4 GB vs. €29.90/mo base": {
+    "ru": "Начальный VPS за $7.50/mo с 2 vCPU / 4 GB против базового тарифа €29.90/mo",
+    "zh-CN": "入门级 VPS 为 $7.50/mo，配置 2 vCPU / 4 GB；对比对象的基础套餐为 €29.90/mo"
+  },
+  "Bare-metal + dedicated catalogue (EPYC up to 256 GB DDR5 ECC) vs. SporeStack VPS-only": {
+    "ru": "Каталог физических и выделенных серверов (EPYC до 256 GB DDR5 ECC) в сравнении с SporeStack, предлагающим только VPS",
+    "zh-CN": "提供物理服务器和独立服务器（EPYC 最高支持 256 GB DDR5 ECC），而 SporeStack 仅提供 VPS"
+  },
+  "Anonymous .com domains from $4.99/yr — 26 TLDs, free WHOIS privacy, paid from your balance.": {
+    "ru": "Анонимные домены .com от $4.99/yr — 26 доменных зон, бесплатная защита WHOIS; оплата с баланса аккаунта.",
+    "zh-CN": "匿名 .com 域名 $4.99/yr 起，支持 26 种域名后缀，免费 WHOIS 隐私保护，使用账户余额支付。"
+  },
+  "Yes. Every VPS ships with full root over SSH plus an out-of-band VNC console for kernel-panic recovery and rescue mode. You can install any Linux distribution, BSD, or upload a custom ISO. We never log into customer servers and have no backdoor.": {
+    "ru": "Да. Каждый VPS предоставляет полный доступ root через SSH и независимую консоль VNC для восстановления после сбоев ядра и работы в режиме восстановления. Можно установить любой дистрибутив Linux, BSD или загрузить собственный ISO. Мы никогда не входим на серверы клиентов и не устанавливаем скрытый доступ.",
+    "zh-CN": "是的。每台 VPS 都提供通过 SSH 使用的完整 root 权限，以及用于内核故障恢复和救援模式的独立 VNC 控制台。您可以安装任意 Linux 发行版、BSD，或上传自定义 ISO。我们不会登录客户服务器，也不设置后门。"
+  },
+  "Most stock plans (DS-1, DS-2, DS-3) are pre-racked and provision in 1–4 hours after payment confirmation. The flagship DS-4 (dual-socket EPYC 9354, 256 GB ECC) is built to order: 24–72 hours depending on jurisdiction. Custom hardware requests via /contact have a 5–10 business day lead time.": {
+    "ru": "Большинство готовых тарифов (DS-1, DS-2, DS-3) уже установлены в стойки и предоставляются в течение 1–4 часов после подтверждения оплаты. Флагманский DS-4 (два процессора EPYC 9354, 256 GB ECC) собирается под заказ за 24–72 часа в зависимости от юрисдикции. Для нестандартного оборудования, запрошенного через /contact, срок составляет 5–10 рабочих дней.",
+    "zh-CN": "大多数现货套餐（DS-1、DS-2、DS-3）已预先上架，付款确认后 1–4 小时内开通。旗舰 DS-4（双路 EPYC 9354、256 GB ECC）按订单组装，依据所在司法管辖区需 24–72 小时。通过 /contact 提交的定制硬件需求通常需 5–10 个工作日。"
+  },
+  "Check the models you need at order time and they are cached to /root/.cache/huggingface before you log in. 🔒 Gated models (Llama, Mistral, Gemma, FLUX-dev, SD 3.5) require your HuggingFace token (also requested at order time).": {
+    "ru": "Укажите необходимые модели при оформлении заказа — до первого входа они будут загружены в кеш /root/.cache/huggingface. 🔒 Для моделей с ограниченным доступом (Llama, Mistral, Gemma, FLUX-dev, SD 3.5) потребуется токен HuggingFace, который также запрашивается при заказе.",
+    "zh-CN": "下单时请选择所需模型；首次登录前，系统会将模型缓存到 /root/.cache/huggingface。🔒 受限访问模型（Llama、Mistral、Gemma、FLUX-dev、SD 3.5）需要您的 HuggingFace 令牌，下单时也会要求提供。"
+  },
+  "Yes — the GPU-XL tier is 2× H100 SXM5 with NVLink interconnect inside one box, ideal for FSDP / DeepSpeed Zero-3 / DDP on the same machine. For multi-node training you can rent multiple GPU-XL servers in the same datacenter and connect them over the 10 Gbps uplink. We do not yet ship 8× H100 cluster nodes — contact us if your training run needs more scale.": {
+    "ru": "Да. Тариф GPU-XL включает 2× H100 SXM5 с соединением NVLink в одном сервере и подходит для FSDP / DeepSpeed Zero-3 / DDP на одной машине. Для обучения на нескольких узлах можно арендовать несколько GPU-XL в одном дата-центре и соединить их каналом 10 Gbps. Узлы с 8× H100 пока недоступны — свяжитесь с нами, если нужен больший масштаб.",
+    "zh-CN": "是的。GPU-XL 套餐在同一台服务器内配备 2× H100 SXM5，并通过 NVLink 互联，适合在单机运行 FSDP / DeepSpeed Zero-3 / DDP。多节点训练可租用同一数据中心的多台 GPU-XL 服务器，通过 10 Gbps 上行链路连接。我们暂不提供 8× H100 集群节点；如需更大规模，请联系我们。"
+  },
+  "Up to 4 TB NVMe SSD, paired with DDR5 RAM for fast dataset I/O.": {
+    "ru": "最高支持 4 TB NVMe SSD，并搭配 DDR5 RAM，实现快速数据集 I/O。",
+    "zh-CN": "最高支持 4 TB NVMe SSD，搭配 DDR5 RAM，实现高速数据集 I/O。"
+  },
+  "Sizes are FP16 weights. For RTX 4090 (24 GB VRAM) with 70B models, the AWQ-quantised variant is downloaded automatically in parallel.": {
+    "ru": "Указанный размер относится к весам FP16. Для моделей 70B на RTX 4090 (24 GB VRAM) параллельно автоматически загружается квантованная версия AWQ.",
+    "zh-CN": "标示的大小为 FP16 权重。使用 RTX 4090（24 GB VRAM）运行 70B 模型时，会自动并行下载 AWQ 量化版本。"
+  },
+  "OpenSora, CogVideoX, Wan-2.1, AnimateDiff. Video generation needs serious VRAM — start at RTX 5090 (32 GB) or H100 (80 GB).": {
+    "ru": "OpenSora, CogVideoX, Wan-2.1, AnimateDiff. Для генерации видео требуется много видеопамяти — рекомендуется начинать с RTX 5090 (32 GB) или H100 (80 GB).",
+    "zh-CN": "OpenSora、CogVideoX、Wan-2.1、AnimateDiff。视频生成需要大量显存，建议从 RTX 5090（32 GB）或 H100（80 GB）起步。"
+  },
+  "GPU AI Hosting": {
+    "ru": "GPU-хостинг для ИИ",
+    "zh-CN": "GPU AI 主机"
+  },
+  "Linux VPS": {
+    "ru": "VPS на Linux",
+    "zh-CN": "Linux VPS 主机"
+  },
+  "No-KYC RDP": {
+    "ru": "RDP без KYC",
+    "zh-CN": "免 KYC 远程桌面"
+  },
+  "No-KYC GPU": {
+    "ru": "GPU без KYC",
+    "zh-CN": "免 KYC GPU 主机"
+  },
+  "Pay for anonymousmous.com": {
+    "ru": "Оплатить домен anonymousmous.com",
+    "zh-CN": "支付域名 anonymousmous.com"
+  },
+  "anonymousmous.com — Configure your domain": {
+    "ru": "anonymousmous.com — Настройка домена",
+    "zh-CN": "anonymousmous.com — 配置您的域名"
+  },
+  "KVM · NVMe SSD · Unlimited BW": {
+    "ru": "KVM · NVMe SSD · Безлимитный трафик",
+    "zh-CN": "KVM · NVMe SSD · 不限流量"
+  },
+  "AnonPort vs Vast.ai · RunPod · Paperspace · Lambda Labs · TensorDock": {
+    "ru": "AnonPort против Vast.ai · RunPod · Paperspace · Lambda Labs · TensorDock",
+    "zh-CN": "AnonPort 对比 Vast.ai · RunPod · Paperspace · Lambda Labs · TensorDock"
+  },
+  "Native Monero (XMR)": {
+    "ru": "Нативный Monero (XMR)",
+    "zh-CN": "原生 Monero（XMR）"
+  },
+  "Min VRAM": {
+    "ru": "Минимальная видеопамять",
+    "zh-CN": "最低显存"
+  },
+  "vs": {
+    "ru": "против",
+    "zh-CN": "对比"
   }
 }
