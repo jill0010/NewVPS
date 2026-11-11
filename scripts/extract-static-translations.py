@@ -49,10 +49,19 @@ def main():
     per_route={}
     route_langs=Counter()
     routes=[]
+    excluded=[]
+    existing_path=OUT/'strings.json'
+    existing=json.loads(existing_path.read_text(encoding='utf-8')) if existing_path.is_file() else {}
+    completed=json.loads((OUT/'approved-translations.json').read_text(encoding='utf-8')) if (OUT/'approved-translations.json').is_file() else {}
     for path in sorted(DIST.rglob('index.html')):
         route='/'+'/'.join(path.parent.relative_to(DIST).parts)
         if route!='/':route+='/'
-        if route.startswith(('/_captures/','/ru/','/zh/')):continue
+        if route.startswith('/_captures/'):
+            excluded.append({'route':route,'reason':'assets archive path'})
+            continue
+        if route.startswith(('/ru/','/zh/')):
+            excluded.append({'route':route,'reason':'localized route (skip retranslation)'})
+            continue
         parser=Extractor()
         parser.feed(path.read_text(encoding='utf-8',errors='replace'))
         routes.append(route)
@@ -62,11 +71,23 @@ def main():
     catalog={}
     for value,locations in sorted(references.items()):
         key=hashlib.sha256(value.encode()).hexdigest()[:20]
-        catalog[key]={'source':value,'protected_tokens':VARIABLE.findall(value),'routes':sorted(locations),'ru':None,'zh-CN':None}
+        previous=existing.get(key,{})
+        approved=completed.get(key,{})
+        translations={}
+        for lang in ('ru','zh-CN'):
+            candidate=approved.get(lang,previous.get(lang))
+            translations[lang]=candidate if isinstance(candidate,str) and candidate.strip() and candidate.strip()!=value else None
+        catalog[key]={'source':value,'protected_tokens':VARIABLE.findall(value),'routes':sorted(locations),**translations}
     OUT.mkdir(exist_ok=True)
+    (OUT/'excluded-routes.json').write_text(json.dumps(excluded,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     (OUT/'routes.json').write_text(json.dumps(per_route,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     (OUT/'strings.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    coverage={'routes':len(routes),'unique_strings':len(catalog),'ru_translated':0,'zh_CN_translated':0,'unique_routes':len(per_route),'route_groups':dict(route_langs),'published_static_locales':False,'reason':'Full human-reviewed translations required; never publish English as translated content.'}
+    coverage={'routes':len(routes),'excluded_routes':len(excluded),'unique_strings':len(catalog),
+              'ru_translated':sum(bool(v['ru']) for v in catalog.values()),
+              'zh_CN_translated':sum(bool(v['zh-CN']) for v in catalog.values()),
+              'unique_routes':len(per_route),'route_groups':dict(route_langs),
+              'published_static_locales':False,
+              'reason':'Static translations stay disabled until all published pages are approved and verified.'}
     (OUT/'coverage.json').write_text(json.dumps(coverage,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(coverage,ensure_ascii=False))
 
