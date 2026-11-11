@@ -848,7 +848,7 @@
     "zh-CN": "是的。GPU-XL 套餐在同一台服务器内配备 2× H100 SXM5，并通过 NVLink 互联，适合在单机运行 FSDP / DeepSpeed Zero-3 / DDP。多节点训练可租用同一数据中心的多台 GPU-XL 服务器，通过 10 Gbps 上行链路连接。我们暂不提供 8× H100 集群节点；如需更大规模，请联系我们。"
   },
   "Up to 4 TB NVMe SSD, paired with DDR5 RAM for fast dataset I/O.": {
-    "ru": "最高支持 4 TB NVMe SSD，并搭配 DDR5 RAM，实现快速数据集 I/O。",
+    "ru": "До 4 TB NVMe SSD в сочетании с DDR5 RAM для быстрого ввода-вывода данных.",
     "zh-CN": "最高支持 4 TB NVMe SSD，搭配 DDR5 RAM，实现高速数据集 I/O。"
   },
   "Sizes are FP16 weights. For RTX 4090 (24 GB VRAM) with 70B models, the AWQ-quantised variant is downloaded automatically in parallel.": {
