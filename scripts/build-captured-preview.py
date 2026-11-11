@@ -157,9 +157,13 @@ def main():
 })();
 </script>"""
         html = html.replace("</body>", order_guard + "\\n</body>", 1)
+        html = html.replace("</body>", '<script defer src="/newvps-original-order-catalog.js"></script>\\n</body>', 1)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
         print(f"Restored archived checkout snapshot at {route} from {entry['capture']}")
+    original_order_catalog = ROOT / "scripts/newvps-original-order-catalog.js"
+    if original_order_catalog.is_file():
+        shutil.copy2(original_order_catalog, OUT / "newvps-original-order-catalog.js")
     # Screenshot-based registration preview is separate from original captures.
     registration_preview = ROOT / "preview-pages" / "register" / "index.html"
     if registration_preview.is_file():
