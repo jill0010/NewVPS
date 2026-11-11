@@ -1,0 +1,33 @@
+/* Mobile-only layout adaptation of archived AnonPort pages. Original files remain unchanged. */
+@media (max-width: 767px) {
+  html { max-width: 100%; overflow-x: clip; }
+  body { max-width: 100%; overflow-x: clip; }
+  img, video, iframe { max-width: 100%; }
+  input, select, textarea { max-width: 100%; box-sizing: border-box; font-size: 16px; }
+  .w, .container, .container-fluid { max-width: 100%; box-sizing: border-box; }
+  .order-layout, .domain-order-layout, .domain-pay-layout, .checkout-layout, .account-layout, .dashboard-layout {
+    display: flex !important; flex-direction: column !important; gap: 18px;
+  }
+  .order-config, .order-summary, .checkout-main, .checkout-sidebar,
+  .domain-order-main, .domain-order-summary, .domain-pay-main, .domain-pay-summary {
+    width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+    position: static !important; box-sizing: border-box;
+  }
+  .cfg-grid, .cfg-grid-billing { max-width: 100%; }
+  .cfg-recap { flex-wrap: wrap; gap: 10px; }
+  .cfg-recap-info { min-width: 0; flex: 1 1 200px; }
+  .cfg-recap-price { flex: 0 0 auto; }
+  .summary-rows { min-width: 0; }
+  .tw-cards, .pricing-grid, .plans-grid { max-width: 100%; }
+  table { max-width: 100%; }
+  .table-responsive, .pricing-table-wrap, .tw-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-tabs, .account-tabs, .dashboard-tabs, .dash-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  .nav-tabs > *, .account-tabs > *, .dashboard-tabs > *, .dash-tabs > * { flex-shrink: 0; }
+  #newvps-account-overlay { padding: 12px; box-sizing: border-box; }
+  #newvps-account-overlay iframe { max-width: 100%; max-height: calc(100dvh - 32px); }
+  .nav-link-text { display: inline !important; }
+}
+@media (max-width: 390px) {
+  .cfg-grid-billing { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cfg-recap-price { width: 100%; }
+}
