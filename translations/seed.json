@@ -1,0 +1,326 @@
+{
+  "Home": {
+    "ru": "Главная",
+    "zh-CN": "首页"
+  },
+  "Login": {
+    "ru": "Войти",
+    "zh-CN": "登录"
+  },
+  "Log in": {
+    "ru": "Войти",
+    "zh-CN": "登录"
+  },
+  "Register": {
+    "ru": "Регистрация",
+    "zh-CN": "注册"
+  },
+  "Dashboard": {
+    "ru": "Панель управления",
+    "zh-CN": "控制面板"
+  },
+  "Account": {
+    "ru": "Аккаунт",
+    "zh-CN": "账户"
+  },
+  "Overview": {
+    "ru": "Обзор",
+    "zh-CN": "概览"
+  },
+  "Top up": {
+    "ru": "Пополнить",
+    "zh-CN": "充值"
+  },
+  "Topup balance": {
+    "ru": "Пополнить баланс",
+    "zh-CN": "充值余额"
+  },
+  "Add credit": {
+    "ru": "Пополнить счёт",
+    "zh-CN": "充值余额"
+  },
+  "Orders": {
+    "ru": "Заказы",
+    "zh-CN": "订单"
+  },
+  "Services": {
+    "ru": "Услуги",
+    "zh-CN": "服务"
+  },
+  "Support": {
+    "ru": "Поддержка",
+    "zh-CN": "支持"
+  },
+  "Logout": {
+    "ru": "Выйти",
+    "zh-CN": "退出登录"
+  },
+  "Log out": {
+    "ru": "Выйти",
+    "zh-CN": "退出登录"
+  },
+  "Language": {
+    "ru": "Язык",
+    "zh-CN": "语言"
+  },
+  "Select language": {
+    "ru": "Выбрать язык",
+    "zh-CN": "选择语言"
+  },
+  "Order notification": {
+    "ru": "Уведомление о заказе",
+    "zh-CN": "订单通知"
+  },
+  "Copy amount": {
+    "ru": "Копировать сумму",
+    "zh-CN": "复制金额"
+  },
+  "Copy address": {
+    "ru": "Копировать адрес",
+    "zh-CN": "复制地址"
+  },
+  "Back to top up": {
+    "ru": "Назад к пополнению",
+    "zh-CN": "返回充值"
+  },
+  "What you're paying": {
+    "ru": "Сумма платежа",
+    "zh-CN": "支付金额"
+  },
+  "What you receive": {
+    "ru": "Вы получите",
+    "zh-CN": "到账金额"
+  },
+  "Reference rate": {
+    "ru": "Курс",
+    "zh-CN": "参考汇率"
+  },
+  "Total": {
+    "ru": "Итого",
+    "zh-CN": "总计"
+  },
+  "Pay with": {
+    "ru": "Оплатить с помощью",
+    "zh-CN": "支付方式"
+  },
+  "SEND EXACTLY": {
+    "ru": "ОТПРАВЬТЕ ТОЧНО",
+    "zh-CN": "请准确支付"
+  },
+  "TO ADDRESS": {
+    "ru": "НА АДРЕС",
+    "zh-CN": "收款地址"
+  },
+  "Create order": {
+    "ru": "Создать заказ",
+    "zh-CN": "创建订单"
+  },
+  "Choose amount": {
+    "ru": "Выбрать сумму",
+    "zh-CN": "选择金额"
+  },
+  "Custom amount": {
+    "ru": "Другая сумма",
+    "zh-CN": "自定义金额"
+  },
+  "Bitcoin": {
+    "ru": "Биткоин",
+    "zh-CN": "比特币"
+  },
+  "English": {
+    "ru": "Английский",
+    "zh-CN": "英语"
+  },
+  "Simplified Chinese": {
+    "ru": "Упрощённый китайский",
+    "zh-CN": "简体中文"
+  },
+  "Russian": {
+    "ru": "Русский",
+    "zh-CN": "俄语"
+  },
+  "VPS Hosting": {
+    "ru": "VPS-хостинг",
+    "zh-CN": "VPS 主机"
+  },
+  "Dedicated Servers": {
+    "ru": "Выделенные серверы",
+    "zh-CN": "独立服务器"
+  },
+  "GPU Hosting": {
+    "ru": "GPU-хостинг",
+    "zh-CN": "GPU 主机"
+  },
+  "Windows RDP": {
+    "ru": "Windows RDP",
+    "zh-CN": "Windows 远程桌面"
+  },
+  "Domains": {
+    "ru": "Домены",
+    "zh-CN": "域名"
+  },
+  "Domain": {
+    "ru": "Домен",
+    "zh-CN": "域名"
+  },
+  "Pricing": {
+    "ru": "Цены",
+    "zh-CN": "价格"
+  },
+  "About": {
+    "ru": "О нас",
+    "zh-CN": "关于我们"
+  },
+  "Contact": {
+    "ru": "Контакты",
+    "zh-CN": "联系我们"
+  },
+  "FAQ": {
+    "ru": "Вопросы и ответы",
+    "zh-CN": "常见问题"
+  },
+  "Privacy Policy": {
+    "ru": "Политика конфиденциальности",
+    "zh-CN": "隐私政策"
+  },
+  "Terms of Service": {
+    "ru": "Условия обслуживания",
+    "zh-CN": "服务条款"
+  },
+  "Continue to checkout": {
+    "ru": "Перейти к оформлению",
+    "zh-CN": "继续结账"
+  },
+  "Configure your domain": {
+    "ru": "Настроить домен",
+    "zh-CN": "配置您的域名"
+  },
+  "Registration period": {
+    "ru": "Срок регистрации",
+    "zh-CN": "注册年限"
+  },
+  "Checkout": {
+    "ru": "Оформление заказа",
+    "zh-CN": "结账"
+  },
+  "Buy": {
+    "ru": "Купить",
+    "zh-CN": "购买"
+  },
+  "Search": {
+    "ru": "Поиск",
+    "zh-CN": "搜索"
+  },
+  "Available": {
+    "ru": "Доступно",
+    "zh-CN": "可用"
+  },
+  "Taken": {
+    "ru": "Занято",
+    "zh-CN": "已注册"
+  },
+  "Price": {
+    "ru": "Цена",
+    "zh-CN": "价格"
+  },
+  "Period": {
+    "ru": "Срок",
+    "zh-CN": "期限"
+  },
+  "Billing": {
+    "ru": "Оплата",
+    "zh-CN": "账单"
+  },
+  "Security": {
+    "ru": "Безопасность",
+    "zh-CN": "安全"
+  },
+  "Tickets": {
+    "ru": "Обращения",
+    "zh-CN": "工单"
+  },
+  "Top up your balance": {
+    "ru": "Пополните баланс",
+    "zh-CN": "充值账户余额"
+  },
+  "Copy": {
+    "ru": "Копировать",
+    "zh-CN": "复制"
+  },
+  "Cancel": {
+    "ru": "Отмена",
+    "zh-CN": "取消"
+  },
+  "Continue": {
+    "ru": "Продолжить",
+    "zh-CN": "继续"
+  },
+  "Sign in": {
+    "ru": "Войти",
+    "zh-CN": "登录"
+  },
+  "Sign out": {
+    "ru": "Выйти",
+    "zh-CN": "退出登录"
+  },
+  "Create an account": {
+    "ru": "Создать аккаунт",
+    "zh-CN": "创建账户"
+  },
+  "Access token": {
+    "ru": "Токен доступа",
+    "zh-CN": "访问令牌"
+  },
+  "Create my token": {
+    "ru": "Создать мой токен",
+    "zh-CN": "生成我的令牌"
+  },
+  "Continue to my account": {
+    "ru": "Перейти в аккаунт",
+    "zh-CN": "进入我的账户"
+  },
+  "Your access token — shown once": {
+    "ru": "Ваш токен доступа — отображается один раз",
+    "zh-CN": "您的访问令牌——仅显示一次"
+  },
+  "Current balance": {
+    "ru": "Текущий баланс",
+    "zh-CN": "当前余额"
+  },
+  "Domain price": {
+    "ru": "Цена домена",
+    "zh-CN": "域名价格"
+  },
+  "You need to add": {
+    "ru": "Необходимо пополнить",
+    "zh-CN": "您需要充值"
+  },
+  "Order summary": {
+    "ru": "Сводка заказа",
+    "zh-CN": "订单摘要"
+  },
+  "Operating System": {
+    "ru": "Операционная система",
+    "zh-CN": "操作系统"
+  },
+  "Location": {
+    "ru": "Расположение",
+    "zh-CN": "地区"
+  },
+  "Server": {
+    "ru": "Сервер",
+    "zh-CN": "服务器"
+  },
+  "Change": {
+    "ru": "Изменить",
+    "zh-CN": "更改"
+  },
+  "Next": {
+    "ru": "Далее",
+    "zh-CN": "下一步"
+  },
+  "Previous": {
+    "ru": "Назад",
+    "zh-CN": "上一步"
+  }
+}
