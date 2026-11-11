@@ -14,7 +14,10 @@ function init(){
  const rate=params.get('price');
  const price=rate&&Object.hasOwn(PRICE_TABLE,rate)?Number(rate):4.99;
  const old=PRICE_TABLE[price.toFixed(2)];
- let years=1;
+ let years=[1,2,3,5].includes(Number(params.get('years')))?Number(params.get('years')):1;
+ const annualPrice=price;
+ const annualOriginal=old;
+ const amountFor=(annual,period)=>Math.round(annual*100)*period/100;
  const periods=[1,2,3,5];
  const all=[...document.querySelectorAll('body *')];
  const leafText=(regex)=>all.filter(e=>e.children.length===0&&regex.test((e.textContent||'').trim()));
@@ -41,10 +44,10 @@ function init(){
  function setPriceTexts(card,n){
    if(!card)return;
    const amounts=[...card.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\$[\d,.]+$/.test(e.textContent.trim()));
-   if(amounts[0])replaceMoney(amounts[0],old*n);
-   if(amounts[1])replaceMoney(amounts[1],price*n);
+   if(amounts[0])replaceMoney(amounts[0],amountFor(annualOriginal,n));
+   if(amounts[1])replaceMoney(amounts[1],amountFor(annualPrice,n));
    const perYear=[...card.querySelectorAll('*')].filter(e=>e.children.length===0&&/\/yr/.test(e.textContent||''));
-   perYear.forEach(e=>e.textContent=money(price)+'/yr');
+   perYear.forEach(e=>e.textContent=money(annualPrice)+'/yr');
  }
  function update(){
    cards.forEach((card,i)=>{
@@ -59,7 +62,7 @@ function init(){
      card.style.setProperty('outline','none','important');
      card.style.setProperty('background-color',active?'#edf1fc':'#fff','important');
    });
-   const total=price*years;
+   const total=amountFor(annualPrice,years);
    // Match the original order-summary rows by label, then update the amount
    // in the same row rather than relying on nested markup or stale values.
    function leaf(regex,root=document){
@@ -85,9 +88,9 @@ function init(){
        if(value&&value!==periodLabel){value.textContent=years+' '+(years===1?'year':'years');break;}
      }
    }
+   setRowAmount(/^Price\s*\(\s*\d+x\s*\)$/i);
    const priceLabel=leaf(/^Price\s*\(\s*\d+x\s*\)$/i);
    if(priceLabel)priceLabel.textContent='Price ('+years+'x)';
-   setRowAmount(/^Price\s*\(\s*\d+x\s*\)$/i);
    setRowAmount(/^Total today$/i);
    // Locate the original top-up message by its wording and replace only its
    // amount, even when the captured HTML wraps the amount in a separate span.
@@ -133,8 +136,8 @@ function init(){
          if(/\$[\d,.]+/.test(node.textContent||''))priceNodes.push(node);
        }
        if(priceNodes.length>=2){
-         priceNodes[0].textContent=priceNodes[0].textContent.replace(/\$[\d,.]+/,money(old));
-         priceNodes[1].textContent=priceNodes[1].textContent.replace(/\$[\d,.]+/,money(price));
+         priceNodes[0].textContent=priceNodes[0].textContent.replace(/\$[\d,.]+/,money(annualOriginal));
+         priceNodes[1].textContent=priceNodes[1].textContent.replace(/\$[\d,.]+/,money(annualPrice));
          break;
        }
      }
