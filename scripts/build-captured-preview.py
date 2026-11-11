@@ -130,7 +130,8 @@ def main():
         # $23 VPS checkout as if it were a Dedicated, RDP, GPU or other VPS plan.
         # Preserve the captured layout and bind its existing fields to the exact archived catalog plan.
         if route == "/order":
-            html = html.replace("</body>", '<script defer src="/newvps-order-original-pricing.js"></script>\\n</body>', 1)
+            html = html.replace("</body>", '<script defer src="/newvps-order-original-pricing.js"></script>\
+</body>', 1)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
         print(f"Restored archived checkout snapshot at {route} from {entry['capture']}")
@@ -173,7 +174,8 @@ def main():
   },true);
 })();
 </script>'''
-        html = html.replace("</body>", login_bridge + "\n</body>", 1)
+        html = html.replace("</body>", login_bridge + "
+</body>", 1)
         homepage.write_text(html, encoding="utf-8")
         print("Connected archived homepage login controls to local account dialog")
     # Restore interactions for the captured dashboard top-up form, without
@@ -293,7 +295,8 @@ def main():
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>'''
-        html = html.replace("</body>", bridge + "\n</body>", 1)
+        html = html.replace("</body>", bridge + "
+</body>", 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Enabled archived account top-up amount selection and preview; payment remains disabled")
     # Keep the original captured form; attach the isolated quote overlay after
@@ -303,7 +306,8 @@ def main():
         quote_target = OUT / "newvps-payment-quote.js"
         shutil.copy2(quote_source, quote_target)
         html = dashboard.read_text(encoding="utf-8")
-        html = html.replace("</body>", '<script defer src="/newvps-payment-quote.js"></script>\\n</body>', 1)
+        html = html.replace("</body>", '<script defer src="/newvps-payment-quote.js"></script>\
+</body>', 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Attached crypto quote overlay to archived account top-up form")
     # Attach account navigation to all archived HTML routes, including /vps/.
@@ -317,7 +321,8 @@ def main():
                 continue
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-account-navigation.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\
+</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored login links and dashboard logout on archived pages")
     # Apply the brand wordmark on every captured page without editing ZIP archives.
@@ -327,7 +332,8 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-brand-wordmark.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-brand-wordmark.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-brand-wordmark.js"></script>\
+</body>', 1)
                 page.write_text(html, encoding="utf-8")
     # Restore the original language dropdown on all captured pages.
     # Existing archive provides English, Russian and Simplified Chinese links.
@@ -337,7 +343,8 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-language-selector.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\
+</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored English, Russian and Simplified Chinese language selector")
     # Restore captured server configuration controls on every matching page.
@@ -379,7 +386,8 @@ def main():
                     raise RuntimeError(f"No OS icons embedded in captured configuration page: {page}")
                 print(f"Embedded {embedded[0]} original OS icons in {page.relative_to(OUT)}")
                 if 'newvps-server-config.js' not in html:
-                    html = html.replace("</body>", '<script defer src="/newvps-server-config.js"></script>\\n</body>', 1)
+                    html = html.replace("</body>", '<script defer src="/newvps-server-config.js"></script>\
+</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored captured server configuration interactions")
     domain_script = ROOT / "scripts/newvps-domain-search.js"
@@ -388,7 +396,8 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if 'id="domSearchForm"' in html and 'newvps-domain-search.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-domain-search.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-search.js"></script>\
+</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored captured domain search controls")
     # User-provided domain flow archives are authoritative for these three routes.
@@ -437,19 +446,26 @@ def main():
             # Domain captures are restored after the global language injection pass.
             # Explicitly include the same selector on these late-restored pages.
             if account_navigation.is_file() and 'newvps-account-navigation.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\
+</body>', 1)
             if language_source.is_file() and 'newvps-language-selector.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\
+</body>', 1)
             if domain_flow_js.is_file():
-                html = html.replace("</body>", '<script defer src="/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-capture-flow.js"></script>\
+</body>', 1)
             if route == "domain-order" and whois_style_js.is_file():
-                html = html.replace("</body>", '<script defer src="/newvps-domain-whois-style.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-whois-style.js"></script>\
+</body>', 1)
             if route == "domain-order" and domain_pricing_js.is_file():
-                html = html.replace("</body>", '<script defer src="/newvps-domain-pricing.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-pricing.js"></script>\
+</body>', 1)
             if brand_source.is_file():
-                html = html.replace("</body>", '<script defer src="/newvps-brand-wordmark.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-brand-wordmark.js"></script>\
+</body>', 1)
             if route == "domain-pay" and domain_checkout_js.is_file():
-                html = html.replace("</body>", '<script defer src="/newvps-domain-checkout.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-checkout.js"></script>\
+</body>', 1)
             dest.write_text(html, encoding="utf-8")
             written["/" + route] = filename
             print(f"Restored original domain flow: /{route}/ from {filename}")
@@ -483,13 +499,16 @@ def main():
                 target.write_bytes(z.read(member))
             html = re.sub(r'(?<![\\w/])assets/', asset_root + "assets/", html)
             if domain_flow_js.is_file():
-                html = html.replace("</body>", '<script defer src="/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-domain-capture-flow.js"></script>\
+</body>', 1)
             if account_navigation.is_file() and 'newvps-account-navigation.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\
+</body>', 1)
             # This archive overwrites the earlier domain page, so re-inject
             # the global language selector after restoring its original HTML.
             if 'newvps-language-selector.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\
+</body>', 1)
             page = OUT / "domains" / "index.html"
             page.parent.mkdir(parents=True, exist_ok=True)
             page.write_text(html, encoding="utf-8")
@@ -569,7 +588,8 @@ def main():
     for page in OUT.rglob("index.html"):
         html = page.read_text(encoding="utf-8")
         if 'id="mobBtn"' in html and 'id="mobMenu"' in html and 'newvps-mobile-menu.js' not in html:
-            html = html.replace("</body>", '<script defer src="/newvps-mobile-menu.js"></script>\\n</body>', 1)
+            html = html.replace("</body>", '<script defer src="/newvps-mobile-menu.js"></script>\
+</body>', 1)
             page.write_text(html, encoding="utf-8")
     print("Restored mobile hamburger menu toggle on captured pages")
     # Restore the previously tested mobile-only stylesheet to generated pages.
@@ -580,7 +600,8 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if "newvps-mobile-responsive.css" not in html:
-                html = html.replace("</head>", '<link rel="stylesheet" href="/newvps-mobile-responsive.css">\\n</head>', 1)
+                html = html.replace("</head>", '<link rel="stylesheet" href="/newvps-mobile-responsive.css">\
+</head>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored mobile-only responsive styles to generated pages")
     # Audit internal navigation against the routes actually generated.
