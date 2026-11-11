@@ -53,6 +53,10 @@ def main():
     existing_path=OUT/'strings.json'
     existing=json.loads(existing_path.read_text(encoding='utf-8')) if existing_path.is_file() else {}
     completed=json.loads((OUT/'approved-translations.json').read_text(encoding='utf-8')) if (OUT/'approved-translations.json').is_file() else {}
+    # Persisted seed translations are version-controlled, unlike CI artifacts.
+    # No pre-existing translation is silently discarded when a new inventory runs.
+    seed_path=ROOT/'translations'/'seed.json'
+    seeds=json.loads(seed_path.read_text(encoding='utf-8')) if seed_path.is_file() else {}
     for path in sorted(DIST.rglob('index.html')):
         route='/'+'/'.join(path.parent.relative_to(DIST).parts)
         if route!='/':route+='/'
@@ -75,7 +79,7 @@ def main():
         approved=completed.get(key,{})
         translations={}
         for lang in ('ru','zh-CN'):
-            candidate=approved.get(lang,previous.get(lang))
+            candidate=approved.get(lang,previous.get(lang,seeds.get(value,{}).get(lang)))
             translations[lang]=candidate if isinstance(candidate,str) and candidate.strip() and candidate.strip()!=value else None
         catalog[key]={'source':value,'protected_tokens':VARIABLE.findall(value),'routes':sorted(locations),**translations}
     OUT.mkdir(exist_ok=True)
