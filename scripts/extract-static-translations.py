@@ -5,7 +5,7 @@ Run after: python3 scripts/build-captured-preview.py
 Produces translation-catalog/strings.json and translation-catalog/coverage.json.
 No translated pages are published until translations are complete and verified.
 """
-from collections import defaultdict
+from collections import defaultdict, Counter
 from html.parser import HTMLParser
 from pathlib import Path
 import hashlib
@@ -46,6 +46,8 @@ class Extractor(HTMLParser):
 def main():
     if not DIST.is_dir():raise SystemExit('Run scripts/build-captured-preview.py first')
     references=defaultdict(set)
+    per_route={}
+    route_langs=Counter()
     routes=[]
     for path in sorted(DIST.rglob('index.html')):
         route='/'+'/'.join(path.parent.relative_to(DIST).parts)
@@ -54,14 +56,17 @@ def main():
         parser=Extractor()
         parser.feed(path.read_text(encoding='utf-8',errors='replace'))
         routes.append(route)
+        route_langs[route.split('/')[1] if route!='/' else 'root']+=1
+        per_route[route]={'strings':len(parser.items),'source':'generated HTML'}
         for value in parser.items:references[value].add(route)
     catalog={}
     for value,locations in sorted(references.items()):
         key=hashlib.sha256(value.encode()).hexdigest()[:20]
         catalog[key]={'source':value,'protected_tokens':VARIABLE.findall(value),'routes':sorted(locations),'ru':None,'zh-CN':None}
     OUT.mkdir(exist_ok=True)
+    (OUT/'routes.json').write_text(json.dumps(per_route,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     (OUT/'strings.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    coverage={'routes':len(routes),'unique_strings':len(catalog),'ru_translated':0,'zh_CN_translated':0,'published_static_locales':False,'reason':'Full human-reviewed translations required; never publish English as translated content.'}
+    coverage={'routes':len(routes),'unique_strings':len(catalog),'ru_translated':0,'zh_CN_translated':0,'unique_routes':len(per_route),'route_groups':dict(route_langs),'published_static_locales':False,'reason':'Full human-reviewed translations required; never publish English as translated content.'}
     (OUT/'coverage.json').write_text(json.dumps(coverage,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(coverage,ensure_ascii=False))
 
