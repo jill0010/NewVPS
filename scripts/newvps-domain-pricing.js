@@ -88,17 +88,30 @@ function init(){
        if(value&&value!==periodLabel){value.textContent=years+' '+(years===1?'year':'years');break;}
      }
    }
-   // Update the Price row as a single unit: both multiplier and the
-   // displayed amount must always match the selected registration card.
-   const priceRowLabel=leaf(/^Price\s*\(\s*\d+\s*[x×]\s*\)$/i);
-   if(priceRowLabel){
-     priceRowLabel.textContent='Price ('+years+'×)';
-     let row=priceRowLabel.parentElement;
-     for(let depth=0;depth<5&&row;depth++,row=row.parentElement){
-       const amountLeaves=[...row.querySelectorAll('*')].filter(el=>
-         el.children.length===0&&/^\$[\d,.]+$/.test((el.textContent||'').trim()));
-       if(amountLeaves.length&&(row.textContent||'').length<180){
-         replaceMoney(amountLeaves[amountLeaves.length-1],total);
+   // Captured summary markup may wrap the Price label/amount in nested
+   // elements. Locate their actual text nodes, not just leaf elements.
+   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+   let priceTextNode=null,walkNode;
+   while((walkNode=walker.nextNode())){
+     if(/^\s*Price\s*\(\s*\d+\s*[x×]\s*\)\s*$/i.test(walkNode.textContent||'')){
+       priceTextNode=walkNode;
+       break;
+     }
+   }
+   if(priceTextNode){
+     priceTextNode.textContent=priceTextNode.textContent.replace(/Price\s*\(\s*\d+\s*[x×]\s*\)/i,'Price ('+years+'×)');
+     let row=priceTextNode.parentElement;
+     for(let depth=0;depth<6&&row;depth++,row=row.parentElement){
+       if((row.textContent||'').length>200)break;
+       const amountWalker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
+       const amounts=[];
+       let amountNode;
+       while((amountNode=amountWalker.nextNode())){
+         if(/^\s*\$[\d,.]+\s*$/.test(amountNode.textContent||''))amounts.push(amountNode);
+       }
+       if(amounts.length){
+         const target=amounts[amounts.length-1];
+         target.textContent=target.textContent.replace(/\$[\d,.]+/,money(total));
          break;
        }
      }
@@ -165,7 +178,7 @@ function init(){
    card.style.cursor='pointer';
    card.setAttribute('role','button');
    card.setAttribute('tabindex','0');
-   const choose=()=>{years=periods[i];update()};
+   const choose=()=>{years=periods[i];update();queueMicrotask(update)};
    card.addEventListener('click',choose);
    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}});
  });
