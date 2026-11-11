@@ -62,12 +62,9 @@ function init(){
      card.style.setProperty('outline','none','important');
      card.style.setProperty('background-color',active?'#edf1fc':'#fff','important');
    });
-   // Read the selected card's displayed main price, not a separate estimate.
-   const selectedCard=cards[periods.indexOf(years)];
-   const cardMoney=selectedCard?[...selectedCard.querySelectorAll('*')].filter(el=>
-     el.children.length===0&&/^\\s*\\$[\\d,.]+\\s*$/.test(el.textContent||'')):[];
-   const selectedMain=cardMoney.length>1?Number(cardMoney[1].textContent.replace(/[^\\d.]/g,'')):NaN;
-   const total=Number.isFinite(selectedMain)?selectedMain:amountFor(annualPrice,years);
+   const total=amountFor(annualPrice,years);
+   // Match the original order-summary rows by label, then update the amount
+   // in the same row rather than relying on nested markup or stale values.
    function leaf(regex,root=document){
      return [...root.querySelectorAll('*')].find(e=>e.children.length===0&&regex.test((e.textContent||'').trim()));
    }
@@ -75,47 +72,75 @@ function init(){
      const label=leaf(labelPattern);
      if(!label)return;
      let row=label.parentElement;
-     for(let i=0;i<6&&row;i++,row=row.parentElement){
-       const amounts=[...row.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\\s*\\$[\\d,.]+\\s*$/.test(e.textContent||''));
-       if(amounts.length&&row.textContent.length<180){replaceMoney(amounts[amounts.length-1],total);return;}
+     for(let i=0;i<5&&row;i++,row=row.parentElement){
+       const amounts=[...row.querySelectorAll('*')].filter(e=>e.children.length===0&&/^\$[\d,.]+$/.test(e.textContent.trim()));
+       if(amounts.length&&row.textContent.length<180){
+         replaceMoney(amounts[amounts.length-1],total);
+         return;
+       }
      }
    }
-   // Update the captured summary by identifying the exact label and its
-   // nearest compact row, including labels split into text nodes.
-   const textNodes=[];
-   const summaryWalker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-   let tn;
-   while((tn=summaryWalker.nextNode()))if(tn.nodeValue.trim())textNodes.push(tn);
-   function findSummaryNode(regex){
-     return textNodes.find(node=>regex.test(node.nodeValue.trim())&&
-       !cards.some(card=>card&&card.contains(node.parentElement)));
-   }
-   const periodNode=findSummaryNode(/^Period$/i);
-   if(periodNode){
-     let row=periodNode.parentElement;
-     for(let d=0;d<7&&row;d++,row=row.parentElement){
-       if(row.textContent.length>350)break;
-       const value=[...row.querySelectorAll('*')].find(el=>el.children.length===0&&
-         /^(?:1|2|3|5)\\s*years?$/i.test(el.textContent.trim())&&el!==periodNode.parentElement);
-       if(value){value.textContent=years+' '+(years===1?'year':'years');break;}
-       const node=textNodes.find(n=>row.contains(n.parentElement)&&n!==periodNode&&
-         /^(?:1|2|3|5)\\s*years?$/i.test(n.nodeValue.trim()));
-       if(node){node.nodeValue=years+' '+(years===1?'year':'years');break;}
+   // Update the summary's two rows by finding the label text node and
+   // the nearest value alongside it. Captured HTML may split either value
+   // into nested spans, so use the label's bounding row, not leaf selectors.
+   function updateSummaryField(labelRegex,valueRegex,newValue){
+     const labels=[...document.querySelectorAll('*')].filter(el=>
+       el.children.length===0&&labelRegex.test((el.textContent||'').trim()));
+     const label=labels.find(el=>!cards.some(card=>card&&card.contains(el)));
+     if(!label)return;
+     let row=label.parentElement;
+     for(let depth=0;depth<7&&row;depth++,row=row.parentElement){
+       if((row.textContent||'').length>260)break;
+       const candidates=[...row.querySelectorAll('*')].filter(el=>
+         el!==label&&el.children.length===0&&valueRegex.test((el.textContent||'').trim()));
+       if(candidates.length){
+         const value=candidates[candidates.length-1];
+         value.textContent=newValue;
+         return;
+       }
+       // Some captures put the label and value in separate text nodes
+       // directly within the same wrapper.
+       const walker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
+       let node;
+       while((node=walker.nextNode())){
+         if(node.parentElement===label)continue;
+         if(valueRegex.test((node.textContent||'').trim())){
+           node.textContent=newValue;
+           return;
+         }
+       }
      }
    }
-   const priceNode=findSummaryNode(/^Price\\s*\\(\\s*[?\\d]+\\s*[x×]\\s*\\)$/i);
-   if(priceNode){
-     priceNode.nodeValue=priceNode.nodeValue.replace(/Price\\s*\\(\\s*[?\\d]+\\s*[x×]\\s*\\)/i,'Price ('+years+'×)');
-     let row=priceNode.parentElement;
-     for(let d=0;d<8&&row;d++,row=row.parentElement){
-       if(row.textContent.length>400)break;
-       const amounts=[...row.querySelectorAll('*')].filter(el=>el.children.length===0&&
-         /^\\s*\\$\\s*[\\d,.]+\\s*$/.test(el.textContent||'')&&!cards.some(c=>c&&c.contains(el)));
-       if(amounts.length){replaceMoney(amounts[amounts.length-1],total);break;}
-       const amountNode=textNodes.find(n=>n!==priceNode&&row.contains(n.parentElement)&&
-         /\\$\\s*[\\d,.]+/.test(n.nodeValue));
-       if(amountNode){amountNode.nodeValue=amountNode.nodeValue.replace(/\\$\\s*[\\d,.]+/,money(total));break;}
+   updateSummaryField(/^Period$/i,/^(?:1|2|3|5)\s*years?$/i,
+     years+' '+(years===1?'year':'years'));
+   // The original summary may render label and amount in either DOM order.
+   // Locate the smallest wrapper containing "Price (Nx)" and a currency value.
+   const summaryPriceLabel=[...document.querySelectorAll('body *')].find(el=>
+     el.children.length===0&&/^\s*Price\s*\(\s*\d+\s*[x×]\s*\)\s*$/i.test(el.textContent||'') &&
+     !cards.some(card=>card&&card.contains(el)));
+   if(summaryPriceLabel){
+     let row=summaryPriceLabel.parentElement;
+     for(let depth=0;depth<9&&row;depth++,row=row.parentElement){
+       if((row.textContent||'').length>400)break;
+       const amounts=[...row.querySelectorAll('*')].filter(el=>
+         el.children.length===0&&/^\s*\$\s*[\d,.]+\s*$/.test(el.textContent||'') &&
+         !cards.some(card=>card&&card.contains(el)));
+       if(amounts.length){
+         replaceMoney(amounts[amounts.length-1],total);
+         break;
+       }
+       const walker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
+       let node;
+       while((node=walker.nextNode())){
+         if(node.parentElement===summaryPriceLabel)continue;
+         if(/\$\s*[\d,.]+/.test(node.nodeValue||'')){
+           node.nodeValue=node.nodeValue.replace(/\$\s*[\d,.]+/,money(total));
+           row=null;break;
+         }
+       }
+       if(!row)break;
      }
+     summaryPriceLabel.textContent='Price ('+years+'×)';
    }
    setRowAmount(/^Total today$/i);
    // Locate the original top-up message by its wording and replace only its
