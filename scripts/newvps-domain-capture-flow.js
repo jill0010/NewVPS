@@ -6,6 +6,11 @@ function ready(){
  const grid=document.getElementById('domGrid');
  const head=document.getElementById('domResultsHd');
  if(!form||!input||!grid||!head)return;
+ // Archived static cards and promotional links may still use the former GitHub Pages prefix.
+ // Normalize their destinations as well as dynamically generated search results.
+ document.querySelectorAll('a[href*="/NewVPS/domain-order/"]').forEach(function(link){
+   link.href=link.href.replace('/NewVPS/domain-order/','/domain-order/');
+ });
  const cards=[...grid.querySelectorAll('.dom-card')];
  const originals=cards.map(card=>card.cloneNode(true));
  const fallbackTlds=['com','net','org','io','me','co','xyz','app','dev','ai','fr','de','is','li','ch','pw','nl','uk','info','biz','tech','pro','site','online','cc','tv'];
