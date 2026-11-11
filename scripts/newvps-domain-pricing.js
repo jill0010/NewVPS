@@ -90,13 +90,13 @@ function init(){
    }
    // Update the Price row as a single unit: both multiplier and the
    // displayed amount must always match the selected registration card.
-   const priceRowLabel=leaf(/^Price\\s*\\(\\s*\\d+\\s*[x×]\\s*\\)$/i);
+   const priceRowLabel=leaf(/^Price\s*\(\s*\d+\s*[x×]\s*\)$/i);
    if(priceRowLabel){
      priceRowLabel.textContent='Price ('+years+'×)';
      let row=priceRowLabel.parentElement;
      for(let depth=0;depth<5&&row;depth++,row=row.parentElement){
        const amountLeaves=[...row.querySelectorAll('*')].filter(el=>
-         el.children.length===0&&/^\\$[\\d,.]+$/.test((el.textContent||'').trim()));
+         el.children.length===0&&/^\$[\d,.]+$/.test((el.textContent||'').trim()));
        if(amountLeaves.length&&(row.textContent||'').length<180){
          replaceMoney(amountLeaves[amountLeaves.length-1],total);
          break;
