@@ -88,9 +88,21 @@ function init(){
        if(value&&value!==periodLabel){value.textContent=years+' '+(years===1?'year':'years');break;}
      }
    }
-   setRowAmount(/^Price\s*\(\s*\d+x\s*\)$/i);
-   const priceLabel=leaf(/^Price\s*\(\s*\d+x\s*\)$/i);
-   if(priceLabel)priceLabel.textContent='Price ('+years+'x)';
+   // Update the Price row as a single unit: both multiplier and the
+   // displayed amount must always match the selected registration card.
+   const priceRowLabel=leaf(/^Price\\s*\\(\\s*\\d+\\s*[x×]\\s*\\)$/i);
+   if(priceRowLabel){
+     priceRowLabel.textContent='Price ('+years+'×)';
+     let row=priceRowLabel.parentElement;
+     for(let depth=0;depth<5&&row;depth++,row=row.parentElement){
+       const amountLeaves=[...row.querySelectorAll('*')].filter(el=>
+         el.children.length===0&&/^\\$[\\d,.]+$/.test((el.textContent||'').trim()));
+       if(amountLeaves.length&&(row.textContent||'').length<180){
+         replaceMoney(amountLeaves[amountLeaves.length-1],total);
+         break;
+       }
+     }
+   }
    setRowAmount(/^Total today$/i);
    // Locate the original top-up message by its wording and replace only its
    // amount, even when the captured HTML wraps the amount in a separate span.
