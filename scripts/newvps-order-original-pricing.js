@@ -29,7 +29,7 @@ function start(){
   document.title='Order '+plan+' in '+region+' — AnonPort';
   text(document.querySelector('.order-title'),'Configure Your '+({vps:'VPS',dedicated:'Dedicated',gpu:'GPU',rdp:'RDP'}[type])+' Server');
   var info=recap.querySelector('.cfg-recap-info');
-  if(info&&info.firstChild)info.firstChild.textContent=plan+' in '+region.charAt(0).toUpperCase()+region.slice(1)+' ';
+  if(info){var specsNode=info.querySelector('.cfg-recap-specs');[...info.childNodes].forEach(function(n){if(n!==specsNode)info.removeChild(n)});info.insertBefore(document.createTextNode(plan+' in '+region.charAt(0).toUpperCase()+region.slice(1)+' '),specsNode||null)}
   var specs=recap.querySelector('.cfg-recap-specs');
   if(specs){
    specs.replaceChildren();
