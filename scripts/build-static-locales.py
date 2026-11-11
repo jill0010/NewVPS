@@ -118,6 +118,7 @@ def main():
     for page in sorted(SRC.rglob('index.html')):
         rel=page.relative_to(SRC)
         if rel.parts and rel.parts[0] in ('ru','zh','_captures'):continue
+        # Any original HTML with preexisting localized routes remains untouched.
         raw=page.read_text(encoding='utf-8')
         for locale,prefix in (('ru','ru'),('zh-CN','zh')):
             lookup={k:v[locale] for k,v in approved.items()}
