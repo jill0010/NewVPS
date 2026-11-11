@@ -1,0 +1,93 @@
+name: Persist and Expand Offline RU-ZH Drafts
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/persist-offline-translation-drafts.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: newvps-translation-draft-persistence
+  cancel-in-progress: false
+
+jobs:
+  persist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OLD_RUN: '43044523186'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download real translation drafts from successful run
+        run: |
+          mkdir -p translation-catalog/imported translations/drafts
+          gh run download "$OLD_RUN" --repo "$GITHUB_REPOSITORY" --name offline-ru-zh-drafts --dir translation-catalog/imported
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, shutil
+          src=Path('translation-catalog/imported/draft-translations.json')
+          report=Path('translation-catalog/imported/draft-report.json')
+          assert src.is_file() and report.is_file()
+          data=json.loads(src.read_text(encoding='utf-8'))
+          stats=json.loads(report.read_text(encoding='utf-8'))
+          assert len(data)==815, f'Unexpected original draft count {len(data)}'
+          assert stats['completed']['ru']==672 and stats['completed']['zh-CN']==814, 'Source artifact mismatched'
+          shutil.copyfile(src,'translations/drafts/core-batch-001.json')
+          shutil.copyfile(report,'translations/drafts/core-batch-001-report.json')
+          print('Preserved 815 draft strings in GitHub working tree; not published as approved translations')
+          PY
+      - name: Commit previous translated draft artifact to repository
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add translations/drafts/core-batch-001.json translations/drafts/core-batch-001-report.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Preserve 815 offline RU-ZH machine translation drafts from successful run'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Prepare remaining core-page text without touching English archives
+        run: |
+          python3 scripts/inventory-captured-routes.py
+          python3 scripts/build-captured-preview.py
+          python3 scripts/extract-static-translations.py
+          python3 -m pip install argostranslate
+      - name: Translate remaining core-page strings offline
+        run: |
+          python3 scripts/generate-offline-translation-drafts.py --limit 1500 --existing translations/drafts/core-batch-001.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          src=Path('translation-catalog/draft-translations.json')
+          report=Path('translation-catalog/draft-report.json')
+          data=json.loads(src.read_text(encoding='utf-8'))
+          stats=json.loads(report.read_text(encoding='utf-8'))
+          assert len(data)>0, 'No new offline drafts'
+          print('NEW drafts:',len(data),'locale counts:',stats['completed'],'failures:',len(stats['failed']))
+          Path('translations/drafts/core-batch-002.json').write_text(src.read_text(encoding='utf-8'),encoding='utf-8')
+          Path('translations/drafts/core-batch-002-report.json').write_text(report.read_text(encoding='utf-8'),encoding='utf-8')
+          PY
+      - name: Commit additional draft translations
+        run: |
+          git add translations/drafts/core-batch-002.json translations/drafts/core-batch-002-report.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Preserve remaining core-page RU-ZH offline draft translations'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Upload new core-page translation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-ru-zh-core-additional-drafts
+          path: |
+            translation-catalog/draft-translations.json
+            translation-catalog/draft-report.json
+          if-no-files-found: ignore
+          retention-days: 30
