@@ -16,6 +16,7 @@ ROOT=Path(__file__).resolve().parents[1]
 DIST=ROOT/'dist-captured'
 OUT=ROOT/'translation-catalog'
 SKIP={'script','style','svg','noscript','code','pre','textarea'}
+VOID={'area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'}
 ATTRS={'placeholder','title','aria-label','alt'}
 WORDS=re.compile(r'[A-Za-z]{2,}')
 VARIABLE=re.compile(r'(\$[\d,.]+|(?:\b\d+(?:\.\d+)?\s*(?:GB|TB|MB|GHz|USD|EUR|TON|months?|years?)\b)|\b[a-z0-9-]+\.[a-z]{2,}\b)',re.I)
@@ -26,12 +27,13 @@ class Extractor(HTMLParser):
         self.stack=[]
         self.items=set()
     def handle_starttag(self,tag,attrs):
-        self.stack.append(tag)
+        if tag not in VOID:self.stack.append(tag)
         if tag in SKIP or any(t in SKIP for t in self.stack):return
         for k,v in attrs:
             if k in ATTRS and v:self.record(v)
     def handle_startendtag(self,tag,attrs):
-        self.handle_starttag(tag,attrs);self.handle_endtag(tag)
+        self.handle_starttag(tag,attrs)
+        if tag not in VOID:self.handle_endtag(tag)
     def handle_endtag(self,tag):
         if tag in self.stack:
             i=len(self.stack)-1-self.stack[::-1].index(tag)
