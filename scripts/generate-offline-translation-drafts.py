@@ -63,17 +63,26 @@ def setup_models():
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument('--existing',default='translations/drafts/core-batch-001.json',
-                        help='Previously persisted draft JSON; only missing languages are regenerated')
+    parser.add_argument('--existing',action='append',default=[],
+                        help='Persisted draft JSON; may specify multiple batches')
     parser.add_argument('--limit',type=int,default=900,
                         help='Number of unique core-page strings to draft this run')
     args=parser.parse_args()
     source_path=CAT/'strings.json'
     if not source_path.is_file():raise SystemExit('No extracted inventory')
     catalog=json.loads(source_path.read_text(encoding='utf-8'))
-    existing_path=ROOT/args.existing
-    existing=json.loads(existing_path.read_text(encoding='utf-8')) if existing_path.is_file() else {}
-    print('Loaded persisted draft entries:',len(existing),flush=True)
+    existing={}
+    paths=args.existing or ['translations/drafts/core-batch-001.json','translations/drafts/core-batch-002.json']
+    for item in paths:
+        existing_path=ROOT/item
+        if existing_path.is_file():
+            obj=json.loads(existing_path.read_text(encoding='utf-8'))
+            for identifier,values in obj.items():
+                dest=existing.setdefault(identifier,{})
+                for language in ('ru','zh-CN'):
+                    if values.get(language):dest.setdefault(language,values[language])
+            print('Loaded persisted draft batch:',item,'entries:',len(obj),flush=True)
+    print('Combined persisted draft entries:',len(existing),flush=True)
     seeds=[]
     for identifier,entry in catalog.items():
         if not CORE_ROUTES.intersection(entry['routes']):continue
