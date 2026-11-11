@@ -416,6 +416,10 @@ def main():
                 lambda m: m.group(1) + 'NewVPS/' + m.group(2),
                 html,
             )
+            # Domain captures are restored after the global language injection pass.
+            # Explicitly include the same selector on these late-restored pages.
+            if language_source.is_file() and 'newvps-language-selector.js' not in html:
+                html = html.replace("</body>", '<script defer src="/NewVPS/newvps-language-selector.js"></script>\\n</body>', 1)
             if domain_flow_js.is_file():
                 html = html.replace("</body>", '<script defer src="/NewVPS/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
             if route == "domain-order" and whois_style_js.is_file():
