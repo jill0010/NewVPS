@@ -43,7 +43,7 @@ jobs:
           missing=json.loads(Path('translation-review/missing-translations.json').read_text(encoding='utf-8'))
           assert missing, 'Missing translation manifest unexpectedly empty'
           assert all(item['source'] and item['locale'] and item['route'] for item in missing), 'Manifest entries must map to a source string'
-          print('Original untranslated text entries for targeted correction:',len(missing))
+          print('Actual untranslated content entries for targeted correction (identifiers excluded):',len(missing))
           print(json.dumps(report['language_route_details'],ensure_ascii=False,indent=2))
           PY
       - name: Upload offline preview archive and missing-text report (not deployment)
