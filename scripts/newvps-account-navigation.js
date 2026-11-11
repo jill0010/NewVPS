@@ -4,6 +4,12 @@
   const base='/';
   function login(event){
     event.preventDefault();event.stopImmediatePropagation();
+    // iOS Safari and in-app browsers can restrict sessionStorage in embedded
+    // documents. Keep the token login on the first-party top-level page.
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      window.location.assign('/register/?view=login');
+      return;
+    }
     if(document.getElementById('newvps-account-overlay'))return;
     const overlay=document.createElement('div');overlay.id='newvps-account-overlay';
     overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center';
@@ -43,7 +49,7 @@
     if(target.closest('form, #newvps-account-overlay, .dialog, #panel'))return;
     const label=(target.textContent||'').trim().toLowerCase();
     const href=(target.getAttribute('href')||'').trim().toLowerCase();
-    if(['login','log in','sign in','登录'].includes(label) ||
+    if(['login','log in','sign in','登录','登入','登陆'].includes(label) ||
        (href==='#'&&/login|sign.?in/i.test(target.getAttribute('aria-label')||''))){
       login(e);
     }
