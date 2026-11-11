@@ -8,7 +8,7 @@ function init(){
  var main=document.createElement('section');
  main.id='newvps-original-plan-details';
  main.style.cssText='max-width:1100px;margin:30px auto;padding:26px;border:1px solid #dce2eb;border-radius:12px;background:white;color:#182230;font:15px/1.6 system-ui,sans-serif';
- main.innerHTML='<h1 style="font-size:23px;margin:0 0 12px">Original product configuration</h1><p id="newvps-plan-status">Reading original archived product data…</p>';
+ main.innerHTML='<h1 id="newvps-order-title" style="font-size:26px;margin:0 0 12px">Configure your server</h1><p id="newvps-plan-status">Loading plan details…</p>';
  // Frontend-only replica: display original catalog details, then navigate to the archived top-up screen. No order or charge is submitted.
  document.body.replaceChildren(main);
  var url=categories[type];
@@ -30,11 +30,12 @@ function init(){
      var headings=[...original.querySelectorAll('th')].map(x=>x.textContent.trim());
      [...original.querySelectorAll('td')].forEach(function(c,i){if(headings[i])labels[headings[i]]=c.textContent.trim().replace(/\s+/g,' ')});
    }
-   var h=document.createElement('h2');h.textContent=type.toUpperCase()+' · '+plan+' · '+region;main.append(h);
+   document.getElementById('newvps-order-title').textContent='Configure Your '+({dedicated:'Dedicated',gpu:'GPU',rdp:'RDP',vps:'VPS'}[type]||type.toUpperCase())+' Server';
+   var h=document.createElement('h2');h.textContent=plan+' in '+region.charAt(0).toUpperCase()+region.slice(1);main.append(h);
    var table=document.createElement('table');table.style.cssText='border-collapse:collapse;width:100%;margin:18px 0';
    Object.entries(labels).forEach(function(pair){if(/^(order|buy)$/i.test(pair[0]))return;var tr=document.createElement('tr');pair.forEach(function(v,i){var el=document.createElement(i?'td':'th');el.textContent=v;el.style.cssText='padding:10px;border-bottom:1px solid #e5e7eb;text-align:left';tr.append(el)});table.append(tr)});
    if(!table.children.length){var pre=document.createElement('p');pre.textContent=original.textContent.trim().replace(/\s+/g,' ');main.append(pre)}else main.append(table);
-   document.getElementById('newvps-plan-status').textContent='Original archived product specifications. Frontend preview only; continuing opens the payment/top-up page without placing an order.';
+   document.getElementById('newvps-plan-status').textContent='Review your configuration and continue to payment.';
    var action=document.createElement('a');action.href='/account/?tab=topup';action.textContent='Continue to payment';action.style.cssText='display:inline-block;padding:12px 22px;border-radius:8px;background:#1a56db;color:white;text-decoration:none;font-weight:700';main.append(action);
  }).catch(function(e){document.getElementById('newvps-plan-status').textContent='Cannot verify original plan details: '+e.message+'. Checkout is disabled.'});
 }
