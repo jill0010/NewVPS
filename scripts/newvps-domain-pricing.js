@@ -113,33 +113,34 @@ function init(){
    }
    updateSummaryField(/^Period$/i,/^(?:1|2|3|5)\s*years?$/i,
      years+' '+(years===1?'year':'years'));
-   // Bind the multiplier and price to the same Price summary row.
-   // Text may be split across nested captured HTML elements.
-   const priceNodes=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-   let priceNode=null,scan;
-   while((scan=priceNodes.nextNode())){
-     if(/Price\s*\(\s*\d+\s*[x×]\s*\)/i.test(scan.nodeValue||'') &&
-        !cards.some(card=>card&&card.contains(scan.parentElement))){
-       priceNode=scan;break;
-     }
-   }
-   if(priceNode){
-     priceNode.nodeValue=priceNode.nodeValue.replace(
-       /Price\s*\(\s*\d+\s*[x×]\s*\)/i,'Price ('+years+'×)');
-     let row=priceNode.parentElement;
-     for(let depth=0;depth<8&&row;depth++,row=row.parentElement){
-       if((row.textContent||'').length>350)break;
+   // The original summary may render label and amount in either DOM order.
+   // Locate the smallest wrapper containing "Price (Nx)" and a currency value.
+   const summaryPriceLabel=[...document.querySelectorAll('body *')].find(el=>
+     el.children.length===0&&/^\s*Price\s*\(\s*\d+\s*[x×]\s*\)\s*$/i.test(el.textContent||'') &&
+     !cards.some(card=>card&&card.contains(el)));
+   if(summaryPriceLabel){
+     let row=summaryPriceLabel.parentElement;
+     for(let depth=0;depth<9&&row;depth++,row=row.parentElement){
+       if((row.textContent||'').length>400)break;
+       const amounts=[...row.querySelectorAll('*')].filter(el=>
+         el.children.length===0&&/^\s*\$\s*[\d,.]+\s*$/.test(el.textContent||'') &&
+         !cards.some(card=>card&&card.contains(el)));
+       if(amounts.length){
+         replaceMoney(amounts[amounts.length-1],total);
+         break;
+       }
        const walker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
-       let node,seenLabel=false;
+       let node;
        while((node=walker.nextNode())){
-         if(node===priceNode){seenLabel=true;continue;}
-         if(seenLabel&&/\$\s*[\d,.]+/.test(node.nodeValue||'')){
+         if(node.parentElement===summaryPriceLabel)continue;
+         if(/\$\s*[\d,.]+/.test(node.nodeValue||'')){
            node.nodeValue=node.nodeValue.replace(/\$\s*[\d,.]+/,money(total));
            row=null;break;
          }
        }
        if(!row)break;
      }
+     summaryPriceLabel.textContent='Price ('+years+'×)';
    }
    setRowAmount(/^Total today$/i);
    // Locate the original top-up message by its wording and replace only its
