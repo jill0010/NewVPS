@@ -1,0 +1,48 @@
+name: Offline Translation Inventory
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/extract-static-translations.py'
+      - '.github/workflows/offline-translation-inventory.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build from original captured archives
+        run: |
+          python3 scripts/inventory-captured-routes.py
+          python3 scripts/build-captured-preview.py
+      - name: Extract multilingual text inventory
+        run: |
+          python3 scripts/extract-static-translations.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('translation-catalog')
+          coverage=json.loads((root/'coverage.json').read_text(encoding='utf-8'))
+          strings=json.loads((root/'strings.json').read_text(encoding='utf-8'))
+          routes=json.loads((root/'routes.json').read_text(encoding='utf-8'))
+          assert coverage['routes']==len(routes)
+          assert coverage['unique_strings']==len(strings)
+          assert coverage['routes']>=174, 'Unexpected missing archived pages'
+          assert coverage['unique_strings']>100, 'Text extraction unexpectedly empty'
+          assert all(item['source'] and item['routes'] for item in strings.values())
+          assert not coverage['published_static_locales'], 'Premature publication of incomplete translations'
+          print('PASS: inventory counts and integrity validated')
+          print(json.dumps(coverage,ensure_ascii=False,indent=2))
+          PY
+      - name: Upload translation catalogs and coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-translation-inventory
+          path: translation-catalog/
+          retention-days: 30
