@@ -29,16 +29,18 @@ PROTECTED=re.compile(
     r'\b[a-z0-9-]+\.(?:com|net|org|io|co|dev|app|xyz|me)\b|'
     r'\{[A-Za-z_][\w.]*\}|\$\{[^{}]+\}|%[sd]',re.I)
 MODEL=re.compile(r'^(?:(?:Intel|AMD|NVIDIA|Xeon|EPYC|Ryzen|GeForce|RTX|GTX|Ubuntu|Debian|AlmaLinux|Rocky Linux|Windows Server|CentOS|Fedora|FreeBSD)[\s\S]*|\d+\s*[×x]\s*(?:Intel|AMD|NVIDIA)[\s\S]*)$',re.I)
-# Pure identifiers are original product data, not translation gaps.
-# Keep prices, currencies, domains, technical specifications, plan IDs, and
-# service/brand acronyms exactly as captured in the English originals.
-IDENTIFIER=re.compile(
-    r'^(?:[A-Z0-9][A-Z0-9.+/_× \-]{1,24}|'
-    r'(?:\d+(?:\.\d+)?\s*(?:vCPU|GB|TB|MB|Mbps|Gbps|GHz|DDR[345]|ECC|NVMe|GDDR[456]X?)(?:\s+\w+){0,4})|'
-    r'(?:[\w-]+\.)+[a-z]{2,}|'
-    r'\.[a-z0-9]{2,12}|'
-    r'/[a-z]{2,5}|'
-    r'[A-Z]{2,8}-[A-Z0-9]+)
+# Keep product identifiers and technical parameters as literal source content.
+PREFERRED=['/','/domains/','/domain-order/','/domain-pay/','/account/','/register/','/order/','/vps/','/dedicated/','/gpu/']
+PROTECTED_NAMES={'VPS','GPU','CPU','RAM','RDP','VPN','AWS','OVH','BTC','ETH','USDT','XMR','LTC','SOL','IDE','GUI','SSH','KVM','NVMe','WHOIS','DNS','SSD','EN','NEW'}
+def is_identifier(text):
+    value=' '.join(text.split())
+    if value in PROTECTED_NAMES:return True
+    if re.fullmatch(r'[A-Z][A-Z0-9-]{1,22}',value):return True
+    if re.fullmatch(r'(?:[A-Za-z0-9-]+[.])+[A-Za-z]{2,15}',value):return True
+    if re.fullmatch(r'[.][A-Za-z0-9-]+',value):return True
+    if re.fullmatch(r'[0-9]+(?:[.][0-9]+)?[ ]*(?:vCPU|GB|TB|MB|Mbps|Gbps|GHz)(?:[ ]+(?:DDR[345]|ECC|NVMe|SSD|GDDR[0-9A-Z]+))?',value,re.I):return True
+    if re.fullmatch(r'XXXX(?:-XXXX){3}',value):return True
+    return False
 CORE=set(PREFERRED)
 
 def key(text):return hashlib.sha256(' '.join(text.split()).encode()).hexdigest()[:20]
