@@ -8,6 +8,7 @@ on:
       - 'scripts/extract-static-translations.py'
       - '.github/workflows/offline-translation-inventory.yml'
       - 'scripts/validate-static-translations.py'
+      - 'scripts/build-static-locales.py'
 
 permissions:
   contents: read
@@ -45,6 +46,13 @@ jobs:
           PY
       - name: Validate protected values and incomplete translation status
         run: python3 scripts/validate-static-translations.py
+      - name: Check static locale publish gate
+        run: |
+          if [ -f translation-catalog/approved-translations.json ]; then
+            python3 scripts/build-static-locales.py
+          else
+            echo 'SAFE: no reviewed translations; generated locale publishing remains disabled.'
+          fi
       - name: Upload translation catalogs and coverage report
         uses: actions/upload-artifact@v4
         with:
