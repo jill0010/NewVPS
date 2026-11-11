@@ -11,6 +11,22 @@ function ready(){
  document.querySelectorAll('a[href*="/NewVPS/domain-order/"]').forEach(function(link){
    link.href=link.href.replace('/NewVPS/domain-order/','/domain-order/');
  });
+ // Archived page scripts can intercept Buy and redirect to the home page.
+ // Capture the click at window level before those handlers; preserve the
+ // selected domain and the sale price displayed on that specific card.
+ window.addEventListener('click',function(event){
+   const link=event.target.closest&&event.target.closest('#domGrid a.dom-card-buy');
+   if(!link||link.getAttribute('aria-disabled')==='true')return;
+   const card=link.closest('.dom-card');
+   const domain=link.dataset.domain||(card&&card.querySelector('.dom-card-domain')?.textContent||'').trim().toLowerCase();
+   const rawPrice=link.dataset.price||(card&&card.querySelector('.dom-card-price')?.textContent||'');
+   const matches=[...rawPrice.matchAll(/\\$\\s*([\\d,]+(?:\\.\\d{1,2})?)/g)];
+   const price=matches.length?Number(matches[matches.length-1][1].replace(/,/g,'')):NaN;
+   if(!/^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$/.test(domain)||!Number.isFinite(price)||price<=0)return;
+   event.preventDefault();
+   event.stopImmediatePropagation();
+   location.assign('/domain-order/?domain='+encodeURIComponent(domain)+'&price='+encodeURIComponent(price.toFixed(2)));
+ },true);
  const cards=[...grid.querySelectorAll('.dom-card')];
  const originals=cards.map(card=>card.cloneNode(true));
  const fallbackTlds=['com','net','org','io','me','co','xyz','app','dev','ai','fr','de','is','li','ch','pw','nl','uk','info','biz','tech','pro','site','online','cc','tv'];
