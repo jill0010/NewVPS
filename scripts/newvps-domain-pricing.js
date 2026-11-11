@@ -80,61 +80,44 @@ function init(){
        }
      }
    }
-   // Find the Period row in the original captured summary and update its
-   // value without touching the registration-period cards on the left.
-   const periodWalker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-   let periodNode=null,periodScan;
-   while((periodScan=periodWalker.nextNode())){
-     if(/^\s*Period\s*$/i.test(periodScan.textContent||'')){
-       periodNode=periodScan;
-       break;
-     }
-   }
-   if(periodNode){
-     let row=periodNode.parentElement;
-     for(let depth=0;depth<6&&row;depth++,row=row.parentElement){
-       if((row.textContent||'').length>180)break;
-       const valueWalker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
-       let valueNode;
-       while((valueNode=valueWalker.nextNode())){
-         if(valueNode===periodNode)continue;
-         if(/^\s*(?:1|2|3|5)\s*years?\s*$/i.test(valueNode.textContent||'')){
-           valueNode.textContent=years+' '+(years===1?'year':'years');
-           row=null;
-           break;
+   // Update the summary's two rows by finding the label text node and
+   // the nearest value alongside it. Captured HTML may split either value
+   // into nested spans, so use the label's bounding row, not leaf selectors.
+   function updateSummaryField(labelRegex,valueRegex,newValue){
+     const labels=[...document.querySelectorAll('*')].filter(el=>
+       el.children.length===0&&labelRegex.test((el.textContent||'').trim()));
+     const label=labels.find(el=>!cards.some(card=>card&&card.contains(el)));
+     if(!label)return;
+     let row=label.parentElement;
+     for(let depth=0;depth<7&&row;depth++,row=row.parentElement){
+       if((row.textContent||'').length>260)break;
+       const candidates=[...row.querySelectorAll('*')].filter(el=>
+         el!==label&&el.children.length===0&&valueRegex.test((el.textContent||'').trim()));
+       if(candidates.length){
+         const value=candidates[candidates.length-1];
+         value.textContent=newValue;
+         return;
+       }
+       // Some captures put the label and value in separate text nodes
+       // directly within the same wrapper.
+       const walker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
+       let node;
+       while((node=walker.nextNode())){
+         if(node.parentElement===label)continue;
+         if(valueRegex.test((node.textContent||'').trim())){
+           node.textContent=newValue;
+           return;
          }
        }
-       if(!row)break;
      }
    }
-   // Captured summary markup may wrap the Price label/amount in nested
-   // elements. Locate their actual text nodes, not just leaf elements.
-   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-   let priceTextNode=null,walkNode;
-   while((walkNode=walker.nextNode())){
-     if(/^\s*Price\s*\(\s*\d+\s*[x×]\s*\)\s*$/i.test(walkNode.textContent||'')){
-       priceTextNode=walkNode;
-       break;
-     }
-   }
-   if(priceTextNode){
-     priceTextNode.textContent=priceTextNode.textContent.replace(/Price\s*\(\s*\d+\s*[x×]\s*\)/i,'Price ('+years+'×)');
-     let row=priceTextNode.parentElement;
-     for(let depth=0;depth<6&&row;depth++,row=row.parentElement){
-       if((row.textContent||'').length>200)break;
-       const amountWalker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
-       const amounts=[];
-       let amountNode;
-       while((amountNode=amountWalker.nextNode())){
-         if(/^\s*\$[\d,.]+\s*$/.test(amountNode.textContent||''))amounts.push(amountNode);
-       }
-       if(amounts.length){
-         const target=amounts[amounts.length-1];
-         target.textContent=target.textContent.replace(/\$[\d,.]+/,money(total));
-         break;
-       }
-     }
-   }
+   updateSummaryField(/^Period$/i,/^(?:1|2|3|5)\s*years?$/i,
+     years+' '+(years===1?'year':'years'));
+   updateSummaryField(/^Price\s*\(\s*\d+\s*[x×]\s*\)$/i,/^\$[\d,.]+$/,
+     money(total));
+   const priceLabel=[...document.querySelectorAll('*')].find(el=>
+     el.children.length===0&&/^Price\s*\(\s*\d+\s*[x×]\s*\)$/i.test((el.textContent||'').trim()));
+   if(priceLabel)priceLabel.textContent='Price ('+years+'×)';
    setRowAmount(/^Total today$/i);
    // Locate the original top-up message by its wording and replace only its
    // amount, even when the captured HTML wraps the amount in a separate span.
