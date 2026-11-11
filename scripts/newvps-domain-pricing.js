@@ -209,6 +209,26 @@ function init(){
    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}});
  });
  update();
+ // The captured checkout control may be a button without a working href or
+ // form action. Route it explicitly while preserving the chosen registration term.
+ const checkoutUrl=()=>'/NewVPS/domain-pay/?domain='+encodeURIComponent(domain)+
+   '&price='+encodeURIComponent(price.toFixed(2))+'&years='+encodeURIComponent(years);
+ const isCheckoutControl=el=>el&&/continue\\s+to\\s+checkout|继续结账|继续付款|перейти\\s+к\\s+оплате/i.test((el.textContent||'').trim());
+ document.addEventListener('click',function(event){
+   const control=event.target.closest('a,button,input[type="submit"],[role="button"]');
+   if(!control||!isCheckoutControl(control))return;
+   event.preventDefault();
+   event.stopImmediatePropagation();
+   location.assign(checkoutUrl());
+ },true);
+ document.addEventListener('submit',function(event){
+   const form=event.target;
+   if(!form||!form.querySelector)return;
+   const submitter=event.submitter;
+   if(!isCheckoutControl(submitter)&&!isCheckoutControl(form.querySelector('button[type="submit"],input[type="submit"]')))return;
+   event.preventDefault();
+   location.assign(checkoutUrl());
+ },true);
  document.querySelectorAll('a[href*="domain-pay"],form[action*="domain-pay"]').forEach(el=>{
    if(el.tagName==='A'){
      const url=new URL(el.href,location.href);
