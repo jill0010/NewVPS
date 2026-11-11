@@ -40,6 +40,9 @@ jobs:
           assert report['status']=='DRAFT_FOR_REVIEW_NOT_PUBLISHABLE'
           assert len(report['language_route_details'])>=10
           assert Path('translation-review.zip').is_file()
+          missing=json.loads(Path('translation-review/missing-translations.json').read_text(encoding='utf-8'))
+          assert missing and all(item['source'] and item['locale'] and item['route'] for item in missing)
+          print('Original untranslated text entries for targeted correction:',len(missing))
           print(json.dumps(report['language_route_details'],ensure_ascii=False,indent=2))
           PY
       - name: Upload offline preview archive and missing-text report (not deployment)
@@ -49,4 +52,5 @@ jobs:
           path: |
             translation-review.zip
             translation-review/review-report.json
+            translation-review/missing-translations.json
           retention-days: 30
