@@ -22,6 +22,8 @@ jobs:
           python3 scripts/inventory-captured-routes.py
           python3 scripts/build-captured-preview.py
           python3 scripts/extract-static-translations.py
+      - name: Verify translation script Python syntax before installing models
+        run: python3 -m py_compile scripts/generate-offline-translation-drafts.py
       - name: Install offline translation engine
         run: |
           python3 -m pip install --upgrade pip
