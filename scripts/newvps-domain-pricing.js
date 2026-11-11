@@ -209,11 +209,18 @@ function init(){
    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}});
  });
  update();
- // The captured checkout control may be a button without a working href or
- // form action. Route it explicitly while preserving the chosen registration term.
+ // The archived checkout form POSTs to a static page, which returns HTTP 405.
+ // Convert checkout navigation to GET and preserve selected registration years.
  const checkoutUrl=()=>'/NewVPS/domain-pay/?domain='+encodeURIComponent(domain)+
    '&price='+encodeURIComponent(price.toFixed(2))+'&years='+encodeURIComponent(years);
- const isCheckoutControl=el=>el&&/continue\\s+to\\s+checkout|继续结账|继续付款|перейти\\s+к\\s+оплате/i.test((el.textContent||'').trim());
+ const checkoutPattern=/continue\\s+to\\s+checkout|继续结账|继续付款|перейти\\s+к\\s+оплате/i;
+ const isCheckoutControl=el=>!!el&&checkoutPattern.test((el.textContent||el.value||'').trim());
+ const controls=[...document.querySelectorAll('a,button,input[type="submit"],[role="button"]')]
+   .filter(isCheckoutControl);
+ controls.forEach(control=>{
+   if(control.tagName==='A')control.href=checkoutUrl();
+   if(control.form){control.form.method='get';control.form.action='/NewVPS/domain-pay/';}
+ });
  document.addEventListener('click',function(event){
    const control=event.target.closest('a,button,input[type="submit"],[role="button"]');
    if(!control||!isCheckoutControl(control))return;
@@ -224,20 +231,20 @@ function init(){
  document.addEventListener('submit',function(event){
    const form=event.target;
    if(!form||!form.querySelector)return;
-   const submitter=event.submitter;
-   if(!isCheckoutControl(submitter)&&!isCheckoutControl(form.querySelector('button[type="submit"],input[type="submit"]')))return;
+   if(!controls.some(control=>control.form===form||form.contains(control))&&
+      !/domain-pay|checkout/i.test(form.action||''))return;
    event.preventDefault();
+   event.stopImmediatePropagation();
    location.assign(checkoutUrl());
  },true);
- document.querySelectorAll('a[href*="domain-pay"],form[action*="domain-pay"]').forEach(el=>{
-   if(el.tagName==='A'){
-     const url=new URL(el.href,location.href);
-     url.searchParams.set('domain',domain);
-     url.searchParams.set('price',price.toFixed(2));
-     url.searchParams.set('years',String(years));
-     el.addEventListener('click',()=>{url.searchParams.set('years',String(years));el.href=url.pathname+url.search});
-   }else el.addEventListener('submit',()=>{el.action='/NewVPS/domain-pay/?domain='+encodeURIComponent(domain)+'&price='+price.toFixed(2)+'&years='+years});
+ document.querySelectorAll('a[href*="domain-pay"]').forEach(el=>{
+   el.href=checkoutUrl();
+   el.addEventListener('click',function(event){
+     event.preventDefault();
+     location.assign(checkoutUrl());
+   });
  });
+
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
