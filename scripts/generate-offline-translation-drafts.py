@@ -249,8 +249,10 @@ if __name__=='__main__':main()
 # Product model specifications and OS versions are identifiers, not prose.
 # Translating these damages the original product names and parameters.
 SPECIFICATION=re.compile(
-    r'^(?:(?:Intel|AMD|NVIDIA|Xeon|EPYC|Ryzen|GeForce|RTX|GTX|Ubuntu|Debian|AlmaLinux|Rocky Linux|Windows Server|CentOS|Fedora|FreeBSD|Intel®|AMD®)[\s\S]*|'
-    r'[\d]+\s*[×x]\s*(?:Intel|AMD|NVIDIA)[\s\S]*)
+    r'^(?:(?:Intel|AMD|NVIDIA|Xeon|EPYC|Ryzen|GeForce|RTX|GTX|Ubuntu|Debian|AlmaLinux|Rocky Linux|Windows Server|CentOS|Fedora|FreeBSD|Intel®|AMD®)[\\s\\S]*|'
+    r'[\\d]+\\s*[×x]\\s*(?:Intel|AMD|NVIDIA)[\\s\\S]*)$',
+    re.I
+)
 LATIN=re.compile(r'[A-Za-z]{2,}')
 
 def token_counts(s):return Counter(m.group(0) for m in PROTECTED.finditer(s))
