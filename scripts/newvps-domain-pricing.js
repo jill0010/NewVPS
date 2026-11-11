@@ -80,12 +80,31 @@ function init(){
        }
      }
    }
-   const periodLabel=leaf(/^Period$/i);
-   if(periodLabel){
-     let row=periodLabel.parentElement;
-     for(let i=0;i<4&&row;i++,row=row.parentElement){
-       const value=leaf(/^(?:1|2|3|5)\s*years?$/i,row);
-       if(value&&value!==periodLabel){value.textContent=years+' '+(years===1?'year':'years');break;}
+   // Find the Period row in the original captured summary and update its
+   // value without touching the registration-period cards on the left.
+   const periodWalker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+   let periodNode=null,periodScan;
+   while((periodScan=periodWalker.nextNode())){
+     if(/^\s*Period\s*$/i.test(periodScan.textContent||'')){
+       periodNode=periodScan;
+       break;
+     }
+   }
+   if(periodNode){
+     let row=periodNode.parentElement;
+     for(let depth=0;depth<6&&row;depth++,row=row.parentElement){
+       if((row.textContent||'').length>180)break;
+       const valueWalker=document.createTreeWalker(row,NodeFilter.SHOW_TEXT);
+       let valueNode;
+       while((valueNode=valueWalker.nextNode())){
+         if(valueNode===periodNode)continue;
+         if(/^\s*(?:1|2|3|5)\s*years?\s*$/i.test(valueNode.textContent||'')){
+           valueNode.textContent=years+' '+(years===1?'year':'years');
+           row=null;
+           break;
+         }
+       }
+       if(!row)break;
      }
    }
    // Captured summary markup may wrap the Price label/amount in nested
