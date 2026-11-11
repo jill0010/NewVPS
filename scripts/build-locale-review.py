@@ -118,6 +118,9 @@ def main():
             for locale in ('ru','zh-CN'):
                 if isinstance(values.get(locale),str) and values[locale].strip():
                     entry.setdefault(locale,values[locale])
+    # Export missing source strings for translation review, grouped by actual route.
+    # Machine drafts are never silently approved just because they passed token checks.
+    missing_manifest=[]
     translated_count={'ru':0,'zh-CN':0}
     items=[]
     summary=[]
@@ -138,6 +141,14 @@ def main():
                             'translated_unique_nodes':len(p.translated),
                             'missing_unique_nodes':len(p.untranslated),
                             'known_bad_drafts_rejected':len(set(p.rejected))})
+            for identifier in sorted(p.untranslated):
+                source_entry=catalog.get(identifier,{})
+                missing_manifest.append({
+                    'route':route,'locale':locale,'key':identifier,
+                    'source':source_entry.get('source',''),
+                    'draft':lookup.get(identifier),
+                    'requires_review':True
+                })
             # HTML output is an offline review file, never an automatically deployed route.
             output_path=OUT/('ru' if locale=='ru' else 'zh-CN')/relative/'index.html'
             items.append((output_path,''.join(p.parts)))
@@ -150,6 +161,7 @@ def main():
             'language_route_details':summary,
             'never_automatically_deploy':True,
             'important':'Draft previews contain untranslated English and machine translation errors; no locale switching enabled'}
+    (OUT/'missing-translations.json').write_text(json.dumps(missing_manifest,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')
     (OUT/'review-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     zip_path=ROOT/'translation-review.zip'
     with zipfile.ZipFile(zip_path,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
