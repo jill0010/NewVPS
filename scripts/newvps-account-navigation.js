@@ -1,7 +1,7 @@
 /* Navigation for archived NewVPS pages. Does not modify captured source. */
 (function(){
   'use strict';
-  const base='/NewVPS/';
+  const base='/';
   function login(event){
     event.preventDefault();event.stopImmediatePropagation();
     if(document.getElementById('newvps-account-overlay'))return;
