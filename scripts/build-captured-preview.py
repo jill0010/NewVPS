@@ -423,13 +423,10 @@ def main():
             dest.parent.mkdir(parents=True, exist_ok=True)
             # Keep the captured DOM and cards; repair only internal navigation
             # to the GitHub Pages project prefix.
-            html = re.sub(
-                r'(\\b(?:href|action)="/)(?!NewVPS/|_captures/|/)([^"]*)"',
-                lambda m: m.group(1) + 'NewVPS/' + m.group(2),
-                html,
-            )
             # Domain captures are restored after the global language injection pass.
             # Explicitly include the same selector on these late-restored pages.
+            if account_navigation.is_file() and 'newvps-account-navigation.js' not in html:
+                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
             if language_source.is_file() and 'newvps-language-selector.js' not in html:
                 html = html.replace("</body>", '<script defer src="/newvps-language-selector.js"></script>\\n</body>', 1)
             if domain_flow_js.is_file():
@@ -474,13 +471,10 @@ def main():
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(z.read(member))
             html = re.sub(r'(?<![\\w/])assets/', asset_root + "assets/", html)
-            html = re.sub(
-                r'(\\b(?:href|action)="/)(?!NewVPS/|_captures/|/)([^"]*)"',
-                lambda m: m.group(1) + 'NewVPS/' + m.group(2),
-                html,
-            )
             if domain_flow_js.is_file():
                 html = html.replace("</body>", '<script defer src="/newvps-domain-capture-flow.js"></script>\\n</body>', 1)
+            if account_navigation.is_file() and 'newvps-account-navigation.js' not in html:
+                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\\n</body>', 1)
             # This archive overwrites the earlier domain page, so re-inject
             # the global language selector after restoring its original HTML.
             if 'newvps-language-selector.js' not in html:
