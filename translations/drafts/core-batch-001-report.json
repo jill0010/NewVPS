@@ -1,0 +1,1577 @@
+{
+  "source_strings": 10784,
+  "core_pending": 1295,
+  "requested_strings": 900,
+  "completed": {
+    "ru": 672,
+    "zh-CN": 814
+  },
+  "failed": [
+    {
+      "id": "41f295b8bbbb9c1d61c9",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6db4eba42f065ab51413",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6db4eba42f065ab51413",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7b0d1579b24290e128f9",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7b0d1579b24290e128f9",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "882abea199816bafb302",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "882abea199816bafb302",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "972b83d015927e02369f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "972b83d015927e02369f",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ca3e2a1592993279303e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ca3e2a1592993279303e",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "eee52d41bc2732d230a2",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "eee52d41bc2732d230a2",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f3f2a7fe2612884ff5ce",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f3f2a7fe2612884ff5ce",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "01ec75e07dc7da3da168",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "01ec75e07dc7da3da168",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "077fc29cf0d645bc68a3",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "141500de6ff9293d37d6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "141500de6ff9293d37d6",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "28a169d8064830a4ca6a",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "28a169d8064830a4ca6a",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "3ae91a223b10ee26466e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6df843248ce1bac27f9f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6df843248ce1bac27f9f",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9a1d4a9400e25a16dda0",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9a1d4a9400e25a16dda0",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "d598026a9cbc60505f13",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "dfd64e67c60badb237d8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "074471c904d435c214ee",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "38ff1909a78cb71ece38",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5c9fde2812965e0e7990",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7c0b5b5ecdfb5d999ac8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8808bf8fb12875d84213",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a13bebeb57e1ea699bd4",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f43a9e2f7da89777ca23",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1711d43dcc643569f37c",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5793d546b9bb764e73fd",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5793d546b9bb764e73fd",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8816486700694c096ca0",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "940bf3a92bb6ad3b0890",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "940bf3a92bb6ad3b0890",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9f0e4f01c7c603b16a9b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9f0e4f01c7c603b16a9b",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "c0e727b92ef6b916e5f8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "de26724ecf85b45cc68e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "de26724ecf85b45cc68e",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e7671b32040d78e81e62",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e7671b32040d78e81e62",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "010c92dddc06d7d7e27e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "010c92dddc06d7d7e27e",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2b4d152cc0f431eb7463",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "3211fa994d40eba8d429",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "3d8a286df73089d773a4",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "3d8a286df73089d773a4",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5286e5ee63e02d1195bf",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5286e5ee63e02d1195bf",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7cd1316f237fb805fd78",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7f220df93a08c4965021",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7f220df93a08c4965021",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ac2566615ec921d7cc09",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cc1ee338f2418368e502",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cc1ee338f2418368e502",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e279c76571bfccf16336",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e5b45c41d678de3baeef",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f653badda12705bde77a",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f653badda12705bde77a",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ffd318ccea5eb3394cc0",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ffd318ccea5eb3394cc0",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "02cca6099327d3562873",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "02cca6099327d3562873",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "207bdd6524c794f4afa6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "207bdd6524c794f4afa6",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "38d8de5066d91e0f42bb",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "38d8de5066d91e0f42bb",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "3b55675036a18401d1e1",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "3b55675036a18401d1e1",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "414b9f2c380acbad3dcc",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "459c8772a41c1ed9b43c",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "459c8772a41c1ed9b43c",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "518441249ce4c3acffc1",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "518441249ce4c3acffc1",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "531a80206e4aad6a33bc",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "531a80206e4aad6a33bc",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "532805ec22ef05d9fbef",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "532805ec22ef05d9fbef",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5c4744e57ef76338e8fe",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5c4744e57ef76338e8fe",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6bc2c3e6bc1c231491e2",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6bc2c3e6bc1c231491e2",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "99c149fc8ca858575d29",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b13903ddf254171b4754",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b13903ddf254171b4754",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b56a8a64505663a1faa6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b56a8a64505663a1faa6",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e42d1ec369c61ef2fbe4",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e56250ae232c57890cd0",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e56250ae232c57890cd0",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ebc009fb204ba6929ae7",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ebc009fb204ba6929ae7",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8a2cd26d05bc87832804",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8eb1ed2259fe231f984e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8eb1ed2259fe231f984e",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "be3ec1185735ba699a86",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6d734adb20aff1e9388a",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "745573233bc6df8fa96f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cfae0c4e9cc739e5ff8a",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "dd7385572c84dbb5f83e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e60d58db1424b847a38a",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9fb6f37a49127971cf53",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "bc483d4fa24f25f293d7",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "bc483d4fa24f25f293d7",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "06a20b23010f38d9d0dd",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "06a20b23010f38d9d0dd",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "4627d5befb427af52cf6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5e25399aa9d6d1455521",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5e25399aa9d6d1455521",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "05bc184829a56a8817a5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "05bc184829a56a8817a5",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8fb19d4423aae6ff0695",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8fb19d4423aae6ff0695",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ad2b1efef7419d880b87",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2605ece7822a4fa50602",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2605ece7822a4fa50602",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b45159e47b7fbfc125d8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cdb8e9d778e9754e012c",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f44c353485ed66e18296",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "fa94a6f63a7822137c5e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "fa94a6f63a7822137c5e",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2a3dc098d398eb8f58b4",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2a3dc098d398eb8f58b4",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1a9a9cd27626fd3594a4",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1a9a9cd27626fd3594a4",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1d528ae814f3e8e8313a",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1d528ae814f3e8e8313a",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "562773898541aa84cc09",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "562773898541aa84cc09",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "630e99b1143a8e52099d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "630e99b1143a8e52099d",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "867f84f4cd679702d3cc",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "867f84f4cd679702d3cc",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "bfb9aca20015264b87e5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "bfb9aca20015264b87e5",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "816bad3850cdc97624bf",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "816bad3850cdc97624bf",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "be8ece13837c07d1a033",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1843653496800edfd0d3",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "30c952fab122c3f9759f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "355b1bbfc96725cdce8f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "4021fadf187fd2c8277a",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2e26a8a65c1dc71d29ea",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "43644bc50d7161477686",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "43644bc50d7161477686",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "485f66b7001089775bf6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "485f66b7001089775bf6",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "64a214401e79365952c1",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "64a214401e79365952c1",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "64b29b62d14dd300a8a1",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "64b29b62d14dd300a8a1",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6c31b63a02708634d1ac",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6c31b63a02708634d1ac",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "83369beba3ab71ca3b91",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b2dd6247c7a0cd98abc8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b2dd6247c7a0cd98abc8",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ba344e24e41f5b5cc573",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ba344e24e41f5b5cc573",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "0f1d488e8a2bf052975e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "0f1d488e8a2bf052975e",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "3b44a64813e992261b94",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "466078ba834243d5f01b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "4d80c3b3f4a5d697b501",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "4d80c3b3f4a5d697b501",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "694d56b2563a3623469f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "694d56b2563a3623469f",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7ad35784707159a710ef",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7ad35784707159a710ef",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8258ab2f0dae8535103d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9c143191bc57a7ee5b7f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9c143191bc57a7ee5b7f",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9d13cef4f239c4a30889",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9d13cef4f239c4a30889",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9dee602228f71bb844c5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9dee602228f71bb844c5",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9e3659b1bbfbc2faf61d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9e3659b1bbfbc2faf61d",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a8c6c13082ce12f91d33",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a8c6c13082ce12f91d33",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "bb709d0553709c0b18a0",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "bb709d0553709c0b18a0",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "c854bb56c3dc22107576",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "c854bb56c3dc22107576",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "daa020f4e4e8db4ce50b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "daa020f4e4e8db4ce50b",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "dbabf21d60e1651d72c9",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "dbabf21d60e1651d72c9",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e95eb42221da3da14d59",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e95eb42221da3da14d59",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "edf70be4cc3997d84703",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "edf70be4cc3997d84703",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ff04bd6b0a8c2525b637",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ff04bd6b0a8c2525b637",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "389f8a2cb73a3d6f2b62",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5770b7ab3b044c9a2104",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "58cc88af739bc4be0aca",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "920d6804725d41735467",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "aaa26a1df83daa57c1e5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "aaa26a1df83daa57c1e5",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cc81e1da21c319f1b4df",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "edfad56e4afaea6bd3df",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "edfad56e4afaea6bd3df",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ffd809076bbe4c68d95d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a1e4a4bed2cea439f5c0",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "462c0bbef15dc2202d59",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5a9ed8d29d981df242c7",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5dd427073f0bfe369d75",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "65eba02cd361d50ec254",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a39cb19609aba42143b8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a9d0f4a854145f78dfff",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "01e91ee079557b1e6570",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "0b88d1d721728b618d1c",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "0cb018cae058f0a72864",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1d8f0681a4fde05b70e6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "1dedab69f3b1424c08b6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2231a55dce2ecefc8cbf",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2270c887c00152a87141",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "27bc5c8a6d645718c1d5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "29be24d7e1ca57a7f32b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2bddfb0df2ba38fa303d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2cd710e7306845a4557f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2f1ebe991d6f4f001798",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "367d533d12cfc206139d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "43a0446cb8d26697fc04",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "4b70e8ae8ae11a223057",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6be0ce687bcaad2f6e67",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6fc19f819a9e9217ab47",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "74740f06c5616c1e96c5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7b76dba71d8428ad8063",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8b922cf7e555ed235df9",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9e746a26b533152c7ba3",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "aeca4db064c3fa814cbb",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b242d3f044d360178d0d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "c1b12c9d27a65e970c6c",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "c9cdf60ad09972adb53b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cfac90a72057e3198f4d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "d76c17508cc9c6f74dfd",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "df1afa5410644f35ad6d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e2fa73270c7a8e95e330",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e93d5832fe5902cfa077",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ee3bc0ada908969ed779",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "0c0fa52fac19eec184e7",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2c4833b3706ab9cc1c0b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "490572972c50ae6ae76c",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "4c65a7bd4023bdba9371",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "52e1b7698e351758c730",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6db56e40b64864ac1ff9",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "776ae7696c2c7738aef6",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "776ae7696c2c7738aef6",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7bf79764ab44720e756b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7cbb1bb1d2c4c5f2bbf5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7e0d4c98ca90c68d5e77",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "846b939e3f2fd5e412df",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "8f358d6c369198f4051d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9a1349bc36901a4070d2",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9c1247d52b42d87465f3",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9c7b778bc6f53af1a29a",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a3816e3865d35491e9c8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "aef50409010a207a531e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b8352a10893fb8f9a56c",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "c9b1ce47b2aaedecf499",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "dab5da930d58fb2279f3",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "dbf852f1eeb722603d2b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e82d39015bc302bf0be4",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e90fc57972906e9e80f7",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ea49b43b917a669b444f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "ea838814f2922e1283e1",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "00025a57d04066af9c0d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "07b7991f60437d218f03",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "2a1c08be1bf1211c80d7",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5714bf9abb18191b264f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "95f28983322b204184b3",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "03c13be3a7445464f6a5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "70b593c73d9995e1d114",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a5c23c0fe2d345fe7c35",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "176747461a2421029f44",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "9b38215248137d0b0496",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b40562b31795d310d8e4",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "c6c921e8eb1bdc721230",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cbd939763d929364d2ef",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f388f1470123dd39a409",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "40ec13d684fa8b483bf2",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "7691841139f22bb6056e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "956e812cfaaf500a1f93",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "552eee20ddc002dfa462",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "dbac91b3a3e8b84dd944",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "f9a4fabdd4e3114295b1",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "d767edd5800597ddc82f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "020356262b44a9e7e6ab",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "020356262b44a9e7e6ab",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "843c9102f2c9f83780a5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6db66a243fa2ed809bab",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6db66a243fa2ed809bab",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "6505e855f4f91f216dad",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "5cd73e3ebe020f7f2e3e",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "a92418e3918cd063aa7b",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "bff32572991223c8728d",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "da794e4be486ebbab1d5",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "0a26de57b34a10fd31c7",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b442317b287b64669cdc",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "b442317b287b64669cdc",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "cdea32fc131d4e0bc64f",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "e6f3589f20f685ffdd29",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "d7747a48c3db1c4e0bb8",
+      "locale": "ru",
+      "reason": "untranslated or protected token mismatch"
+    },
+    {
+      "id": "d7747a48c3db1c4e0bb8",
+      "locale": "zh-CN",
+      "reason": "untranslated or protected token mismatch"
+    }
+  ],
+  "mode": "offline build-time Argos NMT drafts; not approved; not published"
+}
