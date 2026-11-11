@@ -572,6 +572,17 @@ def main():
             html = html.replace("</body>", '<script defer src="/newvps-mobile-menu.js"></script>\\n</body>', 1)
             page.write_text(html, encoding="utf-8")
     print("Restored mobile hamburger menu toggle on captured pages")
+    # Restore the previously tested mobile-only stylesheet to generated pages.
+    # Original archived HTML/CSS and desktop presentation remain unchanged.
+    mobile_css = ROOT / "scripts/newvps-mobile-responsive.css"
+    if mobile_css.is_file():
+        shutil.copy2(mobile_css, OUT / "newvps-mobile-responsive.css")
+        for page in OUT.rglob("index.html"):
+            html = page.read_text(encoding="utf-8")
+            if "newvps-mobile-responsive.css" not in html:
+                html = html.replace("</head>", '<link rel="stylesheet" href="/newvps-mobile-responsive.css">\\n</head>', 1)
+                page.write_text(html, encoding="utf-8")
+        print("Restored mobile-only responsive styles to generated pages")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
