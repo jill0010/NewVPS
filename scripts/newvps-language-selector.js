@@ -10,8 +10,20 @@
   // Immediate local fallback for essential navigation and checkout labels.
   const words={
     ru:{'Home':'Главная','Login':'Войти','Log in':'Войти','Dashboard':'Панель управления','Account':'Аккаунт','Overview':'Обзор','Top up':'Пополнить','Topup balance':'Пополнить баланс','Add credit':'Пополнить счёт','Orders':'Заказы','Services':'Услуги','Support':'Поддержка','Logout':'Выйти','Log out':'Выйти','Language':'Язык','Select language':'Выбрать язык','Order notification':'Уведомление о заказе','订单通知':'Уведомление о заказе','暂无通知。':'Пока нет уведомлений.','Copy amount':'Копировать сумму','Copy address':'Копировать адрес','Back to top up':'Назад к пополнению','What you\'re paying':'Сумма платежа','What you receive':'Вы получите','Reference rate':'Курс','Total':'Итого','Pay with':'Оплатить','SEND EXACTLY':'ОТПРАВЬТЕ ТОЧНО','TO ADDRESS':'НА АДРЕС','Create order':'Создать заказ','Choose amount':'Выбрать сумму','Custom amount':'Другая сумма','Bitcoin':'Биткоин','English':'Английский','Simplified Chinese':'Упрощённый китайский','Russian':'Русский'},
-    'zh-CN':{'Home':'首页','Login':'登录','Log in':'登录','Dashboard':'控制面板','Account':'账户','Overview':'概览','Top up':'充值','Topup balance':'充值余额','Add credit':'充值余额','Orders':'订单','Services':'服务','Support':'支持','Logout':'退出登录','Log out':'退出登录','Language':'语言','Select language':'选择语言','Order notification':'订单通知','订单通知':'订单通知','暂无通知。':'暂无通知。','Copy amount':'复制金额','Copy address':'复制地址','Back to top up':'返回充值','What you\'re paying':'支付金额','What you receive':'到账金额','Reference rate':'参考汇率','Total':'总计','Pay with':'支付方式','SEND EXACTLY':'请准确支付','TO ADDRESS':'收款地址','Create order':'创建订单','Choose amount':'选择金额','Custom amount':'自定义金额','Bitcoin':'比特币','English':'英语','Simplified Chinese':'简体中文','Russian':'俄语'}
+    'zh-CN':{'Home':'首页','Login':'登录','Log in':'登录','Dashboard':'控制面板','Account':'账户','Overview':'概览','Top up':'充值','Topup balance':'充值余额','Add credit':'充值余额','Orders':'订单','Services':'服务','Support':'支持','Logout':'退出登录','Log out':'退出登录','Language':'语言','Select language':'选择语言','Order notification':'订单通知','订单通知':'订单通知','暂无通知。':'暂无通知。','Copy amount':'复制金额','Copy address':'复制地址','Back to top up':'返回充值','What you\'re paying':'支付金额','What you receive':'到账金额','Reference rate':'参考汇率','Total':'总计','Pay with':'支付方式','SEND EXACTLY':'请准确支付','TO ADDRESS':'收款地址','Create order':'创建订单','Choose amount':'选择金额','Custom':'自定义','Custom amount':'自定义金额','Bitcoin':'比特币','English':'英语','Simplified Chinese':'简体中文','Russian':'俄语'}
   };
+  // Google Translate can interpret the top-up option "Custom" as
+  // "风俗" (customs). Correct this exact UI label after translation,
+  // including asynchronous text-node replacements.
+  function correctCustomAmountLabel(root){
+    if(current!=='zh-CN')return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+      if(!node.parentElement||node.parentElement.closest('script,style,textarea,code,pre'))continue;
+      if(node.nodeValue.trim()==='风俗')node.nodeValue=node.nodeValue.replace('风俗','自定义');
+    }
+  }
   const originalText=new WeakMap();
   function localTranslate(root){
     if(current==='en')return;
@@ -129,6 +141,7 @@
     // Reload is required for Google Translate to pick up a newly selected
     // googtrans cookie consistently, including when switching ru <-> zh-CN.
     localTranslate(document.body);
+    correctCustomAmountLabel(document.body);
     document.querySelectorAll('.lang-sw').forEach(function(w){
       const btn=w.querySelector('.lang-btn');
       if(btn){const target=btn.querySelector('span:not(.fi)');if(target)target.textContent=lang==='ru'?'RU':'中文';syncButtonFlag(w,lang);}
@@ -194,8 +207,12 @@
     },true);
     if(current!=='en'){
       localTranslate(document.body);
-      const observer=new MutationObserver(function(){localTranslate(document.body)});
-      observer.observe(document.body,{childList:true,subtree:true});
+      correctCustomAmountLabel(document.body);
+      const observer=new MutationObserver(function(){
+        localTranslate(document.body);
+        correctCustomAmountLabel(document.body);
+      });
+      observer.observe(document.body,{childList:true,characterData:true,subtree:true});
       document.cookie='googtrans=/en/'+current+';path=/;SameSite=Lax';
       installTranslator();
     }
