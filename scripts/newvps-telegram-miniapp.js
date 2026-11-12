@@ -45,7 +45,7 @@
   }
   window.newvpsTelegramEnsureSession=ensureSession;
   // Bootstrap on Mini App launch so other account requests can use the session.
-  if(tg.initData)ensureSession().catch(function(){});
+  // Defer session restoration until a protected action needs it; avoid blocking page load.
   function isAccountPage(){return /\/(dashboard|account|client|panel)(\/|$)/i.test(location.pathname)||/\/(login|profile)(\/|$)/i.test(location.pathname)}
   function render(){
     if(document.getElementById('newvps-tg-link')||!isAccountPage())return;
@@ -89,7 +89,7 @@
     if(document.getElementById('newvps-tg-quick-actions'))return;
     var t=labels[locale()];
     var wrap=document.createElement('div');wrap.id='newvps-tg-quick-actions';
-    wrap.style.cssText='position:fixed;right:12px;bottom:calc(82px + env(safe-area-inset-bottom,0px));z-index:2147483000;display:flex;gap:6px;align-items:center;padding:6px;background:#fff;border:1px solid #dbe2ec;border-radius:12px;box-shadow:0 3px 15px #0002;font:600 12px system-ui,sans-serif';
+    wrap.style.cssText='position:fixed;right:12px;top:calc(65px + env(safe-area-inset-top,0px));z-index:2147483000;display:flex;gap:6px;align-items:center;padding:6px;background:#fff;border:1px solid #dbe2ec;border-radius:12px;box-shadow:0 3px 15px #0002;font:600 12px system-ui,sans-serif';
     var bind=document.createElement('button');bind.type='button';bind.textContent=locale()==='zh'?'绑定 TG':locale()==='ru'?'Привязать TG':'Link TG';
     var logout=document.createElement('button');logout.type='button';logout.textContent=locale()==='zh'?'退出登录':locale()==='ru'?'Выйти':'Log out';
     [bind,logout].forEach(function(b){b.style.cssText='border:0;border-radius:7px;background:#eef2fb;color:#1e45a6;padding:9px 10px;cursor:pointer'});
@@ -99,8 +99,6 @@
       else location.assign('/dashboard/');
     };
     logout.onclick=async function(){
-      var box=document.getElementById('newvps-tg-link');
-      if(box){var buttons=box.querySelectorAll('button');if(buttons[1]){buttons[1].click();return}}
       var token=sessionStorage.getItem('newvps_session')||localStorage.getItem('newvps_session')||'';
       sessionStorage.setItem('newvps_tg_signed_out','1');
       sessionStorage.removeItem('newvps_session');localStorage.removeItem('newvps_session');sessionPromise=null;
@@ -109,7 +107,7 @@
     };
     wrap.append(bind,logout);document.body.appendChild(wrap);
   }
-  function initControls(){render();renderQuickActions()}
+  function initControls(){try{renderQuickActions()}catch(e){console.error('Mini App actions failed',e)}try{render()}catch(e){console.error('Telegram account panel failed',e)}}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initControls);else initControls();
   // Do not treat initDataUnsafe as proof of identity. Authentication remains
   // on the existing NewVPS account system until server-side validation exists.
