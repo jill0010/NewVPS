@@ -1,7 +1,7 @@
-/* Restore the five archived jurisdiction-selector questions and navigation.
-   Original captured HTML, labels, values, and ZIP files remain untouched.
-   No fabricated country scoring is introduced: the original scoring engine
-   was not included in the static capture. */
+/* Independent, illustrative jurisdiction recommender using the five archived
+   questions. The country ratings below are editorial assumptions (0-10),
+   NOT the original site's algorithm or verified legal/compliance assessments.
+   Original HTML and ZIP files remain unchanged. */
 (function(){
   'use strict';
   function init(){
@@ -16,6 +16,51 @@
     const profile=root.querySelector('#selProfile');
     const result=root.querySelector('.sel-result');
     const resultInner=root.querySelector('.sel-result-inner');
+    // Heuristic profiles, not legal claims or original AnonPort ratings.
+    // Dimensions: dmca, gdpr, budget, latency_eu, latency_us, perf,
+    // geo_neutral, speech. Ratings 0-10 are transparent and editable.
+    const countries=[
+      {name:'Iceland',flag:'🇮🇸',scores:{dmca:6,gdpr:2,budget:3,latency_eu:7,latency_us:5,perf:7,geo_neutral:8,speech:9}},
+      {name:'Switzerland',flag:'🇨🇭',scores:{dmca:5,gdpr:8,budget:2,latency_eu:9,latency_us:5,perf:9,geo_neutral:10,speech:8}},
+      {name:'Panama',flag:'🇵🇦',scores:{dmca:8,gdpr:10,budget:6,latency_eu:3,latency_us:9,perf:5,geo_neutral:7,speech:6}},
+      {name:'Moldova',flag:'🇲🇩',scores:{dmca:8,gdpr:10,budget:10,latency_eu:7,latency_us:3,perf:5,geo_neutral:5,speech:6}},
+      {name:'Romania',flag:'🇷🇴',scores:{dmca:5,gdpr:2,budget:8,latency_eu:9,latency_us:4,perf:8,geo_neutral:4,speech:6}},
+      {name:'Netherlands',flag:'🇳🇱',scores:{dmca:3,gdpr:2,budget:5,latency_eu:10,latency_us:7,perf:10,geo_neutral:4,speech:7}},
+      {name:'Russia',flag:'🇷🇺',scores:{dmca:8,gdpr:10,budget:9,latency_eu:5,latency_us:2,perf:6,geo_neutral:3,speech:2}}
+    ];
+    function ranking(){
+      const weights={};
+      choices.forEach(function(option){
+        const key=option.dataset.key;
+        const value=Number(option.dataset.val)||0;
+        if(key)weights[key]=(weights[key]||0)+value;
+      });
+      const total=Object.values(weights).reduce(function(a,b){return a+b},0);
+      return countries.map(function(country){
+        const sum=Object.keys(weights).reduce(function(acc,key){
+          return acc+weights[key]*(country.scores[key]||0);
+        },0);
+        return {country:country,match:total?Math.round(sum/total*10):0};
+      }).sort(function(a,b){return b.match-a.match||a.country.name.localeCompare(b.country.name)});
+    }
+    function renderLeaderboard(){
+      const board=root.querySelector('#selLeaderboard');
+      if(!board)return;
+      if(choices.size<2){
+        board.textContent='Top jurisdictions appear after the second question.';
+        return;
+      }
+      board.replaceChildren();
+      ranking().slice(0,3).forEach(function(item,i){
+        const line=document.createElement('div');
+        line.className='sel-aside-rank';
+        line.textContent=(i+1)+'. '+item.country.flag+' '+item.country.name+' — '+item.match+'/100';
+        board.appendChild(line);
+      });
+      const disclaimer=document.createElement('small');
+      disclaimer.textContent='Illustrative heuristic scores, not legal advice or verified country ratings.';
+      board.appendChild(disclaimer);
+    }
     const choices=new Map();
     let current=1;
     function render(){
@@ -69,6 +114,7 @@
           });
         }
       }
+      renderLeaderboard();
       if(result)result.hidden=true;
     }
     questions.forEach(function(q){
@@ -82,17 +128,20 @@
             if(result&&resultInner){
               resultInner.replaceChildren();
               const heading=document.createElement('h2');
-              heading.textContent='Your jurisdiction priorities';
+              heading.textContent='Recommended jurisdictions';
               resultInner.appendChild(heading);
+              const intro=document.createElement('p');
+              intro.textContent='Independent estimates based on your five answers. Scores are heuristic (0–100), not measured compatibility probabilities or original-site results.';
+              resultInner.appendChild(intro);
               const list=document.createElement('ol');
-              Array.from(choices).sort(function(a,b){return a[0]-b[0]}).forEach(function(pair){
-                const item=document.createElement('li');
-                item.textContent=pair[1].dataset.label||pair[1].querySelector('.sel-opt-txt')?.textContent||'';
-                list.appendChild(item);
+              ranking().forEach(function(item){
+                const li=document.createElement('li');
+                li.textContent=item.country.flag+' '+item.country.name+' — '+item.match+'/100';
+                list.appendChild(li);
               });
               resultInner.appendChild(list);
               const note=document.createElement('p');
-              note.textContent='The original country-ranking calculation was not preserved in the archived page. Your five answers are shown without inventing a recommendation.';
+              note.textContent='Ratings are editorial assumptions, not verified legal, privacy, performance or service-availability claims. Independently verify requirements before purchasing.';
               resultInner.appendChild(note);
               const restart=document.createElement('button');
               restart.type='button';
