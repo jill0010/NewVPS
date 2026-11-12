@@ -27,14 +27,35 @@ function apply(){
    const blue=document.createElement('span');blue.style.color='#315ed5';blue.textContent='Port';
    name.append(black,blue);wrapper.appendChild(name);
  });
- document.querySelectorAll('header,footer,.hd,.ft').forEach(function(root){
-   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
-   let node;
-   while((node=walker.nextNode())){
-     if(node.parentElement&&node.parentElement.closest('script,style,svg,code,pre'))continue;
-     if(/AnonPort/.test(node.nodeValue||''))node.nodeValue=node.nodeValue.replace(/AnonPort/g,'AnonyPort');
-   }
+ // Normalize visible brand mentions throughout the site, including dialogs
+ // and content rendered after the initial page load.
+ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+ let node;
+ while((node=walker.nextNode())){
+   if(node.parentElement&&node.parentElement.closest('script,style,svg,code,pre,textarea'))continue;
+   if(node.nodeValue&&node.nodeValue.includes('AnonPort'))
+     node.nodeValue=node.nodeValue.replace(/AnonPort/g,'AnonyPort');
+ }
+ document.querySelectorAll('[title],[alt],[aria-label],[placeholder],meta[content]').forEach(function(el){
+   const names=el.tagName==='META'?['content']:['title','alt','aria-label','placeholder'];
+   names.forEach(function(key){
+     const value=el.getAttribute(key);
+     if(value&&value.includes('AnonPort'))el.setAttribute(key,value.replace(/AnonPort/g,'AnonyPort'));
+   });
  });
+ if(document.title.includes('AnonPort'))document.title=document.title.replace(/AnonPort/g,'AnonyPort');
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
+let scheduled=false;
+function schedule(){
+ if(scheduled)return;
+ scheduled=true;
+ queueMicrotask(function(){scheduled=false;apply()});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){
+ apply();
+ new MutationObserver(schedule).observe(document.body,{subtree:true,childList:true,characterData:true});
+});else{
+ apply();
+ new MutationObserver(schedule).observe(document.body,{subtree:true,childList:true,characterData:true});
+}
 })();
