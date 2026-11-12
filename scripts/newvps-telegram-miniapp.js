@@ -23,6 +23,28 @@
     en:{title:'Telegram account',intro:'Link this Telegram identity to your signed-in AnonyPort account. Your existing access token stays valid.',bind:'Link Telegram',login:'Sign in to AnonyPort using your existing access token, then return to link.',success:'Telegram account linked',linked:'Telegram is already linked',fail:'Could not link account. Please retry.',checking:'Verifying Telegram identity…'},
     ru:{title:'Аккаунт Telegram',intro:'Привяжите Telegram к текущему аккаунту AnonyPort. Ваш токен доступа останется действительным.',bind:'Привязать Telegram',login:'Сначала войдите в AnonyPort с токеном доступа.',success:'Telegram привязан',linked:'Telegram уже привязан',fail:'Не удалось привязать аккаунт',checking:'Проверка Telegram…'}
   };
+  // Restore a short-lived NewVPS session from a server-verified, already-linked
+  // Telegram identity. Never trust initDataUnsafe or store bot credentials.
+  var sessionPromise=null;
+  function ensureSession(){
+    var existing='';
+    try{existing=sessionStorage.getItem('newvps_session')||''}catch(e){}
+    if(/^[a-f0-9]{64}$/i.test(existing))return Promise.resolve(existing);
+    if(sessionPromise)return sessionPromise;
+    sessionPromise=(async function(){
+      if(!tg.initData)throw Error('Open the Mini App from @AnonyPortBot.');
+      var response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'session',initData:tg.initData}),cache:'no-store'});
+      var data=await response.json();
+      if(!response.ok)throw Error(data.error||'Telegram sign-in unavailable');
+      if(!/^[a-f0-9]{64}$/i.test(data.session||''))throw Error('Invalid session response');
+      sessionStorage.setItem('newvps_session',data.session);
+      return data.session;
+    })().catch(function(e){sessionPromise=null;throw e});
+    return sessionPromise;
+  }
+  window.newvpsTelegramEnsureSession=ensureSession;
+  // Bootstrap on Mini App launch so other account requests can use the session.
+  if(tg.initData)ensureSession().catch(function(){});
   function isAccountPage(){return /\/(dashboard|account|client|panel)(\/|$)/i.test(location.pathname)||/\/(login|profile)(\/|$)/i.test(location.pathname)}
   function render(){
     if(document.getElementById('newvps-tg-link')||!isAccountPage())return;
