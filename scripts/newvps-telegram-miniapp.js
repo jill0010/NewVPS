@@ -29,8 +29,8 @@
   function ensureSession(){
     var existing='';
     try{existing=sessionStorage.getItem('newvps_session')||''}catch(e){}
+    if(/^[a-f0-9]{64}$/i.test(existing)){sessionStorage.removeItem('newvps_tg_signed_out');return Promise.resolve(existing)}
     if(sessionStorage.getItem('newvps_tg_signed_out')==='1')return Promise.reject(Error('Signed out. Sign in with your access token to continue.'));
-    if(/^[a-f0-9]{64}$/i.test(existing))return Promise.resolve(existing);
     if(sessionPromise)return sessionPromise;
     sessionPromise=(async function(){
       if(!tg.initData)throw Error('Open the Mini App from @AnonyPortBot.');
