@@ -9,3 +9,8 @@ class_name = "OrderMonitor"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["OrderMonitor"]
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+persist = true
