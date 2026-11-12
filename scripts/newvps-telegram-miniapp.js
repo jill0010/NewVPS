@@ -29,6 +29,7 @@
   function ensureSession(){
     var existing='';
     try{existing=sessionStorage.getItem('newvps_session')||''}catch(e){}
+    if(sessionStorage.getItem('newvps_tg_signed_out')==='1')return Promise.reject(Error('Signed out. Sign in with your access token to continue.'));
     if(/^[a-f0-9]{64}$/i.test(existing))return Promise.resolve(existing);
     if(sessionPromise)return sessionPromise;
     sessionPromise=(async function(){
@@ -55,7 +56,17 @@
     var intro=document.createElement('p');intro.textContent=t.intro;intro.style.margin='0 0 12px';
     var status=document.createElement('p');status.textContent='';status.style.margin='8px 0';
     var btn=document.createElement('button');btn.type='button';btn.textContent=t.bind;btn.style.cssText='border:0;border-radius:8px;background:#2864df;color:white;padding:10px 18px;cursor:pointer;font-weight:600';
-    box.append(heading,intro,btn,status);
+    var logout=document.createElement('button');logout.type='button';logout.textContent=locale()==='zh'?'退出登录':locale()==='ru'?'Выйти':'Log out';
+    logout.style.cssText='margin-left:10px;border:1px solid #dbe2ec;border-radius:8px;background:#fff;color:#182235;padding:10px 18px;cursor:pointer;font-weight:600';
+    box.append(heading,intro,btn,logout,status);
+    logout.addEventListener('click',async function(){
+      var token=sessionStorage.getItem('newvps_session')||localStorage.getItem('newvps_session')||'';
+      sessionStorage.setItem('newvps_tg_signed_out','1');
+      sessionStorage.removeItem('newvps_session');localStorage.removeItem('newvps_session');
+      sessionPromise=null;
+      if(/^[a-f0-9]{64}$/i.test(token))try{await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action:'logout',initData:tg.initData}),signal:AbortSignal.timeout(5000)})}catch(e){}
+      location.replace('/register/');
+    });
     var target=document.querySelector('main')||document.querySelector('[role="main"]')||document.body;
     // Put the control near the top of the dashboard, not below all account sections.
     target.insertBefore(box,target.firstChild);
@@ -63,6 +74,7 @@
       if(!tg.initData){status.textContent='Telegram identity unavailable. Reopen from @AnonyPortBot.';return}
       var token=sessionStorage.getItem('newvps_session')||localStorage.getItem('newvps_session')||'';
       if(!/^[a-f0-9]{64}$/i.test(token)){status.textContent=t.login;return}
+      sessionStorage.removeItem('newvps_tg_signed_out');
       btn.disabled=true;status.textContent=t.checking;
       try{
         var res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action:'bind',initData:tg.initData}),signal:AbortSignal.timeout(12000)});
