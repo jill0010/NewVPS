@@ -629,9 +629,15 @@ def main():
         shutil.copy2(miniapp_script, OUT / "newvps-telegram-miniapp.js")
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
-            # Correct legacy brand spelling in displayed captured page content.
-            # Do not rewrite the historical anonport.com domain or archived sources.
-            html = html.replace("AnonPort", "AnonyPort")
+            # Update only visible text nodes, preserving image paths, metadata and
+            # captured asset URLs (a blanket HTML replacement can break logos).
+            def brand_text(match):
+                value = match.group(0)
+                return value.replace("AnonPort", "AnonyPort").replace("anonport.com", "anonyport.com")
+            html = re.sub(r'(?<=>)[^<>]+(?=<)', brand_text, html)
+            # The Press Kit contact link must lead to the active brand domain.
+            html = html.replace('href="https://anonport.com/contact"', 'href="https://anonyport.com/contact"')
+            html = html.replace('href="http://anonport.com/contact"', 'href="https://anonyport.com/contact"')
             # Make the No Logs / Clean IPs horizontal divider match the other cells.
             # The captured HTML contains inline border-color, so override it explicitly.
             if "newvps-feature-strip-divider-fix" not in html:
