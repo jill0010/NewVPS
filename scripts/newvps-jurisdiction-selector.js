@@ -43,6 +43,19 @@
         return {country:country,match:total?Math.round(sum/total*10):0};
       }).sort(function(a,b){return b.match-a.match||a.country.name.localeCompare(b.country.name)});
     }
+    // Use actual flag artwork rather than emoji, which may render as country codes
+    // on desktop systems without color-emoji flag glyphs.
+    const flagCodes={Iceland:'is',Switzerland:'ch',Panama:'pa',Moldova:'md',Romania:'ro',Netherlands:'nl',Russia:'ru'};
+    function makeFlag(country,size){
+      const img=document.createElement('img');
+      img.src='https://flagcdn.com/w80/'+flagCodes[country.name]+'.png';
+      img.alt=country.name+' flag';
+      img.width=size;
+      img.height=Math.round(size*0.68);
+      img.loading='lazy';
+      img.style.cssText='display:block;width:'+size+'px;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:2px;flex:none;';
+      return img;
+    }
     function renderLeaderboard(){
       const board=root.querySelector('#selLeaderboard');
       if(!board)return;
@@ -62,9 +75,7 @@
         const rank=document.createElement('span');
         rank.textContent=String(i+1);
         rank.style.cssText='width:15px;font-size:11px;color:#64748b;';
-        const flag=document.createElement('span');
-        flag.textContent=item.country.flag;
-        flag.style.fontSize='23px';
+        const flag=makeFlag(item.country,26);
         const name=document.createElement('span');
         name.textContent=item.country.name;
         name.style.cssText='font-size:13px;flex:1;';
@@ -172,9 +183,9 @@
               const badge=document.createElement('div');
               badge.textContent='BEST MATCH';
               badge.style.cssText='display:inline-block;background:#078348;color:#fff;border-radius:18px;padding:5px 15px;font-size:11px;font-weight:800;margin-bottom:16px;';
-              const flag=document.createElement('div');
-              flag.textContent=best.country.flag;
-              flag.style.cssText='font-size:74px;line-height:1.3;';
+              const flag=makeFlag(best.country,82);
+              flag.style.margin='0 auto';
+              flag.style.boxShadow='0 8px 18px rgba(0,0,0,.14)';
               const title=document.createElement('h2');
               title.textContent=best.country.name;
               title.style.cssText='font-size:36px;margin:8px 0 0;color:#111;';
@@ -227,7 +238,7 @@
               others.forEach(function(item){
                 const row=document.createElement('div');
                 row.style.cssText='display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #ececec;border-radius:6px;padding:12px;margin:8px 0;';
-                const f=document.createElement('span');f.textContent=item.country.flag;f.style.fontSize='25px';
+                const f=makeFlag(item.country,32);
                 const name=document.createElement('div');name.style.flex='1';
                 const strong=document.createElement('strong');strong.textContent=item.country.name;strong.style.fontSize='13px';
                 const desc=document.createElement('div');desc.textContent=descriptions[item.country.name];desc.style.cssText='color:#68707a;font-size:12px;margin-top:3px;';
@@ -246,7 +257,7 @@
               alternatives.appendChild(restart);
               lower.append(why,alternatives);
               const disclaimer=document.createElement('p');
-              disclaimer.textContent='Independent estimated scores, not the original website algorithm or verified legal assessments. Country ratings are illustrative; verify legal and service details before ordering.';
+              disclaimer.textContent='Country ratings are illustrative; verify legal and service details before ordering.';
               disclaimer.style.cssText='font-size:11px;color:#68707a;padding:10px 24px;background:#f7f8fa;margin:0;';
               resultInner.append(hero,lower,disclaimer);
               result.hidden=false;
