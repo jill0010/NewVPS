@@ -593,27 +593,35 @@ def main():
                 html = html.replace("</head>", '<link rel="stylesheet" href="/newvps-mobile-responsive.css">\n</head>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored mobile-only responsive styles to generated pages")
-    # Publish the user-provided AnonyPort social share artwork without editing
-    # original captured ZIPs, images or page sources.
+    # Publish the new social image at a NEW URL to bypass social-app caches.
+    # Original captures, ZIPs and page body text remain untouched.
     social_image = ROOT / "anonyport-og-image.jpg"
     if social_image.is_file():
-        social_target = OUT / "assets" / "img" / "og-image.jpg"
-        social_target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(social_image, social_target)
-        social_url = "https://anonyport.com/assets/img/og-image.jpg"
+        social_dir = OUT / "assets" / "img"
+        social_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(social_image, social_dir / "anonyport-og-image.jpg")
+        shutil.copy2(social_image, social_dir / "og-image.jpg")
+        social_url = "https://anonyport.com/assets/img/anonyport-og-image.jpg"
+        social_tags = (
+            '<meta property="og:image" content="' + social_url + '">\n'
+            '<meta name="twitter:image" content="' + social_url + '">\n'
+            '<meta property="og:site_name" content="AnonyPort">\n'
+            '<meta property="og:title" content="Anonymous Offshore VPS &amp; Dedicated Servers — No KYC | AnonyPort">\n'
+            '<meta name="twitter:title" content="Anonymous Offshore VPS &amp; Dedicated Servers — No KYC | AnonyPort">\n'
+            '<meta property="og:url" content="https://anonyport.com/">\n'
+        )
+        replace_meta = re.compile(
+            r'<meta\b(?=[^>]*\b(?:property|name)\s*=\s*["\']'
+            r'(?:og:image|twitter:image|og:site_name|og:title|twitter:title|og:url)'
+            r'["\'])[^>]*>', re.IGNORECASE,
+        )
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
-            # Remove only old image meta tags, then insert one canonical tag each.
-            html = re.sub(
-                r'<meta\b(?=[^>]*\b(?:property|name)\s*=\s*["\'](?:og:image|twitter:image)["\'])[^>]*>',
-                '', html, flags=re.IGNORECASE,
-            )
+            html = replace_meta.sub("", html)
             if "</head>" in html:
-                tags = ('<meta property="og:image" content="' + social_url + '">\n'
-                        '<meta name="twitter:image" content="' + social_url + '">\n')
-                html = html.replace("</head>", tags + "</head>", 1)
+                html = html.replace("</head>", social_tags + "</head>", 1)
                 page.write_text(html, encoding="utf-8")
-        print("Published AnonyPort social image and updated OG/Twitter metadata")
+        print("Published AnonyPort share image under unique URL and refreshed social metadata")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
