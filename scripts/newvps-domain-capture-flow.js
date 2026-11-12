@@ -146,13 +146,6 @@ function ready(){
      grid.appendChild(card);
    });
    if(title)title.textContent=availableCount+' available · '+totalCards+' checked';
-   // These states are generated locally, not confirmed by a registrar.
-   // Keep a distinct, readable disclosure instead of presenting them as live checks.
-   if(title){
-     let notice=document.getElementById('newvps-domain-availability-disclosure');
-     if(!notice){notice=document.createElement('small');notice.id='newvps-domain-availability-disclosure';notice.style.cssText='display:block;margin-top:4px;font-size:12px;color:#64748b;font-weight:400';title.insertAdjacentElement('afterend',notice)}
-     notice.textContent='Preview estimates only — domain availability has not been verified.';
-   }
    if(more)more.hidden=moreClicks>=7;
  }
  function showLoading(name){
