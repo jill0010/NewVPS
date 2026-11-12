@@ -629,9 +629,13 @@ def main():
         shutil.copy2(miniapp_script, OUT / "newvps-telegram-miniapp.js")
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
-            # Match the third feature cell divider to the first two on narrow screens.\n            if "newvps-feature-strip-divider-fix" not in html:\n                html = html.replace("</head>", '<style id="newvps-feature-strip-divider-fix">@media(max-width:700px){.strip .strip-in > .strip-i:nth-child(6){border-top:1px solid #555!important;border-top-color:#555!important}}</style></head>', 1)\n            if "newvps-telegram-miniapp.js" not in html:
+            # Make the No Logs / Clean IPs horizontal divider match the other cells.
+            # The captured HTML contains inline border-color, so override it explicitly.
+            if "newvps-feature-strip-divider-fix" not in html:
+                html = html.replace("</head>", '<style id="newvps-feature-strip-divider-fix">@media(max-width:700px){.strip .strip-in > .strip-i:nth-child(6){border-top:1px solid #555!important;border-top-color:#555!important}}</style></head>', 1)
+            if "newvps-telegram-miniapp.js" not in html:
                 html = html.replace("</head>", '<script src="https://telegram.org/js/telegram-web-app.js"></script>\n<script defer src="/newvps-telegram-miniapp.js"></script>\n</head>', 1)
-                page.write_text(html, encoding="utf-8")
+            page.write_text(html, encoding="utf-8")
         print("Enabled Telegram Mini App shell for generated pages")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
