@@ -4,6 +4,19 @@
   var tg=window.Telegram&&window.Telegram.WebApp;
   if(!tg)return;
   document.documentElement.classList.add('newvps-telegram-miniapp');
+  // In Telegram's iOS WebView, archived navigation may open an iframe modal
+  // behind the mobile menu. Route login to the first-party full page instead.
+  window.addEventListener('click',function(event){
+    var target=event.target&&event.target.closest&&event.target.closest('a,button');
+    if(!target||target.closest('#panel,.dialog,form'))return;
+    var label=(target.textContent||'').trim().toLowerCase();
+    var href=(target.getAttribute('href')||'').trim().toLowerCase();
+    if(['login','log in','sign in','登录','登入','登陆'].includes(label)||
+       (href==='#'&&/login|sign.?in/i.test(target.getAttribute('aria-label')||''))){
+      event.preventDefault();event.stopImmediatePropagation();
+      location.assign('/register/?view=login');
+    }
+  },true);
   try{
     tg.ready();
     tg.expand();
