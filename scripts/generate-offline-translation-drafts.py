@@ -73,7 +73,7 @@ def main():
                         help='Persisted draft JSON; may specify multiple batches')
     parser.add_argument('--limit',type=int,default=900,
                         help='Number of unique core-page strings to draft this run')
-    args=parser.parse_args()
+    parser.add_argument('--all-routes',action='store_true',\n                        help='Include every restored English route, not only the ten core routes')\n    args=parser.parse_args()
     source_path=CAT/'strings.json'
     if not source_path.is_file():raise SystemExit('No extracted inventory')
     catalog=json.loads(source_path.read_text(encoding='utf-8'))
@@ -91,7 +91,7 @@ def main():
     print('Combined persisted draft entries:',len(existing),flush=True)
     seeds=[]
     for identifier,entry in catalog.items():
-        if not CORE_ROUTES.intersection(entry['routes']):continue
+        if not args.all_routes and not CORE_ROUTES.intersection(entry['routes']):continue
         source=entry['source']
         if not LATIN.search(source) or INVARIANT.fullmatch(source) or NO_TRANSLATE.match(source) or SPECIFICATION.match(source):continue
         if source.startswith(('http:','https:')) or len(source)>2000:continue
@@ -99,11 +99,11 @@ def main():
                for locale in ('ru','zh-CN')):continue
         priority=min((0 if r in ('/domain-order/','/domain-pay/','/register/','/account/','/order/')
                       else 1 if r in ('/domains/','/vps/','/dedicated/','/gpu/') else 2)
-                     for r in entry['routes'] if r in CORE_ROUTES)
+                     for r in entry['routes'] if args.all_routes or r in CORE_ROUTES)
         seeds.append((priority,len(source),identifier,entry))
     seeds.sort(key=lambda x:(x[0],x[1],x[2]))
     selected=seeds[:args.limit]
-    print(f'Core strings pending: {len(seeds)}; selected for actual offline translation: {len(selected)}',flush=True)
+    print(f'Eligible strings pending across {"all restored routes" if args.all_routes else "core routes"}: {len(seeds)}; selected: {len(selected)}',flush=True)
     CAT.mkdir(exist_ok=True)
     report={'source_strings':len(catalog),'core_pending':len(seeds),
             'requested_strings':len(selected),'completed':{'ru':0,'zh-CN':0},
