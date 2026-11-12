@@ -21,7 +21,14 @@
     let node;
     while((node=walker.nextNode())){
       if(!node.parentElement||node.parentElement.closest('script,style,textarea,code,pre'))continue;
-      if(node.nodeValue.trim()==='风俗')node.nodeValue=node.nodeValue.replace('风俗','自定义');
+      const label=node.nodeValue.trim();
+      if(label==='风俗'||label==='定制'||label==='海关'||label==='Custom'){
+        const container=node.parentElement;
+        if(container.closest('button,label,[role="button"],.amount-option,.amount-btn')||container.textContent.trim()===label){
+          node.nodeValue=node.nodeValue.replace(label,'自定义');
+          if(container.closest('button,[role="button"],.amount-option,.amount-btn'))container.setAttribute('translate','no');
+        }
+      }
     }
   }
   const originalText=new WeakMap();
