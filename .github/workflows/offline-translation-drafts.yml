@@ -29,7 +29,7 @@ jobs:
           python3 -m pip install argostranslate
       - name: Generate Russian and Simplified Chinese drafts without modifying website
         run: |
-          python3 scripts/generate-offline-translation-drafts.py --limit 900
+          python3 scripts/generate-offline-translation-drafts.py --all-routes --limit 900 --existing translations/drafts/core-batch-001.json --existing translations/drafts/core-batch-002.json --existing translations/drafts/core-batch-003.json
           python3 - <<'PY'
           import json
           from pathlib import Path
