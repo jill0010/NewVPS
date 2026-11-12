@@ -2,7 +2,7 @@
 (function(){
   'use strict';
   var tg=window.Telegram&&window.Telegram.WebApp;
-  if(!tg||!tg.initData)return;
+  if(!tg)return;
   document.documentElement.classList.add('newvps-telegram-miniapp');
   try{
     tg.ready();
@@ -35,8 +35,10 @@
     var btn=document.createElement('button');btn.type='button';btn.textContent=t.bind;btn.style.cssText='border:0;border-radius:8px;background:#2864df;color:white;padding:10px 18px;cursor:pointer;font-weight:600';
     box.append(heading,intro,btn,status);
     var target=document.querySelector('main')||document.querySelector('[role="main"]')||document.body;
-    target.appendChild(box);
+    // Put the control near the top of the dashboard, not below all account sections.
+    target.insertBefore(box,target.firstChild);
     btn.addEventListener('click',async function(){
+      if(!tg.initData){status.textContent='Telegram identity unavailable. Reopen from @AnonyPortBot.';return}
       var token=sessionStorage.getItem('newvps_session')||localStorage.getItem('newvps_session')||'';
       if(!/^[a-f0-9]{64}$/i.test(token)){status.textContent=t.login;return}
       btn.disabled=true;status.textContent=t.checking;
@@ -47,7 +49,7 @@
         status.textContent=t.success;btn.textContent=t.linked;btn.disabled=true;
       }catch(e){status.textContent=(e&&e.message)||t.fail;btn.disabled=false}
     });
-    fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'status',initData:tg.initData}),signal:AbortSignal.timeout(12000)}).then(function(r){return r.json()}).then(function(d){if(d.linked){status.textContent=t.linked;btn.textContent=t.linked;btn.disabled=true}}).catch(function(){});
+    if(tg.initData)fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'status',initData:tg.initData}),signal:AbortSignal.timeout(12000)}).then(function(r){return r.json()}).then(function(d){if(d.linked){status.textContent=t.linked;btn.textContent=t.linked;btn.disabled=true}}).catch(function(){});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
   // Do not treat initDataUnsafe as proof of identity. Authentication remains
