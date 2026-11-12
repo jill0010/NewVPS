@@ -19,7 +19,28 @@ function status(message){const e=document.getElementById("status");if(e)e.textCo
 async function register(){status("Creating account…");try{const inviteCode=new URLSearchParams(location.search).get("ref")||sessionStorage.getItem("newvps_invite_code")||"";const result=await request("register",{invite_code:inviteCode});oneTimeToken=result.token;show("token")}catch(e){status(e.message)}}
 function copyToken(){if(oneTimeToken)navigator.clipboard.writeText(oneTimeToken)}
 async function login(){const token=document.getElementById("access-token").value.trim();if(!/^(?:[A-Z0-9]{4}-){3}[A-Z0-9]{4}$/i.test(token)&&!/^[0-9a-f]{48}$/i.test(token)){status("Enter your private access token (XXXX-XXXX-XXXX-XXXX). Existing 48-character tokens are also supported. Account ID cannot be used to log in.");return}status("Signing in…");try{const result=await request("login",{token});session=result.session;sessionStorage.setItem("newvps_session",session);window.top.location.assign("/account/")}catch(e){status(e.message)}}
-async function continueAccount(){const token=oneTimeToken;oneTimeToken=null;try{const result=await request("login",{token});session=result.session;sessionStorage.setItem("newvps_session",session);window.top.location.assign("/account/")}catch(e){show("login");status(e.message)}}
+async function continueAccount(){
+ const token=oneTimeToken;
+ if(!token)return;
+ const button=panel.querySelector("button.primary");
+ if(button){button.disabled=true;button.textContent="Opening your account…"}
+ try{
+  const result=await request("login",{token});
+  if(!/^[a-f0-9]{64}$/i.test(result.session||""))throw Error("Invalid login session");
+  session=result.session;
+  sessionStorage.setItem("newvps_session",session);
+  // The account dialog is embedded in an iframe on desktop. Notify the
+  // parent before navigating so the modal cannot remain open indefinitely.
+  if(window.parent!==window)window.parent.postMessage({type:"newvps-account-authenticated"} ,location.origin);
+  window.top.location.href=location.origin+"/account/";
+ }catch(e){
+  // Keep the one-time token visible for copying or retrying; never discard it
+  // on a temporary network error.
+  const notice=document.createElement("p");notice.style.color="#b42318";notice.textContent=(e&&e.message)||"Login failed. Please retry.";
+  panel.appendChild(notice);
+  if(button){button.disabled=false;button.textContent="Continue to my account"}
+ }
+}
 async function showAccount(){oneTimeToken=null;try{const result=await request("me",{},true);tabs("login");heading.textContent=result.account.role==="admin"?"Admin dashboard":"My account";document.querySelector(".subtitle").textContent="Signed in securely";panel.innerHTML='<p>Account ID: <code>'+result.account.id+'</code></p><p>Role: '+result.account.role+'</p><div id="admin"></div><button class="primary" onclick="logout()">Log out</button>';foot.textContent="Your access token cannot be recovered.";if(result.account.role==="admin"){const list=await request("admin_list",{},true);const admin=document.getElementById("admin");admin.innerHTML='<h3>Accounts</h3>'+list.accounts.map(a=>'<p>'+a.id+' ('+a.role+') '+(a.disabled_at?"Disabled":'<button data-id="'+a.id+'">Disable</button>')+'</p>').join("");admin.querySelectorAll("button[data-id]").forEach(b=>b.onclick=async()=>{if(confirm("Disable this account and revoke sessions?")){await request("admin_disable",{account_id:b.dataset.id},true);showAccount()}})}}catch{sessionStorage.removeItem("newvps_session");session=null;show("login")}}
 async function logout(){try{await request("logout",{},true)}finally{sessionStorage.removeItem("newvps_session");session=null;show("login")}}
 if(session && !new URLSearchParams(location.search).has("embed"))showAccount();else show(new URLSearchParams(location.search).get("view")==="login"?"login":"register");
