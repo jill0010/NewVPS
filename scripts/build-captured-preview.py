@@ -605,12 +605,12 @@ def main():
             html = page.read_text(encoding="utf-8")
             # Remove only old image meta tags, then insert one canonical tag each.
             html = re.sub(
-                r'<meta\\b(?=[^>]*\\b(?:property|name)\\s*=\\s*["\\\'](?:og:image|twitter:image)["\\\'])[^>]*>',
+                r'<meta\b(?=[^>]*\b(?:property|name)\s*=\s*["\'](?:og:image|twitter:image)["\'])[^>]*>',
                 '', html, flags=re.IGNORECASE,
             )
             if "</head>" in html:
-                tags = ('<meta property="og:image" content="' + social_url + '">\\n'
-                        '<meta name="twitter:image" content="' + social_url + '">\\n')
+                tags = ('<meta property="og:image" content="' + social_url + '">\n'
+                        '<meta name="twitter:image" content="' + social_url + '">\n')
                 html = html.replace("</head>", tags + "</head>", 1)
                 page.write_text(html, encoding="utf-8")
         print("Published AnonyPort social image and updated OG/Twitter metadata")
