@@ -593,6 +593,27 @@ def main():
                 html = html.replace("</head>", '<link rel="stylesheet" href="/newvps-mobile-responsive.css">\n</head>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored mobile-only responsive styles to generated pages")
+    # Publish the user-provided AnonyPort social share artwork without editing
+    # original captured ZIPs, images or page sources.
+    social_image = ROOT / "anonyport-og-image.jpg"
+    if social_image.is_file():
+        social_target = OUT / "assets" / "img" / "og-image.jpg"
+        social_target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(social_image, social_target)
+        social_url = "https://anonyport.com/assets/img/og-image.jpg"
+        for page in OUT.rglob("index.html"):
+            html = page.read_text(encoding="utf-8")
+            # Remove only old image meta tags, then insert one canonical tag each.
+            html = re.sub(
+                r'<meta\\b(?=[^>]*\\b(?:property|name)\\s*=\\s*["\\\'](?:og:image|twitter:image)["\\\'])[^>]*>',
+                '', html, flags=re.IGNORECASE,
+            )
+            if "</head>" in html:
+                tags = ('<meta property="og:image" content="' + social_url + '">\\n'
+                        '<meta name="twitter:image" content="' + social_url + '">\\n')
+                html = html.replace("</head>", tags + "</head>", 1)
+                page.write_text(html, encoding="utf-8")
+        print("Published AnonyPort social image and updated OG/Twitter metadata")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
