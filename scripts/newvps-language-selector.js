@@ -130,9 +130,25 @@
       }
     }
   }
+  // Archived mobile language buttons contain a hard-coded English .on class
+  // and inline colors. Keep the visible selection tied to the saved language.
+  function syncMobileLanguageSelection(){
+    document.querySelectorAll('a.mob-lang-opt').forEach(function(a){
+      const lang=a.dataset.newvpsLang;
+      if(!lang)return;
+      const selected=lang===current;
+      a.classList.toggle('on',selected);
+      a.setAttribute('aria-selected',String(selected));
+      a.style.setProperty('color',selected?'#1a56db':'#555','important');
+      a.style.setProperty('background-color',selected?'#edf1fc':'#fff','important');
+      a.style.setProperty('border-color',selected?'#1a56db':'#ececec','important');
+    });
+  }
   function choose(lang){
     if(!languages.includes(lang))return;
     localStorage.setItem(KEY,lang);
+    current=lang;
+    syncMobileLanguageSelection();
     if(lang==='en'){
       // Reset translation cookie and reload the English source.
       document.cookie='googtrans=/en/en;path=/';
@@ -140,7 +156,6 @@
       location.reload();
       return;
     }
-    current=lang;
     document.documentElement.lang=lang;
     document.querySelectorAll('.lang-sw').forEach(function(w){const c=w.querySelector('.lang-btn span:not(.fi)');if(c)c.textContent=lang==='ru'?'RU':'中文';syncButtonFlag(w,lang)});
     document.cookie='googtrans=/en/'+lang+';path=/;SameSite=Lax';
@@ -201,6 +216,7 @@
       a.href='#';
       a.addEventListener('click',function(e){e.preventDefault();choose(lang)});
     });
+    syncMobileLanguageSelection();
     // Always navigate the English route, preserving language in localStorage.
     document.addEventListener('click',function(e){
       const a=e.target.closest('a[href]');if(!a)return;
