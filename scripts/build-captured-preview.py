@@ -630,7 +630,7 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if "newvps-telegram-miniapp.js" not in html:
-                html = html.replace("</head>", '<script src="https://telegram.org/js/telegram-web-app.js"></script>\\n<script defer src="/newvps-telegram-miniapp.js"></script>\\n</head>', 1)
+                html = html.replace("</head>", '<script src="https://telegram.org/js/telegram-web-app.js"></script>\n<script defer src="/newvps-telegram-miniapp.js"></script>\n</head>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Enabled Telegram Mini App shell for generated pages")
     # Audit internal navigation against the routes actually generated.
