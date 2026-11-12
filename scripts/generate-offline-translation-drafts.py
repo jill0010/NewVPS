@@ -73,7 +73,9 @@ def main():
                         help='Persisted draft JSON; may specify multiple batches')
     parser.add_argument('--limit',type=int,default=900,
                         help='Number of unique core-page strings to draft this run')
-    parser.add_argument('--all-routes',action='store_true',\n                        help='Include every restored English route, not only the ten core routes')\n    args=parser.parse_args()
+    parser.add_argument('--all-routes',action='store_true',
+                        help='Include every restored English route, not only the ten core routes')
+    args=parser.parse_args()
     source_path=CAT/'strings.json'
     if not source_path.is_file():raise SystemExit('No extracted inventory')
     catalog=json.loads(source_path.read_text(encoding='utf-8'))
