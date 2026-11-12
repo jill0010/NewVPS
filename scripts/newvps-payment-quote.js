@@ -130,7 +130,6 @@
         row('What you receive',money(usd)+' account credit (not yet credited)');
         row('Reference rate','1 '+value+' = '+money(price)+' USD');
         row('Total',payable+' '+value);
-        const quoteRef=Date.now().toString(36)+'-'+rand;
         left.appendChild(el('p','Indicative quote · '+new Date().toLocaleString()+' · Ref '+quoteRef,'nv-subtle'));
         const notice=el('section',undefined,'nv-order-notice notranslate');
         notice.setAttribute('translate','no');
