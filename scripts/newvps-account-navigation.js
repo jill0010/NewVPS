@@ -47,6 +47,20 @@
       location.replace(base+'register/');
     }
   }
+  // Mobile Telegram WebView: bypass the captured site's legacy login modal.
+  // Its iframe can render as an empty dimmed backdrop on iOS.
+  window.addEventListener('click',function(e){
+    if(!window.matchMedia('(max-width: 900px)').matches)return;
+    const target=e.target&&e.target.closest&&e.target.closest('a,button');
+    if(!target||target.closest('#newvps-account-overlay, .dialog, #panel, form'))return;
+    const label=(target.textContent||'').trim().toLowerCase();
+    const href=(target.getAttribute('href')||'').toLowerCase();
+    if(!['login','log in','sign in','登录','登入','登陆'].includes(label)&&
+       !(href==='#'&&/login|sign.?in/i.test(target.getAttribute('aria-label')||'')))return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.location.replace('/register/?view=login');
+  },true);
   document.addEventListener('click',function(e){
     const target=e.target.closest('a,button');if(!target)return;
     if(target.id==='dh-logout'||target.classList.contains('dash-nav-logout')||
