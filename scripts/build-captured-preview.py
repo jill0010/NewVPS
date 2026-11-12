@@ -633,7 +633,7 @@ def main():
             # captured asset URLs (a blanket HTML replacement can break logos).
             def brand_text(match):
                 value = match.group(0)
-                return value.replace("AnonPort", "AnonyPort").replace("anonport.com", "anonyport.com")
+                return value.replace("AnonPort", "AnonyPort")
             html = re.sub(r'(?<=>)[^<>]+(?=<)', brand_text, html)
             # The Press Kit contact link must lead to the active brand domain.
             html = html.replace('href="https://anonport.com/contact"', 'href="https://anonyport.com/contact"')
