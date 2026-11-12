@@ -94,6 +94,22 @@
       if(/^fi-[a-z]{2}(?:-[a-z]+)?$/.test(name))flag.classList.remove(name);
     });
     flag.classList.add('fi','fi-'+code);
+    // Archived captures put a fixed background-image inline on the button.
+    // That inline image overrides the fi-xx CSS class, so copy the actual
+    // flag asset from the corresponding original dropdown option as well.
+    const option=Array.from(wrapper.querySelectorAll('.lang-opt')).find(function(a){
+      return !!a.querySelector('.fi-'+code);
+    });
+    const optionFlag=option&&option.querySelector('.fi-'+code);
+    if(optionFlag){
+      const image=optionFlag.style.backgroundImage||getComputedStyle(optionFlag).backgroundImage;
+      if(image&&image!=='none'){
+        flag.style.setProperty('background-image',image,'important');
+        flag.style.backgroundPosition='50% 50%';
+        flag.style.backgroundSize='contain';
+        flag.style.backgroundRepeat='no-repeat';
+      }
+    }
   }
   function choose(lang){
     if(!languages.includes(lang))return;
