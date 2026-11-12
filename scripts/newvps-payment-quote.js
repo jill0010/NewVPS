@@ -107,7 +107,8 @@
         const timeout=setTimeout(()=>controller.abort(),15000);
         let created;
         try{
-          const response=await fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/payment-order-api',{
+          const endpoint=value==='XMR'?'newvps-xmr-gateway':'payment-order-api';
+          const response=await fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/'+endpoint,{
             method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},
             body:JSON.stringify({action:'create',currency,usd}),signal:controller.signal,cache:'no-store'
           });
