@@ -18,7 +18,7 @@ panel.innerHTML='<div class="notice"><span class="info">ⓘ</span><div><strong>A
 function status(message){const e=document.getElementById("status");if(e)e.textContent=message}
 async function register(){status("Creating account…");try{const inviteCode=new URLSearchParams(location.search).get("ref")||sessionStorage.getItem("newvps_invite_code")||"";const result=await request("register",{invite_code:inviteCode});oneTimeToken=result.token;show("token")}catch(e){status(e.message)}}
 function copyToken(){if(oneTimeToken)navigator.clipboard.writeText(oneTimeToken)}
-async function login(){const token=document.getElementById("access-token").value.trim();if(!/^(?:[A-Z0-9]{4}-){3}[A-Z0-9]{4}$/i.test(token)&&!/^[0-9a-f]{48}$/i.test(token)){status("Enter your private access token (XXXX-XXXX-XXXX-XXXX). Existing 48-character tokens are also supported. Account ID cannot be used to log in.");return}status("Signing in…");try{const result=await request("login",{token});session=result.session;sessionStorage.setItem("newvps_session",session);window.top.location.assign("/account/")}catch(e){status(e.message)}}
+async function login(){const token=document.getElementById("access-token").value.trim();if(!/^(?:[A-Z0-9]{4}-){3}[A-Z0-9]{4}$/i.test(token)&&!/^[0-9a-f]{48}$/i.test(token)){status("Enter your private access token (XXXX-XXXX-XXXX-XXXX). Existing 48-character tokens are also supported. Account ID cannot be used to log in.");return}status("Signing in…");try{const result=await request("login",{token});session=result.session;sessionStorage.setItem("newvps_session",session);if(window.parent!==window){window.parent.postMessage({type:"newvps-account-authenticated"},location.origin)}else{window.location.assign("/account/")}}catch(e){status(e.message)}}
 async function continueAccount(){
  const token=oneTimeToken;
  if(!token)return;
@@ -31,8 +31,11 @@ async function continueAccount(){
   sessionStorage.setItem("newvps_session",session);
   // The account dialog is embedded in an iframe on desktop. Notify the
   // parent before navigating so the modal cannot remain open indefinitely.
-  if(window.parent!==window)window.parent.postMessage({type:"newvps-account-authenticated"} ,location.origin);
-  window.top.location.href=location.origin+"/account/";
+  if(window.parent!==window){
+    window.parent.postMessage({type:"newvps-account-authenticated"},location.origin);
+  }else{
+    window.location.assign("/account/");
+  }
  }catch(e){
   // Keep the one-time token visible for copying or retrying; never discard it
   // on a temporary network error.
