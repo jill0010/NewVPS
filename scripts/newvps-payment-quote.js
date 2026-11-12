@@ -100,21 +100,26 @@
       area.appendChild(overlay);
       area.style.display='block';
       try{
+        const session=sessionStorage.getItem('newvps_session');
+        if(!session)throw new Error('Please sign in before creating a payment order.');
+        const currency=value==='USDT'?'USDT_ERC20':value==='USDTTRC'?'USDT_TRC20':value;
         const controller=new AbortController();
-        const timeout=setTimeout(()=>controller.abort(),10000);
-        let response;
-        try{response=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+encodeURIComponent(coin.id)+'&vs_currencies=usd',{cache:'no-store',signal:controller.signal})}
-        finally{clearTimeout(timeout)}
-        if(!response.ok)throw new Error('Rate unavailable');
-        const prices=await response.json();
-        const price=Number(prices[coin.id]?.usd);
-        if(!Number.isFinite(price)||price<=0)throw new Error('Invalid rate');
+        const timeout=setTimeout(()=>controller.abort(),15000);
+        let created;
+        try{
+          const response=await fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/payment-order-api',{
+            method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},
+            body:JSON.stringify({action:'create',currency,usd}),signal:controller.signal,cache:'no-store'
+          });
+          created=await response.json();
+          if(!response.ok||!created.order)throw new Error(created.error||'Order creation failed');
+        }finally{clearTimeout(timeout)}
         if(request!==serial)return;
-        // The fractional suffix is a quote identifier only, not a unique
-        // on-chain order assignment. A server must reserve suffixes atomically.
-        const rand=crypto.getRandomValues(new Uint32Array(1))[0]%900+100;
-        const scale=10**coin.precision;
-        const payable=((Math.ceil(usd/price*scale)+rand)/scale).toFixed(coin.precision);
+        const order=created.order;
+        const price=Number(order.rate_usd);
+        const payable=String(order.asset_amount);
+        const quoteRef=order.quote_ref;
+        const paymentAddress=order.destination_address;
         progress.remove();
         const grid=el('div',undefined,'nv-grid');shell.appendChild(grid);
         const left=el('div',undefined,'nv-left');grid.appendChild(left);
@@ -170,7 +175,7 @@
         const right=el('div',undefined,'nv-right');grid.appendChild(right);
         right.appendChild(el('strong','Pay with '+coin.name));
         const qr=el('img',undefined,'nv-qr');qr.alt='QR code for '+coin.name+' address';qr.loading='eager';
-        qr.src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='+encodeURIComponent(coin.address);
+        qr.src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='+encodeURIComponent(paymentAddress);
         right.appendChild(qr);
         right.appendChild(el('p','SEND EXACTLY','nv-subtle'));
         right.appendChild(el('strong',payable+' '+value));
@@ -180,7 +185,7 @@
         right.appendChild(el('div',coin.address,'nv-address'));
         const copyAddress=el('button','Copy address');copyAddress.style.marginTop='10px';copyAddress.onclick=()=>navigator.clipboard.writeText(coin.address).then(()=>copyAddress.textContent='Copied').catch(()=>{});right.appendChild(copyAddress);
         
-      }catch(err){if(request===serial)progress.textContent='Could not obtain a live exchange rate. No payment amount was generated. Please try again.'}
+      }catch(err){if(request===serial)progress.textContent=err?.message||'Could not create a payment order. Please try again.'}
     }
     form.addEventListener('submit',function(event){event.preventDefault();event.stopImmediatePropagation();show()},true);
     
