@@ -182,8 +182,8 @@
         const buttons=el('div',undefined,'nv-copy');right.appendChild(buttons);
         const copyAmount=el('button','Copy amount');copyAmount.onclick=()=>navigator.clipboard.writeText(payable).then(()=>copyAmount.textContent='Copied').catch(()=>{});buttons.appendChild(copyAmount);
         right.appendChild(el('p','TO ADDRESS · '+coin.name,'nv-subtle'));
-        right.appendChild(el('div',coin.address,'nv-address'));
-        const copyAddress=el('button','Copy address');copyAddress.style.marginTop='10px';copyAddress.onclick=()=>navigator.clipboard.writeText(coin.address).then(()=>copyAddress.textContent='Copied').catch(()=>{});right.appendChild(copyAddress);
+        const addressDisplay=el('div',paymentAddress,'nv-address notranslate');addressDisplay.setAttribute('translate','no');right.appendChild(addressDisplay);
+        const copyAddress=el('button','Copy address');copyAddress.style.marginTop='10px';copyAddress.onclick=()=>navigator.clipboard.writeText(paymentAddress).then(()=>copyAddress.textContent='Copied').catch(()=>{});right.appendChild(copyAddress);
         
       }catch(err){if(request===serial)progress.textContent=err?.message||'Could not create a payment order. Please try again.'}
     }
