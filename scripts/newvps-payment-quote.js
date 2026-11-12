@@ -100,7 +100,11 @@
       area.appendChild(overlay);
       area.style.display='block';
       try{
-        const session=sessionStorage.getItem('newvps_session');
+        let session=sessionStorage.getItem('newvps_session');
+        if(!session&&typeof window.newvpsTelegramEnsureSession==='function'){
+          try{session=await window.newvpsTelegramEnsureSession()}
+          catch(e){throw new Error((e&&e.message)||'Please link your Telegram account to AnonyPort before creating an order.')}
+        }
         if(!session)throw new Error('Please sign in before creating a payment order.');
         const currency=value==='USDT'?'USDT_ERC20':value==='USDTTRC'?'USDT_TRC20':value;
         const controller=new AbortController();
