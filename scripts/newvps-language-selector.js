@@ -83,6 +83,18 @@
     }
     return true;
   }
+  // Keep the flag on the collapsed language button in sync with the selection.
+  function syncButtonFlag(wrapper,lang){
+    const button=wrapper.querySelector('.lang-btn');
+    if(!button)return;
+    const flag=button.querySelector('.fi, [class*="fi-"]');
+    if(!flag)return;
+    const code=lang==='ru'?'ru':lang==='zh-CN'?'cn':'gb';
+    Array.from(flag.classList).forEach(function(name){
+      if(/^fi-[a-z]{2}(?:-[a-z]+)?$/.test(name))flag.classList.remove(name);
+    });
+    flag.classList.add('fi','fi-'+code);
+  }
   function choose(lang){
     if(!languages.includes(lang))return;
     localStorage.setItem(KEY,lang);
@@ -95,7 +107,7 @@
     }
     current=lang;
     document.documentElement.lang=lang;
-    document.querySelectorAll('.lang-sw').forEach(function(w){const c=w.querySelector('.lang-btn span:not(.fi)');if(c)c.textContent=lang==='ru'?'RU':'中文'});
+    document.querySelectorAll('.lang-sw').forEach(function(w){const c=w.querySelector('.lang-btn span:not(.fi)');if(c)c.textContent=lang==='ru'?'RU':'中文';syncButtonFlag(w,lang)});
     document.cookie='googtrans=/en/'+lang+';path=/;SameSite=Lax';
     installTranslator();
     // Reload is required for Google Translate to pick up a newly selected
@@ -103,7 +115,7 @@
     localTranslate(document.body);
     document.querySelectorAll('.lang-sw').forEach(function(w){
       const btn=w.querySelector('.lang-btn');
-      if(btn){const target=btn.querySelector('span:not(.fi)');if(target)target.textContent=lang==='ru'?'RU':'中文';}
+      if(btn){const target=btn.querySelector('span:not(.fi)');if(target)target.textContent=lang==='ru'?'RU':'中文';syncButtonFlag(w,lang);}
       w.querySelectorAll('.lang-opt').forEach(function(a){a.classList.toggle('on',a.dataset.newvpsLang===lang)});
     });
     setTimeout(function(){if(!applyLanguage())installTranslator()},100);
@@ -143,6 +155,7 @@
       });
       const code=button.querySelector('span:not(.fi)');
       if(code)code.textContent=current==='ru'?'RU':current==='zh-CN'?'中文':'EN';
+      syncButtonFlag(wrapper,current);
     });
     document.querySelectorAll('a.mob-lang-opt').forEach(function(a){
       const href=a.getAttribute('href')||'';
