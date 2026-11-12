@@ -20,6 +20,14 @@
     close.onclick=()=>overlay.remove();overlay.onclick=e=>{if(e.target===overlay)overlay.remove()};
     overlay.append(frame,close);document.body.appendChild(overlay);
   }
+  // Receive successful login from the same-origin embedded registration page.
+  window.addEventListener('message',function(event){
+    if(event.origin!==location.origin||!event.data||event.data.type!=='newvps-account-authenticated')return;
+    const overlay=document.getElementById('newvps-account-overlay');
+    if(!overlay||event.source!==overlay.querySelector('iframe')?.contentWindow)return;
+    overlay.remove();
+    window.location.assign('/account/');
+  });
   async function logout(event){
     event.preventDefault();event.stopImmediatePropagation();
     const session=sessionStorage.getItem('newvps_session');
