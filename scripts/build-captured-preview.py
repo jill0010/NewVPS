@@ -629,7 +629,7 @@ def main():
         shutil.copy2(miniapp_script, OUT / "newvps-telegram-miniapp.js")
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
-            if "newvps-telegram-miniapp.js" not in html:
+            # Match the third feature cell divider to the first two on narrow screens.\n            if "newvps-feature-strip-divider-fix" not in html:\n                html = html.replace("</head>", '<style id="newvps-feature-strip-divider-fix">@media(max-width:700px){.strip-in>.strip-i:nth-child(3){border-bottom-color:#555!important}}</style></head>', 1)\n            if "newvps-telegram-miniapp.js" not in html:
                 html = html.replace("</head>", '<script src="https://telegram.org/js/telegram-web-app.js"></script>\n<script defer src="/newvps-telegram-miniapp.js"></script>\n</head>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Enabled Telegram Mini App shell for generated pages")
