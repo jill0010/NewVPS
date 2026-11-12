@@ -108,14 +108,20 @@
         if(!session)throw new Error('Please sign in before creating a payment order.');
         const currency=value==='USDT'?'USDT_ERC20':value==='USDTTRC'?'USDT_TRC20':value;
         const controller=new AbortController();
-        const timeout=setTimeout(()=>controller.abort(),25000);
+        const timeout=setTimeout(()=>controller.abort(),30000);
         let created;
         try{
           const endpoint=value==='XMR'?'newvps-xmr-gateway':'payment-order-api';
-          const response=await fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/'+endpoint,{
-            method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},
-            body:JSON.stringify({action:'create',currency,usd}),signal:controller.signal,cache:'no-store'
-          });
+          const options={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},body:JSON.stringify({action:'create',currency,usd}),signal:controller.signal,cache:'no-store'};
+          // Use a same-origin Cloudflare Pages proxy on iOS Telegram WebKit.
+          // Fall back only if the proxy route does not exist; never retry a
+          // possibly-processed POST after a network failure.
+          let response=await fetch('/api/payment-order',options);
+          if(response.status===404||response.status===405){
+            response=await fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/'+endpoint,options);
+          }
+          const contentType=response.headers.get('content-type')||'';
+          if(!contentType.includes('application/json'))throw new Error('Payment service returned an unexpected response (HTTP '+response.status+').');
           created=await response.json();
           if(!response.ok||!created.order)throw new Error(created.error||'Order creation failed (HTTP '+response.status+')');
         }finally{clearTimeout(timeout)}
@@ -189,7 +195,18 @@
         const addressDisplay=el('div',paymentAddress,'nv-address notranslate');addressDisplay.setAttribute('translate','no');right.appendChild(addressDisplay);
         const copyAddress=el('button','Copy address');copyAddress.style.marginTop='10px';copyAddress.onclick=()=>navigator.clipboard.writeText(paymentAddress).then(()=>copyAddress.textContent='Copied').catch(()=>{});right.appendChild(copyAddress);
         
-      }catch(err){if(request===serial){progress.textContent='订单创建失败：'+(err?.name==='AbortError'?'请求超时，请稍后重试':(err?.message||'请稍后重试'));progress.style.color='#b42318';const retry=el('button','重新尝试');retry.type='button';retry.style.margin='12px 0 0';retry.onclick=()=>show();shell.appendChild(retry)}}
+      }catch(err){if(request===serial){
+        const message=String(err?.message||'');
+        const isLogin=/sign in|login required|unauthorized|session expired|account not linked|not linked|login|登录|绑定/i.test(message);
+        const isNetwork=/load failed|failed to fetch|networkerror|network request failed/i.test(message);
+        progress.textContent=isLogin?'请先登录 AnonyPort 账户，再创建充值订单。':isNetwork?'网络连接失败：无法连接支付服务。请检查网络后重试；若已提交订单，请先核对订单记录，避免重复创建。':'订单创建失败：'+(err?.name==='AbortError'?'请求超时，请核对订单记录后重试':message||'请稍后重试');
+        progress.style.color='#b42318';
+        if(isLogin){
+          const login=el('button','登录账户');login.type='button';login.style.margin='12px 12px 0 0';
+          login.onclick=()=>{location.assign('/register/?view=login')};shell.appendChild(login);
+        }
+        const retry=el('button','重新尝试');retry.type='button';retry.style.margin='12px 0 0';retry.onclick=()=>show();shell.appendChild(retry);
+      }}
     }
     form.addEventListener('submit',function(event){event.preventDefault();event.stopImmediatePropagation();show()},true);
     
