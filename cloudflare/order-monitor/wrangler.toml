@@ -1,0 +1,11 @@
+name = "newvps-order-monitor"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+[[durable_objects.bindings]]
+name = "ORDER_MONITORS"
+class_name = "OrderMonitor"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["OrderMonitor"]
