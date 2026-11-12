@@ -97,6 +97,16 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(html, encoding="utf-8")
         written[route] = entry["capture"]
+    # Restore the captured five-step jurisdiction selector without changing its source HTML.
+    selector_script = ROOT / "scripts/newvps-jurisdiction-selector.js"
+    selector_page = OUT / "jurisdiction-selector" / "index.html"
+    if selector_script.is_file() and selector_page.is_file():
+        shutil.copy2(selector_script, OUT / "newvps-jurisdiction-selector.js")
+        selector_html = selector_page.read_text(encoding="utf-8")
+        if 'id="selectorTool"' in selector_html and "newvps-jurisdiction-selector.js" not in selector_html:
+            selector_html = selector_html.replace("</body>", '<script defer src="/newvps-jurisdiction-selector.js"></script>\\n</body>', 1)
+            selector_page.write_text(selector_html, encoding="utf-8")
+            print("Restored five-step jurisdiction selector interactions from captured HTML")
     # All original captures and order snapshots remain untouched in extracted/.
     # Avoid copying their redundant duplicates into the live site bundle.
     # Restore /order from an actual archived order capture, not from a
