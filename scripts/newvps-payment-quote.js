@@ -104,7 +104,7 @@
         if(!session)throw new Error('Please sign in before creating a payment order.');
         const currency=value==='USDT'?'USDT_ERC20':value==='USDTTRC'?'USDT_TRC20':value;
         const controller=new AbortController();
-        const timeout=setTimeout(()=>controller.abort(),15000);
+        const timeout=setTimeout(()=>controller.abort(),25000);
         let created;
         try{
           const endpoint=value==='XMR'?'newvps-xmr-gateway':'payment-order-api';
@@ -113,7 +113,7 @@
             body:JSON.stringify({action:'create',currency,usd}),signal:controller.signal,cache:'no-store'
           });
           created=await response.json();
-          if(!response.ok||!created.order)throw new Error(created.error||'Order creation failed');
+          if(!response.ok||!created.order)throw new Error(created.error||'Order creation failed (HTTP '+response.status+')');
         }finally{clearTimeout(timeout)}
         if(request!==serial)return;
         const order=created.order;
@@ -185,7 +185,7 @@
         const addressDisplay=el('div',paymentAddress,'nv-address notranslate');addressDisplay.setAttribute('translate','no');right.appendChild(addressDisplay);
         const copyAddress=el('button','Copy address');copyAddress.style.marginTop='10px';copyAddress.onclick=()=>navigator.clipboard.writeText(paymentAddress).then(()=>copyAddress.textContent='Copied').catch(()=>{});right.appendChild(copyAddress);
         
-      }catch(err){if(request===serial)progress.textContent=err?.message||'Could not create a payment order. Please try again.'}
+      }catch(err){if(request===serial){progress.textContent='订单创建失败：'+(err?.name==='AbortError'?'请求超时，请稍后重试':(err?.message||'请稍后重试'));progress.style.color='#b42318';const retry=el('button','重新尝试');retry.type='button';retry.style.margin='12px 0 0';retry.onclick=()=>show();shell.appendChild(retry)}}
     }
     form.addEventListener('submit',function(event){event.preventDefault();event.stopImmediatePropagation();show()},true);
     
