@@ -85,7 +85,32 @@
     });
     if(tg.initData)fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'status',initData:tg.initData}),signal:AbortSignal.timeout(12000)}).then(function(r){return r.json()}).then(function(d){if(d.linked){status.textContent=t.linked;btn.textContent=t.linked;btn.disabled=true}}).catch(function(){});
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
+  function renderQuickActions(){
+    if(document.getElementById('newvps-tg-quick-actions'))return;
+    var t=labels[locale()];
+    var wrap=document.createElement('div');wrap.id='newvps-tg-quick-actions';
+    wrap.style.cssText='position:fixed;right:12px;bottom:calc(82px + env(safe-area-inset-bottom,0px));z-index:2147483000;display:flex;gap:6px;align-items:center;padding:6px;background:#fff;border:1px solid #dbe2ec;border-radius:12px;box-shadow:0 3px 15px #0002;font:600 12px system-ui,sans-serif';
+    var bind=document.createElement('button');bind.type='button';bind.textContent=locale()==='zh'?'绑定 TG':locale()==='ru'?'Привязать TG':'Link TG';
+    var logout=document.createElement('button');logout.type='button';logout.textContent=locale()==='zh'?'退出登录':locale()==='ru'?'Выйти':'Log out';
+    [bind,logout].forEach(function(b){b.style.cssText='border:0;border-radius:7px;background:#eef2fb;color:#1e45a6;padding:9px 10px;cursor:pointer'});
+    bind.onclick=function(){
+      var box=document.getElementById('newvps-tg-link');
+      if(box){box.scrollIntoView({behavior:'smooth',block:'center'});var b=box.querySelector('button');if(b&&!b.disabled)b.click()}
+      else location.assign('/dashboard/');
+    };
+    logout.onclick=async function(){
+      var box=document.getElementById('newvps-tg-link');
+      if(box){var buttons=box.querySelectorAll('button');if(buttons[1]){buttons[1].click();return}}
+      var token=sessionStorage.getItem('newvps_session')||localStorage.getItem('newvps_session')||'';
+      sessionStorage.setItem('newvps_tg_signed_out','1');
+      sessionStorage.removeItem('newvps_session');localStorage.removeItem('newvps_session');sessionPromise=null;
+      if(/^[a-f0-9]{64}$/i.test(token))try{await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action:'logout',initData:tg.initData}),signal:AbortSignal.timeout(5000)})}catch(e){}
+      location.replace('/register/');
+    };
+    wrap.append(bind,logout);document.body.appendChild(wrap);
+  }
+  function initControls(){render();renderQuickActions()}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initControls);else initControls();
   // Do not treat initDataUnsafe as proof of identity. Authentication remains
   // on the existing NewVPS account system until server-side validation exists.
   var style=document.createElement('style');
