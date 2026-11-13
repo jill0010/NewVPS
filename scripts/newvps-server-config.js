@@ -93,6 +93,54 @@ function init(){
   }
   if(ips){ips.disabled=false;ips.addEventListener('change',refreshSummary)}
   refreshSummary();
+  // Checkout displays the same authenticated, server-side balance as Top up.
+  // This only updates the display; payment authorization remains server-side.
+  const balanceEndpoint='https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/account-api';
+  async function syncCheckoutAccount(){
+    const session=sessionStorage.getItem('newvps_session');
+    const balance=document.getElementById('sumBalance');
+    const logged=document.querySelector('.cfg-logged, .cfg-login-status, [data-checkout-account], .cfg-auth');
+    if(!session||!/^[0-9a-f]{64}$/.test(session))return;
+    try{
+      const response=await fetch(balanceEndpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},body:JSON.stringify({action:'me'}),cache:'no-store'});
+      if(!response.ok)return;
+      const data=await response.json();
+      const value=data?.account?.balance_usd;
+      const hint=String(data?.account?.token_hint||'').toUpperCase();
+      if(typeof value==='string'&&/^\\d+\\.\\d{2}$/.test(value)&&balance){
+        balance.textContent='password?.parentElement?.querySelector('button');
+  if(password&&generate){
+    generate.addEventListener('click',function(){
+      if(!window.crypto?.getRandomValues){alert('Secure password generation is unavailable in this browser.');return}
+      const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%*-_';
+      const bytes=new Uint32Array(24);crypto.getRandomValues(bytes);
+      password.value=Array.from(bytes,n=>chars[n%chars.length]).join('');
+      password.dispatchEvent(new Event('input',{bubbles:true}));
+      password.dispatchEvent(new Event('change',{bubbles:true}));
+      const hint=document.getElementById('pwHint');
+      if(hint)hint.textContent='Strong password generated. Save it securely.';
+    });
+  }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();+value;
+        balance.dataset.availableBalance=value;
+      }
+      const label=/^[A-Z0-9]{4}$/.test(hint)?'****-****-****-'+hint:'****-****-****-****';
+      if(logged){
+        const walker=document.createTreeWalker(logged,NodeFilter.SHOW_TEXT);
+        let node;
+        while((node=walker.nextNode())){
+          if(/(?:[A-Z0-9]{4}-\\*{4}|\\*{4}-\\*{4}-\\*{4}-[A-Z0-9]{4})/.test(node.textContent||'')){
+            node.textContent=node.textContent.replace(/(?:[A-Z0-9]{4}-\\*{4}|\\*{4}-\\*{4}-\\*{4}-[A-Z0-9]{4})/g,label);
+          }
+        }
+      }
+    }catch(error){console.warn('Checkout account sync deferred',error)}
+  }
+  syncCheckoutAccount();
+  window.addEventListener('pageshow',syncCheckoutAccount);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)syncCheckoutAccount()});
   const generate=password?.parentElement?.querySelector('button');
   if(password&&generate){
     generate.addEventListener('click',function(){
