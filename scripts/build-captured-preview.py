@@ -316,6 +316,15 @@ def main():
         html = html.replace("</body>", '<script defer src="/newvps-payment-quote.js"></script>\n</body>', 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Attached crypto quote overlay to archived account top-up form")
+    # Purchase conversion is gated by the backend's credited order + unique ledger entry.
+    # The archived page and its visual layout remain unchanged.
+    verified_purchase = ROOT / "scripts/newvps-verified-purchase.js"
+    if dashboard.is_file() and verified_purchase.is_file():
+        shutil.copy2(verified_purchase, OUT / "newvps-verified-purchase.js")
+        html = dashboard.read_text(encoding="utf-8")
+        html = html.replace("</body>", '<script defer src="/newvps-verified-purchase.js"></script>\n</body>', 1)
+        dashboard.write_text(html, encoding="utf-8")
+        print("Attached verified-only Google Ads purchase conversion to account dashboard")
     # Attach account navigation to all archived HTML routes, including /vps/.
     # Login is not limited to the homepage. The script also revokes the
     # account session when the dashboard Log out button is clicked.
