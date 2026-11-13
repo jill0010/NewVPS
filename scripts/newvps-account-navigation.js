@@ -47,6 +47,29 @@
       location.replace(base+'register/');
     }
   }
+  // Archived account pages contain a hard-coded token preview. Never show it as
+  // the currently authenticated account's token.
+  if(/^\/account\/?$/.test(location.pathname)){
+    const updatePreview=(label)=>{
+      document.querySelectorAll('.acc-tok').forEach(el=>{el.textContent=label});
+      document.querySelectorAll('.dh-r [data-copy]').forEach(el=>{
+        el.setAttribute('data-copy',label);
+        el.setAttribute('title','Masked token hint only; the full access token is not recoverable.');
+      });
+    };
+    updatePreview('****-****-****-****');
+    const session=sessionStorage.getItem('newvps_session');
+    if(session&&/^[0-9a-f]{64}$/.test(session)){
+      fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/account-api',{
+        method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},
+        body:JSON.stringify({action:'me'}),cache:'no-store'
+      }).then(res=>{if(!res.ok)throw Error('Account session unavailable');return res.json()})
+        .then(data=>{
+          const hint=String(data?.account?.token_hint||'').toUpperCase();
+          if(/^[A-Z0-9]{4}$/.test(hint))updatePreview('****-****-****-'+hint);
+        }).catch(()=>updatePreview('****-****-****-****'));
+    }
+  }
   // Mobile Telegram WebView: bypass the captured site's legacy login modal.
   // Its iframe can render as an empty dimmed backdrop on iOS.
   window.addEventListener('click',function(e){
