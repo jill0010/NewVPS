@@ -115,13 +115,13 @@ function init(){
       const hint=String(account.token_hint||'').toUpperCase();
       const masked=/^[A-Z0-9]{4}$/.test(hint)?'****-****-****-'+hint:'****-****-****-****';
       // Change only the account label, not the underlying login/session token.
-      const root=document.querySelector('main')||document.body;
+      const root=document.body;
       const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
       let node;
       while((node=walker.nextNode())){
         const text=node.nodeValue||'';
-        if(/Logged in\\s*[—–-]\\s*[A-Z0-9]{4}-\\*{4}/i.test(text)){
-          node.nodeValue=text.replace(/(Logged in\\s*[—–-]\\s*)[A-Z0-9]{4}-\\*{4}/i,'$1'+masked);
+        if(/Logged in\s*[—–-]\s*[A-Z0-9]{4}-\*{4}/i.test(text)){
+          node.nodeValue=text.replace(/(Logged in\s*[—–-]\s*)[A-Z0-9]{4}-\*{4}/i,'$1'+masked);
         }
       }
     }catch(error){console.warn('Checkout balance sync unavailable',error)}
