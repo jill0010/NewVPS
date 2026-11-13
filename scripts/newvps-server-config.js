@@ -108,7 +108,28 @@ function init(){
       if(Number.isFinite(amount)&&amount>=0){
         const label='$'+amount.toFixed(2);
         const target=document.getElementById('sumBalance');
-        if(target){target.textContent=label;target.dataset.availableBalance=amount.toFixed(2)}
+        if(target){
+          target.dataset.availableBalance=amount.toFixed(2);
+          target.dataset.balance=amount.toFixed(2);
+          let valueEl=target.querySelector('.summary-balance-val');
+          if(!valueEl){
+            valueEl=document.createElement('span');
+            valueEl.className='summary-balance-val';
+            valueEl.style.color='#1244b0';
+            const heading=target.querySelector('.summary-balance-lbl');
+            if(heading)heading.insertAdjacentElement('afterend',valueEl);
+            else target.prepend(valueEl);
+          }
+          valueEl.textContent=label;
+          if(!target.querySelector('.summary-balance-add')){
+            const add=document.createElement('a');
+            add.href='/account/?tab=topup';
+            add.className='summary-balance-add';
+            add.textContent='+ Add credit';
+            add.style.cssText='color:#1a56db;background:#fff;border:1px solid #c4d6f7;border-radius:6px;padding:8px 12px;text-decoration:none';
+            target.append(add);
+          }
+        }
         // Archived checkout templates may not have a stable balance ID.
         document.querySelectorAll('[data-account-credit-value]').forEach(el=>{el.textContent=label});
       }
