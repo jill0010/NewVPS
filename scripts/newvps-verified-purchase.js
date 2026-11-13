@@ -6,6 +6,7 @@
  const target=adsId+'/A-2qCKj6ybcdEKy1i5hF';
  const endpoint='https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/newvps-ads-purchase';
  let busy=false;
+ let awaitingCallback=false;
  function loadTag(){
   return new Promise(function(resolve,reject){
    if(window.__newvpsAdsReady){resolve();return;}
@@ -25,7 +26,7 @@
   });
  }
  async function check(){
-  if(busy||document.visibilityState==='hidden')return;
+  if(busy||awaitingCallback||document.visibilityState==='hidden')return;
   const session=sessionStorage.getItem('newvps_session');
   if(!session||!/^[0-9a-f]{64}$/.test(session))return;
   busy=true;
@@ -36,8 +37,25 @@
    const data=await r.json();
    const p=data.purchase;
    if(!p)return;
-   if(typeof p.transaction_id!=='string'||!p.transaction_id||!Number.isFinite(p.value)||p.value<=0||p.currency!=='USD')return;
-   window.gtag('event','conversion',{send_to:target,transaction_id:p.transaction_id,value:p.value,currency:'USD'});
+   if(typeof p.order_id!=='string'||typeof p.transaction_id!=='string'||!p.transaction_id||!Number.isFinite(p.value)||p.value<=0||p.currency!=='USD')return;
+   awaitingCallback=true;
+   let completed=false;
+   const callback=async function(){
+    if(completed)return;
+    completed=true;
+    try{
+     const ack=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},body:JSON.stringify({action:'ack',order_id:p.order_id}),cache:'no-store'});
+     if(!ack.ok)throw new Error('Purchase ack '+ack.status);
+     const result=await ack.json();
+     if(!result.ok)throw new Error('Purchase ack rejected');
+    }catch(err){console.warn('Purchase acknowledgement deferred:',err)}
+    finally{awaitingCallback=false}
+   };
+   try{
+    window.gtag('event','conversion',{send_to:target,transaction_id:p.transaction_id,value:p.value,currency:'USD',event_callback:callback,event_timeout:5000});
+    // Callback may not run if a tag is blocked. The server lease expires for retry.
+    setTimeout(function(){if(!completed)awaitingCallback=false},15000);
+   }catch(err){awaitingCallback=false;throw err}
   }catch(err){console.warn('Verified purchase conversion deferred:',err)}
   finally{busy=false}
  }
