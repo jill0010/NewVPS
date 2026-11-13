@@ -101,11 +101,15 @@
       area.style.display='block';
       try{
         let session=sessionStorage.getItem('newvps_session');
-        if(!session&&typeof window.newvpsTelegramEnsureSession==='function'){
-          try{session=await window.newvpsTelegramEnsureSession()}
-          catch(e){throw new Error((e&&e.message)||'Please link your Telegram account to AnonyPort before creating an order.')}
+        // Telegram's in-app browser is not necessarily a Telegram Mini App:
+        // WebApp may exist without signed initData. Ordinary access-token login
+        // must remain usable on iOS and Android.
+        if(!/^[a-f0-9]{64}$/i.test(session||'')&&typeof window.newvpsTelegramEnsureSession==='function'){
+          try{session=await window.newvpsTelegramEnsureSession()}catch(e){
+            console.info('Telegram Mini App session unavailable; standard account sign-in required.');
+          }
         }
-        if(!session)throw new Error('Please sign in before creating a payment order.');
+        if(!/^[a-f0-9]{64}$/i.test(session||''))throw new Error('LOGIN_REQUIRED: Sign in with your AnonyPort access token to create a payment order.');
         const currency=value==='USDT'?'USDT_ERC20':value==='USDTTRC'?'USDT_TRC20':value;
         const controller=new AbortController();
         const timeout=setTimeout(()=>controller.abort(),30000);
@@ -197,13 +201,13 @@
         
       }catch(err){if(request===serial){
         const message=String(err?.message||'');
-        const isLogin=/sign in|login required|unauthorized|session expired|account not linked|not linked|login|登录|绑定/i.test(message);
+        const isLogin=/LOGIN_REQUIRED|sign in|login required|unauthorized|session expired|account not linked|not linked|login|登录|绑定|Open the Mini App/i.test(message);
         const isNetwork=/load failed|failed to fetch|networkerror|network request failed/i.test(message);
-        progress.textContent=isLogin?'请先登录 AnonyPort 账户，再创建充值订单。':isNetwork?'网络连接失败：无法连接支付服务。请检查网络后重试；若已提交订单，请先核对订单记录，避免重复创建。':'订单创建失败：'+(err?.name==='AbortError'?'请求超时，请核对订单记录后重试':message||'请稍后重试');
+        progress.textContent=isLogin?'请先使用 AnonyPort 私有访问令牌登录，再创建充值订单。无需从 Telegram Mini App 打开。':isNetwork?'网络连接失败：无法连接支付服务。请检查网络后重试；若已提交订单，请先核对订单记录，避免重复创建。':'订单创建失败：'+(err?.name==='AbortError'?'请求超时，请核对订单记录后重试':message||'请稍后重试');
         progress.style.color='#b42318';
         if(isLogin){
           const login=el('button','登录账户');login.type='button';login.style.margin='12px 12px 0 0';
-          login.onclick=()=>{location.assign('/register/?view=login')};shell.appendChild(login);
+          login.onclick=()=>{location.assign('/register/?view=login&return='+encodeURIComponent(location.pathname+location.search))};shell.appendChild(login);
         }
         const retry=el('button','重新尝试');retry.type='button';retry.style.margin='12px 0 0';retry.onclick=()=>show();shell.appendChild(retry);
       }}
