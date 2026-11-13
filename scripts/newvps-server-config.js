@@ -110,7 +110,7 @@ function init(){
         const target=document.getElementById('sumBalance');
         if(target){target.textContent=label;target.dataset.availableBalance=amount.toFixed(2)}
         // Archived checkout templates may not have a stable balance ID.
-        document.querySelectorAll('.account-credit,.credit-amount,[data-account-credit]').forEach(el=>{el.textContent=label});
+        document.querySelectorAll('[data-account-credit-value]').forEach(el=>{el.textContent=label});
       }
       const hint=String(account.token_hint||'').toUpperCase();
       const masked=/^[A-Z0-9]{4}$/.test(hint)?'****-****-****-'+hint:'****-****-****-****';
@@ -122,6 +122,8 @@ function init(){
         const text=node.nodeValue||'';
         if(/Logged in\s*[—–-]\s*[A-Z0-9]{4}-\*{4}/i.test(text)){
           node.nodeValue=text.replace(/(Logged in\s*[—–-]\s*)[A-Z0-9]{4}-\*{4}/i,'$1'+masked);
+        }else if(/^[\s\u2014\u2013-]*[A-Z0-9]{4}-\*{4}\s*$/i.test(text)&&/logged\s*in/i.test(node.parentElement?.parentElement?.textContent||'')){
+          node.nodeValue=text.replace(/[A-Z0-9]{4}-\*{4}/i,masked);
         }
       }
     }catch(error){console.warn('Checkout balance sync unavailable',error)}
