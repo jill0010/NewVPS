@@ -17,6 +17,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
+      - name: Independently verify TRC20 deposits and credit confirmed orders
+        env:
+          MONITOR_SECRET: ${{ secrets.NEWVPS_MONITOR_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "$MONITOR_SECRET" ]; then
+            echo "::error::Configure repository secret NEWVPS_MONITOR_SECRET"
+            exit 1
+          fi
+          curl --fail-with-body --retry 2 --retry-delay 3 --max-time 90 \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "x-monitor-secret: $MONITOR_SECRET" \
+            -d '{}' \
+            "https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/newvps-verified-tron-credit"
       - name: Send queued order and payment notifications
         env:
           MONITOR_SECRET: ${{ secrets.NEWVPS_MONITOR_SECRET }}
