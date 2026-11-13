@@ -33,6 +33,7 @@ jobs:
             -d '{}' \
             "https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/newvps-verified-tron-credit"
       - name: Send queued order and payment notifications
+        if: always()
         env:
           MONITOR_SECRET: ${{ secrets.NEWVPS_MONITOR_SECRET }}
         run: |
