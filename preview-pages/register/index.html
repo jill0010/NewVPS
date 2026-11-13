@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create an account — AnonPort</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font:13px Arial,Helvetica,sans-serif;color:#15191f;background:#0b172b}.background{position:fixed;inset:0;width:100%;height:100%;border:0;filter:blur(5px);pointer-events:none}.shade{position:fixed;inset:0;background:rgba(10,21,40,.58)}.dialog{position:relative;margin:clamp(70px,24vh,235px) auto 40px;width:min(366px,calc(100vw - 30px));background:#fff;border-radius:11px;box-shadow:0 18px 60px #0004;overflow:hidden}.content{padding:24px 24px 22px;text-align:center}.close{position:absolute;right:14px;top:14px;width:28px;height:28px;border:0;background:#f5f6f8;border-radius:6px;color:#677183;cursor:pointer}.lock{width:43px;height:43px;background:#eef2ff;border-radius:11px;margin:0 auto 16px;display:grid;place-items:center;color:#2154df}.lock svg{width:21px;height:21px}h1{font-size:17px;margin:0 0 8px;letter-spacing:-.4px}p.subtitle{color:#77808c;margin:0 0 19px;font-size:12px}.tabs{display:flex;margin-bottom:18px;border:1px solid #e6e8ed;border-radius:6px;overflow:hidden}.tabs button{flex:1;height:32px;border:0;background:#fff;color:#647080;font-weight:600;cursor:pointer}.tabs button.active,.primary{background:#2054dc;color:#fff}.notice{border:1px solid #cfd9fc;background:#f3f6ff;text-align:left;border-radius:7px;padding:13px 14px;display:flex;gap:10px;line-height:1.5;margin-bottom:16px}.notice strong{font-size:12px}.notice small{display:block;color:#707986;font-size:11px}.info{font-size:16px;color:#2357df}.steps{text-align:left;list-style:none;padding:0;margin:0 0 17px}.steps li{display:flex;align-items:center;gap:10px;margin:9px 0;color:#737b87;font-size:12px}.steps b{display:grid;place-items:center;background:#2054dc;color:white;border-radius:50%;width:21px;height:21px;font-size:11px;flex-shrink:0}.primary{border:0;border-radius:5px;height:32px;width:100%;font-weight:bold;cursor:pointer}.footer{padding:17px 10px;background:#f6f7f9;text-align:center;color:#79818d;font-size:12px}.footer a{color:#2054dc;text-decoration:none;font-weight:600}.field{text-align:left;margin:15px 0}.field label{font-size:11px;color:#4a4e54;font-weight:bold}.field input{display:block;width:100%;margin-top:7px;padding:10px;border:1px solid #d9dce2;border-radius:5px;background:#f8f9fb}.token{display:flex;border:1px dashed #d5d9e2;background:#f8f9fb;align-items:center;justify-content:space-between;padding:8px 8px 8px 14px;margin-bottom:20px}.token code{font-weight:bold;letter-spacing:1px}.token button{border:1px solid #ddd;background:#fff;border-radius:4px;padding:8px;cursor:pointer}.note{font-size:11px;color:#697386;margin-top:12px}button:focus-visible,a:focus-visible{outline:2px solid #2054dc;outline-offset:2px}
-.signed-in-summary{border:1px solid #e3e8f2;background:#f8faff;border-radius:8px;padding:12px;text-align:left;margin:0 0 12px;overflow-wrap:anywhere}.signed-in-summary p{margin:5px 0;line-height:1.5}.admin-dashboard-link{display:block;padding:11px;background:#eef3ff;color:#2054dc;border-radius:7px;text-decoration:none;font-weight:700;margin:0 0 12px}.admin-accounts{border:1px solid #e2e6ee;border-radius:8px;text-align:left;margin-bottom:14px}.admin-accounts summary{cursor:pointer;padding:12px;font-weight:600}.admin-account-list{max-height:240px;overflow-y:auto;border-top:1px solid #e2e6ee;padding:5px 10px}.admin-account-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #edf0f5;overflow-wrap:anywhere}.admin-account-row span{min-width:0}.admin-account-row button{flex-shrink:0;border:1px solid #d5dce9;background:#fff;border-radius:5px;padding:5px 8px;cursor:pointer}.tabs[hidden]{display:none}</style></head><body><iframe class="background" src="/" title="Archived homepage background"></iframe><div class="shade"></div><main class="dialog" role="dialog" aria-modal="true" aria-labelledby="heading"><button class="close" onclick="location.href='/'" aria-label="Close">×</button><section class="content"><div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h1 id="heading">Create an account</h1><p class="subtitle">It only takes an order</p><nav class="tabs"><button id="login-tab" onclick="show('login')">Login</button><button id="register-tab" class="active" onclick="show('register')">Register</button></nav><div id="panel"></div></section><footer class="footer" id="footer">Already have a token? <a href="#" onclick="show('login');return false">Login</a></footer></main>
+</style></head><body><iframe class="background" src="/" title="Archived homepage background"></iframe><div class="shade"></div><main class="dialog" role="dialog" aria-modal="true" aria-labelledby="heading"><button class="close" onclick="location.href='/'" aria-label="Close">×</button><section class="content"><div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h1 id="heading">Create an account</h1><p class="subtitle">It only takes an order</p><nav class="tabs"><button id="login-tab" onclick="show('login')">Login</button><button id="register-tab" class="active" onclick="show('register')">Register</button></nav><div id="panel"></div></section><footer class="footer" id="footer">Already have a token? <a href="#" onclick="show('login');return false">Login</a></footer></main>
 <script>
 // Google Ads: record a registration only after account-api confirms creation.
 const googleAdsConversionId="AW-18572565164";
@@ -25,7 +25,7 @@ let oneTimeToken=null,session=sessionStorage.getItem("newvps_session");
 const inviteRef=new URLSearchParams(location.search).get("ref");if(inviteRef&&/^[a-z0-9]{6,16}$/i.test(inviteRef))sessionStorage.setItem("newvps_invite_code",inviteRef.toUpperCase());
 async function request(action,payload={},authenticated=false){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),15000);try{const res=await fetch(api,{method:"POST",headers:{"Content-Type":"application/json",...(authenticated?{"Authorization":"Bearer "+session}:{})},body:JSON.stringify({action,...payload}),signal:controller.signal});const body=await res.json();if(!res.ok)throw Error(res.status===401?"Invalid access token. Use the private token shown at registration, not your Account ID.":body.error||"Request failed");return body}catch(e){if(e.name==="AbortError")throw Error("Login timed out. Please retry.");throw e}finally{clearTimeout(timer)}}
 function tabs(view){document.getElementById("login-tab").classList.toggle("active",view==="login");document.getElementById("register-tab").classList.toggle("active",view!=="login")}
-function show(view){document.querySelector(".tabs").hidden=false;tabs(view);heading.textContent=view==="login"?"Welcome back":"Create an account";document.querySelector(".subtitle").textContent=view==="login"?"Access your server dashboard":"It only takes an order";
+function show(view){tabs(view);heading.textContent=view==="login"?"Welcome back":"Create an account";document.querySelector(".subtitle").textContent=view==="login"?"Access your server dashboard":"It only takes an order";
 if(view==="login"){panel.innerHTML='<div class="field"><label>ACCESS TOKEN<input id="access-token" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off"></label></div><button class="primary" onclick="login()">Login</button><p id="status" class="note"></p>';foot.innerHTML='No account? <a href="#" onclick="show(\'register\');return false">See how to register</a>';return}
 if(view==="token"){panel.innerHTML='<div class="notice"><span class="info">♢</span><div><strong>Your access token — shown once</strong><small>Copy it now — we cannot recover or show it again.</small></div></div><div class="token"><code id="one-time"></code><button onclick="copyToken()">Copy</button></div><button class="primary" onclick="continueAccount()">Continue to my account</button>';document.getElementById("one-time").textContent=oneTimeToken;return}
 panel.innerHTML='<div class="notice"><span class="info">ⓘ</span><div><strong>Account creation is free and instant.</strong><small>One token replaces your name, email and password. We hash it on creation and never see the full value again. You’ll need to add credit before deploying.</small></div></div><ol class="steps"><li><b>1</b>Click below to generate your token</li><li><b>2</b>Save it (we cannot recover it)</li><li><b>3</b>Top up &amp; deploy any service</li></ol><button class="primary" onclick="register()">Create my token</button><p id="status" class="note"></p>';foot.innerHTML='Already have a token? <a href="#" onclick="show(\'login\');return false">Login</a>'}
@@ -58,53 +58,7 @@ async function continueAccount(){
   if(button){button.disabled=false;button.textContent="Continue to my account"}
  }
 }
-async function showAccount(){
- oneTimeToken=null;
- try{
-  const result=await request("me",{},true);
-  tabs("login");
-  document.querySelector(".tabs").hidden=true;
-  heading.textContent=result.account.role==="admin"?"Admin dashboard":"My account";
-  document.querySelector(".subtitle").textContent="Signed in securely";
-  panel.replaceChildren();
-  const info=document.createElement("div");
-  info.className="signed-in-summary";
-  const id=document.createElement("p");id.textContent="Account ID: "+result.account.id;
-  const role=document.createElement("p");role.textContent="Role: "+result.account.role;
-  info.append(id,role);panel.append(info);
-  if(result.account.role==="admin"){
-   const link=document.createElement("a");link.className="admin-dashboard-link";link.href="/admin/analytics/";link.textContent="Open website analytics";panel.append(link);
-   const details=document.createElement("details");details.className="admin-accounts";
-   const summary=document.createElement("summary");summary.textContent="Manage accounts";details.append(summary);
-   const listArea=document.createElement("div");listArea.className="admin-account-list";details.append(listArea);panel.append(details);
-   details.addEventListener("toggle",async function(){
-    if(!details.open||details.dataset.loaded)return;
-    listArea.textContent="Loading accounts…";
-    try{
-     const list=await request("admin_list",{},true);
-     listArea.replaceChildren();
-     for(const account of list.accounts||[]){
-      const item=document.createElement("div");item.className="admin-account-row";
-      const label=document.createElement("span");label.textContent=account.id+" ("+account.role+")";item.append(label);
-      if(account.disabled_at){const state=document.createElement("span");state.textContent="Disabled";item.append(state)}
-      else{const button=document.createElement("button");button.type="button";button.textContent="Disable";button.onclick=async()=>{
-       if(!confirm("Disable this account and revoke sessions?"))return;
-       button.disabled=true;
-       try{await request("admin_disable",{account_id:account.id},true);button.replaceWith(document.createTextNode("Disabled"))}
-       catch(e){button.disabled=false;alert(e.message)}
-      };item.append(button)}
-      listArea.append(item);
-     }
-     details.dataset.loaded="1";
-    }catch(e){listArea.textContent=e.message}
-   });
-  }
-  const logoutButton=document.createElement("button");logoutButton.className="primary";logoutButton.textContent="Log out";logoutButton.onclick=logout;panel.append(logoutButton);
-  foot.textContent="Your access token cannot be recovered.";
- }catch{
-  sessionStorage.removeItem("newvps_session");session=null;show("login");
- }
-}
+async function showAccount(){oneTimeToken=null;try{const result=await request("me",{},true);tabs("login");heading.textContent=result.account.role==="admin"?"Admin dashboard":"My account";document.querySelector(".subtitle").textContent="Signed in securely";panel.innerHTML='<p>Account ID: <code>'+result.account.id+'</code></p><p>Role: '+result.account.role+'</p><div id="admin"></div><button class="primary" onclick="logout()">Log out</button>';foot.textContent="Your access token cannot be recovered.";if(result.account.role==="admin"){const list=await request("admin_list",{},true);const admin=document.getElementById("admin");admin.innerHTML='<h3>Accounts</h3>'+list.accounts.map(a=>'<p>'+a.id+' ('+a.role+') '+(a.disabled_at?"Disabled":'<button data-id="'+a.id+'">Disable</button>')+'</p>').join("");admin.querySelectorAll("button[data-id]").forEach(b=>b.onclick=async()=>{if(confirm("Disable this account and revoke sessions?")){await request("admin_disable",{account_id:b.dataset.id},true);showAccount()}})}}catch{sessionStorage.removeItem("newvps_session");session=null;show("login")}}
 async function logout(){try{await request("logout",{},true)}finally{sessionStorage.removeItem("newvps_session");session=null;show("login")}}
 if(session && !new URLSearchParams(location.search).has("embed"))showAccount();else show(new URLSearchParams(location.search).get("view")==="login"?"login":"register");
 </script></body></html>
