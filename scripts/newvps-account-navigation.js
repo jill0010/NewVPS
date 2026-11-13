@@ -51,7 +51,7 @@
   // the currently authenticated account's token.
   if(/^\/account\/?$/.test(location.pathname)){
     const updatePreview=(label)=>{
-      document.querySelectorAll('.acc-tok').forEach(el=>{el.textContent=label});
+      document.querySelectorAll('.acc-tok, .sec-tok-line').forEach(el=>{el.textContent=label});
       document.querySelectorAll('.dh-r [data-copy]').forEach(el=>{
         el.setAttribute('data-copy',label);
         el.setAttribute('title','Masked token hint only; the full access token is not recoverable.');
