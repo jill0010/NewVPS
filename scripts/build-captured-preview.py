@@ -327,7 +327,7 @@ def main():
                 continue
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-account-navigation.js' not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js"></script>\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js?v=5eac2ef"></script>\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Restored login links and dashboard logout on archived pages")
     # Apply the brand wordmark on every captured page without editing ZIP archives.
