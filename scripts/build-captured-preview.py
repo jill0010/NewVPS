@@ -716,7 +716,7 @@ def main():
         for page in OUT.rglob("index.html"):
             html = page.read_text(encoding="utf-8")
             if "newvps-site-analytics.js" not in html:
-                html = html.replace("</body>", '<script defer src="/newvps-site-analytics.js"></script>\\n</body>', 1)
+                html = html.replace("</body>", '<script defer src="/newvps-site-analytics.js"></script>\n</body>', 1)
                 page.write_text(html, encoding="utf-8")
         print("Installed first-party pageview tracking")
     admin_dashboard = ROOT / "scripts/newvps-analytics-admin.html"
