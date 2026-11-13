@@ -70,6 +70,34 @@
         }).catch(()=>updatePreview('****-****-****-****'));
     }
   }
+  // Keep admin navigation in the authenticated dashboard's existing tab.
+  if(/^\/account\/?$/.test(location.pathname)){
+    const mountAdminLink=async()=>{
+      const token=sessionStorage.getItem('newvps_session');
+      if(!token||!/^[0-9a-f]{64}$/.test(token))return;
+      try{
+        const res=await fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/account-api',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({action:'me'}),cache:'no-store'});
+        if(!res.ok)return;
+        const json=await res.json();
+        if(json.account?.role!=='admin')return;
+        if(document.getElementById('newvps-admin-analytics-link'))return;
+        const link=document.createElement('a');
+        link.id='newvps-admin-analytics-link';
+        link.href='/admin/analytics/';
+        link.textContent='网站流量 / Site analytics';
+        link.style.cssText='display:block;padding:12px 16px;margin:8px 0;color:#245fe4;font-weight:600;text-decoration:none;border:1px solid #d9e2f1;border-radius:8px;background:#f8faff';
+        // Use the existing account navigation rather than introducing a new dashboard panel.
+        const nav=document.querySelector('.dash-sidebar nav, .dash-nav, .dash-sidebar, .dash-side');
+        if(nav)nav.appendChild(link);
+        else{
+          const heading=Array.from(document.querySelectorAll('h1,h2,h3')).find(el=>el.textContent?.trim()==='Dashboard');
+          if(heading)heading.parentElement?.appendChild(link);
+        }
+      }catch(e){console.warn('Admin navigation unavailable',e)}
+    };
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountAdminLink);
+    else mountAdminLink();
+  }
   // Mobile Telegram WebView: bypass the captured site's legacy login modal.
   // Its iframe can render as an empty dimmed backdrop on iOS.
   window.addEventListener('click',function(e){
