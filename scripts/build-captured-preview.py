@@ -651,14 +651,14 @@ def main():
     # separately and must not treat unpaid checkout orders as purchases.
     gtm_id = "GTM-N94M4D8D"
     gtm_head = (
-        '<!-- Google Tag Manager -->\\n'
+        '<!-- Google Tag Manager -->\n'
         '<script id="newvps-google-tag-manager">'
-        '(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\\'gtm.start\\':'
-        'new Date().getTime(),event:\\'gtm.js\\'});var f=d.getElementsByTagName(s)[0],'
-        'j=d.createElement(s),dl=l!=\\'dataLayer\\'?\\'&l=\\'+l:\\'\\';'
-        'j.async=true;j.src=\\'https://www.googletagmanager.com/gtm.js?id=\\'+i+dl;'
-        'f.parentNode.insertBefore(j,f);})(window,document,\\'script\\',\\'dataLayer\\',\\'' + gtm_id + '\\');'
-        '</script>\\n<!-- End Google Tag Manager -->\\n'
+        '(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start":'
+        'new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],'
+        'j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";'
+        'j.async=true;j.src="https://www.googletagmanager.com/gtm.js?id="+i+dl;'
+        'f.parentNode.insertBefore(j,f);})(window,document,"script","dataLayer","' + gtm_id + '");'
+        '</script>\n<!-- End Google Tag Manager -->\n'
     )
     gtm_body = (
         '<!-- Google Tag Manager (noscript) -->'
@@ -671,12 +671,12 @@ def main():
         html = page.read_text(encoding="utf-8")
         if "newvps-google-tag-manager" in html or "googletagmanager.com/gtm.js?id=" + gtm_id in html:
             continue
-        if re.search(r"</head\\s*>", html, re.IGNORECASE):
-            html = re.sub(r"</head\\s*>", lambda m: gtm_head + m.group(0), html, count=1, flags=re.IGNORECASE)
+        if re.search(r"</head\s*>", html, re.IGNORECASE):
+            html = re.sub(r"</head\s*>", lambda m: gtm_head + m.group(0), html, count=1, flags=re.IGNORECASE)
         else:
             continue
-        if re.search(r"<body\\b[^>]*>", html, re.IGNORECASE):
-            html = re.sub(r"<body\\b[^>]*>", lambda m: m.group(0) + "\\n" + gtm_body, html, count=1, flags=re.IGNORECASE)
+        if re.search(r"<body\b[^>]*>", html, re.IGNORECASE):
+            html = re.sub(r"<body\b[^>]*>", lambda m: m.group(0) + "\n" + gtm_body, html, count=1, flags=re.IGNORECASE)
         page.write_text(html, encoding="utf-8")
         gtm_pages += 1
     print(f"Installed Google Tag Manager {gtm_id} on {gtm_pages} generated pages")
