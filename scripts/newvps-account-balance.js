@@ -43,7 +43,7 @@
    if(!r.ok)return;
    const j=await r.json();
    const value=j.account&&j.account.balance_usd;
-   if(typeof value!=='string'||!/^\\d+\\.\\d{2}$/.test(value))return;
+   if(typeof value!=='string'||!/^\d+\.\d{2}$/.test(value))return;
    lastValue=value;
    paint(value);
   }catch(e){console.warn('Balance fetch deferred',e)}
