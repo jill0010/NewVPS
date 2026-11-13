@@ -660,6 +660,18 @@ def main():
         'f.parentNode.insertBefore(j,f);})(window,document,"script","dataLayer","' + gtm_id + '");'
         '</script>\n<!-- End Google Tag Manager -->\n'
     )
+    # Google Ads base tag: page visits only. Purchase conversions are NOT
+    # emitted here; they require a verified, paid order and a unique order ID.
+    ads_head = (
+        '<!-- Google tag (gtag.js) for Google Ads -->\n'
+        '<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18572565164"></script>\n'
+        '<script id="newvps-google-ads-base">'
+        'window.dataLayer=window.dataLayer||[];'
+        'function gtag(){dataLayer.push(arguments);}'
+        'gtag("js",new Date());'
+        'gtag("config","AW-18572565164");'
+        '</script>\n'
+    )
     gtm_body = (
         '<!-- Google Tag Manager (noscript) -->'
         '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' + gtm_id + '" '
@@ -672,7 +684,7 @@ def main():
         if "newvps-google-tag-manager" in html or "googletagmanager.com/gtm.js?id=" + gtm_id in html:
             continue
         if re.search(r"</head\s*>", html, re.IGNORECASE):
-            html = re.sub(r"</head\s*>", lambda m: gtm_head + m.group(0), html, count=1, flags=re.IGNORECASE)
+            html = re.sub(r"</head\s*>", lambda m: gtm_head + ("" if "newvps-google-ads-base" in html else ads_head) + m.group(0), html, count=1, flags=re.IGNORECASE)
         else:
             continue
         if re.search(r"<body\b[^>]*>", html, re.IGNORECASE):
