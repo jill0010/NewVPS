@@ -709,6 +709,22 @@ def main():
         page.write_text(html, encoding="utf-8")
         gtm_pages += 1
     print(f"Installed Google Tag Manager {gtm_id} on {gtm_pages} generated pages")
+    # First-party analytics: instrument generated pages without changing archived sources.
+    analytics_script = ROOT / "scripts/newvps-site-analytics.js"
+    if analytics_script.is_file():
+        shutil.copy2(analytics_script, OUT / "newvps-site-analytics.js")
+        for page in OUT.rglob("index.html"):
+            html = page.read_text(encoding="utf-8")
+            if "newvps-site-analytics.js" not in html:
+                html = html.replace("</body>", '<script defer src="/newvps-site-analytics.js"></script>\\n</body>', 1)
+                page.write_text(html, encoding="utf-8")
+        print("Installed first-party pageview tracking")
+    admin_dashboard = ROOT / "scripts/newvps-analytics-admin.html"
+    if admin_dashboard.is_file():
+        target = OUT / "admin" / "analytics"
+        target.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(admin_dashboard, target / "index.html")
+        print("Published admin analytics dashboard")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
