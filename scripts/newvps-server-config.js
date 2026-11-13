@@ -93,54 +93,42 @@ function init(){
   }
   if(ips){ips.disabled=false;ips.addEventListener('change',refreshSummary)}
   refreshSummary();
-  // Checkout displays the same authenticated, server-side balance as Top up.
-  // This only updates the display; payment authorization remains server-side.
-  const balanceEndpoint='https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/account-api';
+  // Read the same authoritative balance as the account dashboard.
   async function syncCheckoutAccount(){
-    const session=sessionStorage.getItem('newvps_session');
-    const balance=document.getElementById('sumBalance');
-    const logged=document.querySelector('.cfg-logged, .cfg-login-status, [data-checkout-account], .cfg-auth');
-    if(!session||!/^[0-9a-f]{64}$/.test(session))return;
+    const token=sessionStorage.getItem('newvps_session');
+    if(!token||!/^[0-9a-f]{64}$/.test(token))return;
     try{
-      const response=await fetch(balanceEndpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session},body:JSON.stringify({action:'me'}),cache:'no-store'});
-      if(!response.ok)return;
-      const data=await response.json();
-      const value=data?.account?.balance_usd;
-      const hint=String(data?.account?.token_hint||'').toUpperCase();
-      if(typeof value==='string'&&/^\\d+\\.\\d{2}$/.test(value)&&balance){
-        balance.textContent='password?.parentElement?.querySelector('button');
-  if(password&&generate){
-    generate.addEventListener('click',function(){
-      if(!window.crypto?.getRandomValues){alert('Secure password generation is unavailable in this browser.');return}
-      const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%*-_';
-      const bytes=new Uint32Array(24);crypto.getRandomValues(bytes);
-      password.value=Array.from(bytes,n=>chars[n%chars.length]).join('');
-      password.dispatchEvent(new Event('input',{bubbles:true}));
-      password.dispatchEvent(new Event('change',{bubbles:true}));
-      const hint=document.getElementById('pwHint');
-      if(hint)hint.textContent='Strong password generated. Save it securely.';
-    });
-  }
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();+value;
-        balance.dataset.availableBalance=value;
+      const res=await fetch('https://gvsnbmejydgzqzzjyykt.supabase.co/functions/v1/account-api',{
+        method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
+        body:JSON.stringify({action:'me'}),cache:'no-store'
+      });
+      if(!res.ok)throw Error('Account lookup failed');
+      const data=await res.json(),account=data.account||{};
+      const amount=Number(account.balance_usd);
+      if(Number.isFinite(amount)&&amount>=0){
+        const label='$'+amount.toFixed(2);
+        const target=document.getElementById('sumBalance');
+        if(target){target.textContent=label;target.dataset.availableBalance=amount.toFixed(2)}
+        // Archived checkout templates may not have a stable balance ID.
+        document.querySelectorAll('.account-credit,.credit-amount,[data-account-credit]').forEach(el=>{el.textContent=label});
       }
-      const label=/^[A-Z0-9]{4}$/.test(hint)?'****-****-****-'+hint:'****-****-****-****';
-      if(logged){
-        const walker=document.createTreeWalker(logged,NodeFilter.SHOW_TEXT);
-        let node;
-        while((node=walker.nextNode())){
-          if(/(?:[A-Z0-9]{4}-\\*{4}|\\*{4}-\\*{4}-\\*{4}-[A-Z0-9]{4})/.test(node.textContent||'')){
-            node.textContent=node.textContent.replace(/(?:[A-Z0-9]{4}-\\*{4}|\\*{4}-\\*{4}-\\*{4}-[A-Z0-9]{4})/g,label);
-          }
+      const hint=String(account.token_hint||'').toUpperCase();
+      const masked=/^[A-Z0-9]{4}$/.test(hint)?'****-****-****-'+hint:'****-****-****-****';
+      // Change only the account label, not the underlying login/session token.
+      const root=document.querySelector('main')||document.body;
+      const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+      let node;
+      while((node=walker.nextNode())){
+        const text=node.nodeValue||'';
+        if(/Logged in\\s*[—–-]\\s*[A-Z0-9]{4}-\\*{4}/i.test(text)){
+          node.nodeValue=text.replace(/(Logged in\\s*[—–-]\\s*)[A-Z0-9]{4}-\\*{4}/i,'$1'+masked);
         }
       }
-    }catch(error){console.warn('Checkout account sync deferred',error)}
+    }catch(error){console.warn('Checkout balance sync unavailable',error)}
   }
   syncCheckoutAccount();
   window.addEventListener('pageshow',syncCheckoutAccount);
-  document.addEventListener('visibilitychange',function(){if(!document.hidden)syncCheckoutAccount()});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncCheckoutAccount()});
   const generate=password?.parentElement?.querySelector('button');
   if(password&&generate){
     generate.addEventListener('click',function(){
