@@ -325,6 +325,14 @@ def main():
         html = html.replace("</body>", '<script defer src="/newvps-verified-purchase.js"></script>\n</body>', 1)
         dashboard.write_text(html, encoding="utf-8")
         print("Attached verified-only Google Ads purchase conversion to account dashboard")
+    # Read authenticated balance from the server ledger without altering the archive.
+    balance_script = ROOT / "scripts/newvps-account-balance.js"
+    if dashboard.is_file() and balance_script.is_file():
+        shutil.copy2(balance_script, OUT / "newvps-account-balance.js")
+        html = dashboard.read_text(encoding="utf-8")
+        html = html.replace("</body>", '<script defer src="/newvps-account-balance.js"></script>\\n</body>', 1)
+        dashboard.write_text(html, encoding="utf-8")
+        print("Attached authenticated account balance reader")
     # Attach account navigation to all archived HTML routes, including /vps/.
     # Login is not limited to the homepage. The script also revokes the
     # account session when the dashboard Log out button is clicked.
