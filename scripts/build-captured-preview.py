@@ -748,11 +748,11 @@ def main():
         url = "https://anonyport.com" + (route if route == "/" else route.rstrip("/") + "/")
         sitemap.append("  <url><loc>" + escape(url) + "</loc></url>")
     sitemap.append("</urlset>")
-    (OUT / "sitemap.xml").write_text("\\n".join(sitemap) + "\\n", encoding="utf-8")
+    (OUT / "sitemap.xml").write_text("\n".join(sitemap) + "\n", encoding="utf-8")
     (OUT / "robots.txt").write_text(
-        "User-agent: *\\nAllow: /\\nDisallow: /account/\\nDisallow: /admin/\\n"
-        "Disallow: /register/\\nDisallow: /order/\\nDisallow: /checkout/\\n"
-        "Disallow: /_captures/\\nSitemap: https://anonyport.com/sitemap.xml\\n",
+        "User-agent: *\nAllow: /\nDisallow: /account/\nDisallow: /admin/\n"
+        "Disallow: /register/\nDisallow: /order/\nDisallow: /checkout/\n"
+        "Disallow: /_captures/\nSitemap: https://anonyport.com/sitemap.xml\n",
         encoding="utf-8")
     print(f"Generated XML sitemap with {len(public_routes)} public captured routes")
     # Audit internal navigation against the routes actually generated.
