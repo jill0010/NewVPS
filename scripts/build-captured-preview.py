@@ -752,6 +752,10 @@ def main():
                 '<meta property="og:url" content="' + escape(canonical_url, quote=True) + '">\n')
         html, count = re.subn(r'</head\s*>', lambda m: tags + m.group(0), html, count=1, flags=re.I)
         if count != 1:
+            # /topup/ is a redirect alias without a head element.
+            # It is excluded from the sitemap; keep its redirect unchanged.
+            if page == OUT / "topup" / "index.html":
+                continue
             raise SystemExit(f"Missing closing head tag: {page}")
         page.write_text(html, encoding="utf-8")
         # Fail the build if the old site's canonical survives or more than one remains.
