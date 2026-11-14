@@ -11,5 +11,14 @@ if(!source){try{const h=new URL(document.referrer).hostname;if(h&&!h.endsWith('a
 source=source||'direct';
 const clean=v=>String(v||'').replace(/[^\w.\-]/g,'').slice(0,100);
 const payload={action:'collect',path:location.pathname,visitor,session,source:clean(source),medium:clean(p.get('utm_medium')),campaign:clean(p.get('utm_campaign')),ad_landing:hasAd};
-fetch(endpoint,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(()=>{});
+let eventId=null,activeSeconds=0,lastTick=Date.now(),pending=false;
+const send=(body,keepalive=false)=>fetch(endpoint,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),keepalive}).catch(()=>null);
+const visible=()=>document.visibilityState==='visible'&&document.hasFocus();
+let wasVisible=visible();
+function tick(){const now=Date.now();if(wasVisible)activeSeconds+=Math.min(30,Math.max(0,(now-lastTick)/1000));lastTick=now;wasVisible=visible()}
+async function flush(){tick();if(!eventId||pending)return;pending=true;try{await send({action:'duration',event_id:eventId,session,duration_seconds:Math.min(86400,Math.floor(activeSeconds))},true)}finally{pending=false}}
+send(payload,true).then(async r=>{if(!r||!r.ok)return;const j=await r.json();eventId=j.event_id;if(eventId)flush()}).catch(()=>{});
+setInterval(()=>{if(document.visibilityState==='visible')flush()},15000);
+document.addEventListener('visibilitychange',()=>{flush()});
+window.addEventListener('pagehide',()=>{flush()});
 })();
