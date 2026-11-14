@@ -345,7 +345,14 @@ def main():
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-account-navigation.js' not in html:
                 html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js?v=5eac2ef"></script>\n</body>', 1)
-                page.write_text(html, encoding="utf-8")
+                # Prevent a successful build from shipping SEO links to the other domain.
+        seo_links = re.findall(r'<link\b[^>]*>', html, re.I)
+        stale = [tag for tag in seo_links if re.search(
+            r'\brel\s*=\s*["\x27]?(?:canonical|alternate)\b', tag, re.I)
+            and re.search(r'https?://(?:www\.)?anonport\.com(?:/|["\x27])', tag, re.I)]
+        if stale:
+            raise SystemExit(f"Archived domain remains in SEO links: {page}: {stale}")
+        page.write_text(html, encoding="utf-8")
         print("Restored login links and dashboard logout on archived pages")
     # Apply the brand wordmark on every captured page without editing ZIP archives.
     brand_source = ROOT / "scripts/newvps-brand-wordmark.js"
@@ -748,6 +755,18 @@ def main():
         route = "/" + "/".join(route_parts) + ("/" if route_parts else "")
         canonical_url = "https://anonyport.com" + route
         html = strip_seo_links(page.read_text(encoding="utf-8"))
+        # Fix archived cross-domain hreflang links. Do not advertise a markdown
+        # alternate that belongs to the unrelated source website.
+        def fix_archived_alternate(match):
+            tag = match.group(0)
+            if not re.search(r'\brel\s*=\s*["\x27]?alternate\b', tag, re.I):
+                return tag
+            if not re.search(r'https?://(?:www\.)?anonport\.com(?:/|["\x27])', tag, re.I):
+                return tag
+            if re.search(r'\btype\s*=\s*["\x27]?text/markdown\b', tag, re.I):
+                return ""
+            return re.sub(r'https?://(?:www\.)?anonport\.com', 'https://anonyport.com', tag, flags=re.I)
+        html = re.sub(r'<link\b[^>]*>', fix_archived_alternate, html, flags=re.I)
         tags = ('<link rel="canonical" href="' + escape(canonical_url, quote=True) + '">\n'
                 '<meta property="og:url" content="' + escape(canonical_url, quote=True) + '">\n')
         html, count = re.subn(r'</head\s*>', lambda m: tags + m.group(0), html, count=1, flags=re.I)
