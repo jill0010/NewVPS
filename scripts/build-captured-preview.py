@@ -725,6 +725,25 @@ def main():
         target.mkdir(parents=True, exist_ok=True)
         shutil.copy2(admin_dashboard, target / "index.html")
         print("Published admin analytics dashboard")
+    # Canonical URLs must refer to our own domain, never the source archive's domain.
+    # Change only SEO metadata in generated output, leaving captured sources intact.
+    for page in OUT.rglob("index.html"):
+        route_parts = page.relative_to(OUT).parts[:-1]
+        route = "/" + "/".join(route_parts) + ("/" if route_parts else "")
+        canonical_url = "https://anonyport.com" + route
+        html = page.read_text(encoding="utf-8")
+        html = re.sub(r'<link\\b(?=[^>]*\\brel\\s*=\\s*["\\\']canonical["\\\'])[^>]*>\\s*',
+                      "", html, flags=re.IGNORECASE)
+        html = re.sub(r'<meta\\b(?=[^>]*\\bproperty\\s*=\\s*["\\\']og:url["\\\'])[^>]*>\\s*',
+                      "", html, flags=re.IGNORECASE)
+        html = re.sub(r'<link\\b(?=[^>]*\\brel\\s*=\\s*["\\\']alternate["\\\'])[^>]*\\bhreflang\\s*=[^>]*>\\s*',
+                      "", html, flags=re.IGNORECASE)
+        tags = ('<link rel="canonical" href="' + escape(canonical_url, quote=True) + '">\\n'
+                '<meta property="og:url" content="' + escape(canonical_url, quote=True) + '">\\n')
+        html = re.sub(r'</head\\s*>', lambda m: tags + m.group(0), html,
+                      count=1, flags=re.IGNORECASE)
+        page.write_text(html, encoding="utf-8")
+    print("Set self-referencing canonical and og:url on generated pages")
     # Search-engine discovery files: only public pages actually emitted by this build.
     # Never expose account, authentication, checkout, admin or payment URLs in sitemap.
     from datetime import datetime, timezone
