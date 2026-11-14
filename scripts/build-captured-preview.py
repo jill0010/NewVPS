@@ -725,19 +725,41 @@ def main():
         target.mkdir(parents=True, exist_ok=True)
         shutil.copy2(admin_dashboard, target / "index.html")
         print("Published admin analytics dashboard")
-    # Replace source-site canonical metadata in built HTML only.
+    # Enforce canonical ownership on the final generated HTML, never the source archive.
+    # Parse link attributes regardless of attribute order, whitespace, or quote style.
+    def strip_seo_links(html):
+        link_tag = re.compile(r'<link\b[^>]*>', re.I)
+        meta_tag = re.compile(r'<meta\b[^>]*>', re.I)
+        def link_filter(match):
+            tag = match.group(0)
+            if re.search(r'\brel\s*=\s*["\x27]?canonical\b', tag, re.I):
+                return ""
+            return tag
+        def meta_filter(match):
+            tag = match.group(0)
+            if re.search(r'\bproperty\s*=\s*["\x27]?og:url\b', tag, re.I):
+                return ""
+            return tag
+        return meta_tag.sub(meta_filter, link_tag.sub(link_filter, html))
+
+    checked = 0
     for page in OUT.rglob("index.html"):
         route_parts = page.relative_to(OUT).parts[:-1]
         route = "/" + "/".join(route_parts) + ("/" if route_parts else "")
         canonical_url = "https://anonyport.com" + route
-        html = page.read_text(encoding="utf-8")
-        html = re.sub(r'<link[^>]*\\brel=["\\\']canonical["\\\'][^>]*>\\s*', "", html, flags=re.I)
-        html = re.sub(r'<meta[^>]*\\bproperty=["\\\']og:url["\\\'][^>]*>\\s*', "", html, flags=re.I)
-        tags = ('<link rel="canonical" href="' + escape(canonical_url, quote=True) + '">\\n'
-                '<meta property="og:url" content="' + escape(canonical_url, quote=True) + '">\\n')
-        html = re.sub(r'</head\\s*>', lambda m: tags + m.group(0), html, count=1, flags=re.I)
+        html = strip_seo_links(page.read_text(encoding="utf-8"))
+        tags = ('<link rel="canonical" href="' + escape(canonical_url, quote=True) + '">\n'
+                '<meta property="og:url" content="' + escape(canonical_url, quote=True) + '">\n')
+        html, count = re.subn(r'</head\s*>', lambda m: tags + m.group(0), html, count=1, flags=re.I)
+        if count != 1:
+            raise SystemExit(f"Missing closing head tag: {page}")
         page.write_text(html, encoding="utf-8")
-    print("Replaced archived canonical and og:url with AnonyPort URLs")
+        # Fail the build if the old site's canonical survives or more than one remains.
+        canonicals = re.findall(r'<link\b[^>]*\brel\s*=\s*["\x27]?canonical\b[^>]*>', html, re.I)
+        if len(canonicals) != 1 or canonical_url not in canonicals[0]:
+            raise SystemExit(f"Invalid canonical metadata in {page}: {canonicals}")
+        checked += 1
+    print(f"Verified self-referencing AnonyPort canonical metadata on {checked} generated pages")
     # Search-engine discovery files: only public pages actually emitted by this build.
     # Never expose account, authentication, checkout, admin or payment URLs in sitemap.
     from datetime import datetime, timezone
