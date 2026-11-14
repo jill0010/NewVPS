@@ -345,14 +345,7 @@ def main():
             html = page.read_text(encoding="utf-8")
             if "</body>" in html and 'newvps-account-navigation.js' not in html:
                 html = html.replace("</body>", '<script defer src="/newvps-account-navigation.js?v=5eac2ef"></script>\n</body>', 1)
-                # Prevent a successful build from shipping SEO links to the other domain.
-        seo_links = re.findall(r'<link\b[^>]*>', html, re.I)
-        stale = [tag for tag in seo_links if re.search(
-            r'\brel\s*=\s*["\x27]?(?:canonical|alternate)\b', tag, re.I)
-            and re.search(r'https?://(?:www\.)?anonport\.com(?:/|["\x27])', tag, re.I)]
-        if stale:
-            raise SystemExit(f"Archived domain remains in SEO links: {page}: {stale}")
-        page.write_text(html, encoding="utf-8")
+                page.write_text(html, encoding="utf-8")
         print("Restored login links and dashboard logout on archived pages")
     # Apply the brand wordmark on every captured page without editing ZIP archives.
     brand_source = ROOT / "scripts/newvps-brand-wordmark.js"
@@ -781,6 +774,12 @@ def main():
         canonicals = re.findall(r'<link\b[^>]*\brel\s*=\s*["\x27]?canonical\b[^>]*>', html, re.I)
         if len(canonicals) != 1 or canonical_url not in canonicals[0]:
             raise SystemExit(f"Invalid canonical metadata in {page}: {canonicals}")
+        seo_links = re.findall(r'<link\b[^>]*>', html, re.I)
+        stale = [tag for tag in seo_links if re.search(
+            r'\brel\s*=\s*["\x27]?(?:canonical|alternate)\b', tag, re.I)
+            and re.search(r'https?://(?:www\.)?anonport\.com(?:/|["\x27])', tag, re.I)]
+        if stale:
+            raise SystemExit(f"Archived domain remains in SEO links: {page}: {stale}")
         checked += 1
     print(f"Verified self-referencing AnonyPort canonical metadata on {checked} generated pages")
     # Search-engine discovery files: only public pages actually emitted by this build.
