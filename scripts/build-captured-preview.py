@@ -725,6 +725,36 @@ def main():
         target.mkdir(parents=True, exist_ok=True)
         shutil.copy2(admin_dashboard, target / "index.html")
         print("Published admin analytics dashboard")
+    # Search-engine discovery files: only public pages actually emitted by this build.
+    # Never expose account, authentication, checkout, admin or payment URLs in sitemap.
+    from datetime import datetime, timezone
+    public_routes = []
+    private_prefixes = ("/account", "/admin", "/register", "/login", "/order",
+                        "/checkout", "/payment", "/topup", "/dashboard", "/api",
+                        "/_captures", "/preview")
+    for route in sorted(written):
+        if route != "/" and any(route == p or route.startswith(p + "/") or route.startswith(p + "?")
+                                for p in private_prefixes):
+            continue
+        if route.endswith(("/login", "/register", "/order", "/checkout", "/account")):
+            continue
+        parts = safe_route(route)
+        if parts is None or not OUT.joinpath(*parts, "index.html").is_file():
+            continue
+        public_routes.append(route)
+    sitemap = ['<?xml version="1.0" encoding="UTF-8"?>',
+               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for route in public_routes:
+        url = "https://anonyport.com" + (route if route == "/" else route.rstrip("/") + "/")
+        sitemap.append("  <url><loc>" + escape(url) + "</loc></url>")
+    sitemap.append("</urlset>")
+    (OUT / "sitemap.xml").write_text("\\n".join(sitemap) + "\\n", encoding="utf-8")
+    (OUT / "robots.txt").write_text(
+        "User-agent: *\\nAllow: /\\nDisallow: /account/\\nDisallow: /admin/\\n"
+        "Disallow: /register/\\nDisallow: /order/\\nDisallow: /checkout/\\n"
+        "Disallow: /_captures/\\nSitemap: https://anonyport.com/sitemap.xml\\n",
+        encoding="utf-8")
+    print(f"Generated XML sitemap with {len(public_routes)} public captured routes")
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
