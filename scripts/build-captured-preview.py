@@ -812,6 +812,41 @@ def main():
         "Disallow: /_captures/\nSitemap: https://anonyport.com/sitemap.xml\n",
         encoding="utf-8")
     print(f"Generated XML sitemap with {len(public_routes)} public captured routes")
+    # Cloudflare Pages: normalize only generated public HTML routes, not API,
+    # authentication, assets or checkout. Preserve query parameters by default.
+    # Exact redirects avoid a catch-all rule that would mask missing pages.
+    redirects = []
+    for route in sorted(set(public_routes)):
+        if route == "/":
+            continue
+        clean = route.rstrip("/")
+        redirects.append(f"{clean} {clean}/ 301")
+    (OUT / "_redirects").write_text("\n".join(redirects) + "\n", encoding="utf-8")
+    print(f"Generated {len(redirects)} exact public trailing-slash redirects")
+
+    # Non-destructive SEO audit of archived source content. Never fabricate
+    # translations or overwrite captured page text to satisfy these checks.
+    seo_warnings = []
+    for route in public_routes:
+        page = OUT.joinpath(*safe_route(route), "index.html")
+        html = page.read_text(encoding="utf-8", errors="replace")
+        title_match = re.search(r"<title\\b[^>]*>(.*?)</title\\s*>", html, re.I | re.S)
+        title_text = re.sub(r"<[^>]+>", "", title_match.group(1)).strip() if title_match else ""
+        lang_match = re.search(r"<html\\b[^>]*\\blang\\s*=\\s*['\\\"]([^'\\\"]+)", html, re.I)
+        lang = lang_match.group(1).lower() if lang_match else ""
+        expected = "zh" if route.startswith("/zh/") else "ru" if route.startswith("/ru/") else None
+        if not title_text:
+            seo_warnings.append(f"{route}: missing title")
+        if expected and not lang.startswith(expected):
+            seo_warnings.append(f"{route}: html lang={lang or 'missing'}, expected {expected}")
+        if route.startswith(("/guides/", "/zh/", "/ru/")):
+            body_match = re.search(r"<body\\b[^>]*>(.*?)</body\\s*>", html, re.I | re.S)
+            visible = re.sub(r"<script\\b[^>]*>.*?</script\\s*>|<style\\b[^>]*>.*?</style\\s*>|<[^>]+>", " ", body_match.group(1) if body_match else "", flags=re.I | re.S)
+            if len(re.sub(r"\\s+", "", visible)) < 80:
+                seo_warnings.append(f"{route}: very little static body text; inspect page")
+    (OUT / "seo-audit.txt").write_text("\n".join(seo_warnings) + ("\n" if seo_warnings else ""), encoding="utf-8")
+    print(f"SEO content audit: {len(seo_warnings)} warnings (see seo-audit.txt)")
+
     # Audit internal navigation against the routes actually generated.
     # Missing targets are reported without inventing pages or masking real 404s.
     known = set(written)
