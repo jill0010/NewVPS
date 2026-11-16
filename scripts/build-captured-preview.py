@@ -832,7 +832,7 @@ def main():
         html = page.read_text(encoding="utf-8", errors="replace")
         title_match = re.search(r"<title\b[^>]*>(.*?)</title\s*>", html, re.I | re.S)
         title_text = re.sub(r"<[^>]+>", "", title_match.group(1)).strip() if title_match else ""
-        lang_match = re.search(r"<html\b[^>]*\blang\s*=\s*['\\"]([^'\\"]+)", html, re.I)
+        lang_match = re.search(r"<html\b[^>]*\blang\s*=\s*[\x22\x27]([^\x22\x27]+)", html, re.I)
         lang = lang_match.group(1).lower() if lang_match else ""
         expected = "zh" if route.startswith("/zh/") else "ru" if route.startswith("/ru/") else None
         if not title_text:
