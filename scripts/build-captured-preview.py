@@ -59,9 +59,17 @@ def main():
         return (0 if "order-pages" not in capture else 1, capture)
 
     entries.sort(key=capture_priority)
+    # Archived translations remain in extracted/, but are not published as pages.
+    language_prefixes = ("/zh", "/ru")
+    def is_archived_language_route(route):
+        return any(route == prefix or route.startswith(prefix + "/") for prefix in language_prefixes)
+
+    archived_language_routes = {entry["route"] for entry in entries if is_archived_language_route(entry["route"])}
     written = {}
     for entry in entries:
         route = entry["route"]
+        if is_archived_language_route(route):
+            continue
         parts = safe_route(route)
         if parts is None or route in written:
             continue
@@ -754,6 +762,9 @@ def main():
             tag = match.group(0)
             if not re.search(r'\brel\s*=\s*["\x27]?alternate\b', tag, re.I):
                 return tag
+            # No independently maintained localized pages exist: remove stale hreflang.
+            if re.search(r'\bhreflang\s*=', tag, re.I):
+                return ""
             if not re.search(r'https?://(?:www\.)?anonport\.com(?:/|["\x27])', tag, re.I):
                 return tag
             if re.search(r'\btype\s*=\s*["\x27]?text/markdown\b', tag, re.I):
@@ -790,6 +801,8 @@ def main():
                         "/checkout", "/payment", "/topup", "/dashboard", "/api",
                         "/_captures", "/preview")
     for route in sorted(written):
+        if is_archived_language_route(route):
+            continue
         if route != "/" and any(route == p or route.startswith(p + "/") or route.startswith(p + "?")
                                 for p in private_prefixes):
             continue
@@ -821,6 +834,19 @@ def main():
             continue
         clean = route.rstrip("/")
         redirects.append(f"{clean} {clean}/ 301")
+    # Redirect previously archived language URLs (with and without slash) to
+    # the matching English route. Never redirect to a nonexistent target.
+    english_routes = set(written)
+    for old_route in sorted(archived_language_routes):
+        suffix = old_route.split("/", 2)[2] if old_route.count("/") >= 2 else ""
+        target = "/" + suffix.strip("/") if suffix else "/"
+        if target not in english_routes:
+            target = "/"
+        target_url = target.rstrip("/") + "/" if target != "/" else "/"
+        old_clean = old_route.rstrip("/") or "/"
+        if old_clean != "/":
+            redirects.append(f"{old_clean} {target_url} 301")
+            redirects.append(f"{old_clean}/ {target_url} 301")
     (OUT / "_redirects").write_text("\n".join(redirects) + "\n", encoding="utf-8")
     print(f"Generated {len(redirects)} exact public trailing-slash redirects")
 
